@@ -12,9 +12,9 @@ D:\Tomek\Virtual Studio\Projects\Knigth's Memorial\WindowsFormsApp1\bin\Debug\Wi
 D:\Tomek\Virtual Studio\Projects\Knigth's Memorial\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe
 D:\Tomek\Virtual Studio\Projects\Knigth's Memorial\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.pdb
 D:\Tomek\Virtual Studio\Projects\Knigth's Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.AssemblyReference.cache
-D:\Tomek\Virtual Studio\Projects\Knigth's Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Form1.resources
 D:\Tomek\Virtual Studio\Projects\Knigth's Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Properties.Resources.resources
 D:\Tomek\Virtual Studio\Projects\Knigth's Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.GenerateResource.cache
 D:\Tomek\Virtual Studio\Projects\Knigth's Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.CoreCompileInputs.cache
 D:\Tomek\Virtual Studio\Projects\Knigth's Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
 D:\Tomek\Virtual Studio\Projects\Knigth's Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb
+D:\Tomek\Virtual Studio\Projects\Knigth's Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.MainForm.resources

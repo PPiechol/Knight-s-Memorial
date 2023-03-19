@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interactive_Object.cs" />
     <Compile Include="Display.cs">
       <SubType>Component</SubType>
     </Compile>
