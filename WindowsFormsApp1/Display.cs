@@ -18,7 +18,7 @@ namespace WindowsFormsApp1
         List<Interactive_Object> Objects;
         PictureBox temp;
         private const int Character_size = 50;
-        private const int speed = 3;
+        private const int speed = 5;
         int Display_Size;
         int MapPositionX;
         int MapPositionY;
@@ -67,7 +67,7 @@ namespace WindowsFormsApp1
             //Beta HitBox'a
             Level_Hitbox = SetHitbox(level, MapPositionX, MapPositionY);
             Objects = new List<Interactive_Object>();
-            Interactive_Object Coin = new Interactive_Object(1, 1, 0, 350, 200, 30, "Coin");
+            Interactive_Object Coin = new Interactive_Object(1, 1, 0, 350, 200, 100, "Coin");
             Objects.Add(Coin);
 
             temp = new PictureBox();
@@ -99,8 +99,6 @@ namespace WindowsFormsApp1
 
         public static Image Scale(Image sourceImage, int destWidth, int destHeight)
         {
-            destWidth += 1;
-            destHeight += 1;
             var toReturn = new Bitmap(destWidth, destHeight);
 
             using (var graphics = Graphics.FromImage(toReturn))
@@ -123,7 +121,7 @@ namespace WindowsFormsApp1
         {
             int x = Character.Location.X;
             int y = Character.Location.Y;
-            int Border = Display_Size - Character_size;
+            int Border = Display_Size - Character_size - 1;
             switch (e.KeyCode)
             {
                 case Keys.Left:
@@ -230,11 +228,10 @@ namespace WindowsFormsApp1
                     start_y = temp;
                     while(start_y != end_y)
                     {
-                        if (start_x <= Display_Size && start_x >= 0)
+                        if (start_x < Display_Size && start_x >= 0)
                         {
                             if(Level_Hitbox.GetPixel(start_x, start_y).ToArgb() != Color.White.ToArgb())
                             {
-                                MessageBox.Show(start_x.ToString() + " - " + start_y.ToString() + " color: " + Level_Hitbox.GetPixel(start_x, start_y).ToArgb());
                                 return distance;
                             }
                             start_y += direction_y;
@@ -272,7 +269,7 @@ namespace WindowsFormsApp1
                     start_x = temp;
                     while (start_x != end_x)
                     {
-                        if (start_y <= Display_Size && start_y >= 0)
+                        if (start_y < Display_Size && start_y >= 0)
                         {
                             if (Level_Hitbox.GetPixel(start_x, start_y).ToArgb() != Color.White.ToArgb())
                             {

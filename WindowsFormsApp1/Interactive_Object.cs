@@ -12,10 +12,12 @@ namespace WindowsFormsApp1
         int level;
         int map_pos_x;
         int map_pos_y;
+        int interaction_range;
+        //Od tąd
         int pos_x;
         int pos_y;
-        int interaction_range;
         Image icon;
+        //Do tąd zamienić na picturebox
 
         public Interactive_Object(int level, int map_x, int map_y, int x, int y, int range, string name)
         {

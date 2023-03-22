@@ -38,6 +38,7 @@ namespace WindowsFormsApp1
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(770, 719);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "MainForm";
             this.Text = "Knight\'s Memorial";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
