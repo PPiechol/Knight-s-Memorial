@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Battle.cs" />
+    <Compile Include="Entity.cs" />
     <Compile Include="Interactive_Object.cs" />
     <Compile Include="Display.cs">
       <SubType>Component</SubType>

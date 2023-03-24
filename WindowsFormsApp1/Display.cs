@@ -16,14 +16,13 @@ namespace WindowsFormsApp1
         PictureBox Character;
         Bitmap Level_Hitbox;
         List<Interactive_Object> Objects;
-        PictureBox temp;
         private const int Character_size = 50;
         private const int speed = 5;
         int Display_Size;
         int MapPositionX;
         int MapPositionY;
         int Current_Level;
-        bool picked;
+        bool battle;
 
         public Display(int Width, int Height)
         {
@@ -66,21 +65,16 @@ namespace WindowsFormsApp1
 
             //Beta HitBox'a
             Level_Hitbox = SetHitbox(level, MapPositionX, MapPositionY);
+
+            //Punkty interakcji
             Objects = new List<Interactive_Object>();
-            Interactive_Object Coin = new Interactive_Object(1, 1, 0, 350, 200, 100, "Coin");
+            Interactive_Object Coin = new Interactive_Object(1, 1, 0, 350, 200, 15, 50, "Coin");
             Objects.Add(Coin);
 
-            temp = new PictureBox();
-            temp.SizeMode = PictureBoxSizeMode.Zoom;
-            temp.Size = new Size(15, 15);
-            temp.BackColor = Color.Transparent;
-            temp.Image = Objects[0].GetIcon;
-            int temp_x = Objects[0].Get_Pos_X;
-            int temp_y = Objects[0].Get_Pos_Y;
-            temp.Location = new Point(temp_x, temp_y);
-            temp.Visible = false;
-            Game_Board.Controls.Add(temp);
-            picked = false;
+            Interactive_Object Enemy = new Interactive_Object(1, 1, 1, 700, 700, 50, 100, "Enemy");
+            Objects.Add(Enemy);
+
+            battle = false;
         }
 
         private Image SetBackGround(int level, int x, int y)
@@ -119,6 +113,10 @@ namespace WindowsFormsApp1
 
         public void Movement(KeyEventArgs e)
         {
+            if(battle)
+            {
+                return;
+            }
             int x = Character.Location.X;
             int y = Character.Location.Y;
             int Border = Display_Size - Character_size - 1;
@@ -174,28 +172,74 @@ namespace WindowsFormsApp1
                 Scene_Switch = true;
                 Character.Location = new Point(1, y);
             }
-
-            if(temp.Visible)
+            foreach (Interactive_Object IO in Objects)
             {
-                if(Math.Pow(x - Objects[0].Get_Pos_X, 2) + Math.Pow(y - Objects[0].Get_Pos_Y, 2) <= Math.Pow(Objects[0].Get_Range,2))
+                if (Game_Board.Controls.Contains(IO.GetIcon))
                 {
-                    picked = true;
-                    temp.Visible = false;
+                    if (Math.Pow(x - IO.Get_Pos_X, 2) + Math.Pow(y - IO.Get_Pos_Y, 2) <= Math.Pow(IO.Get_Range, 2))
+                    {
+                        IO.Get_Interaction = true;
+                        Game_Board.Controls.Remove(IO.GetIcon);
+                    }
                 }
             }
 
-            if(Scene_Switch)
+            //Ładowanie walki
+            if (Objects[1].Get_Interaction)
+            {
+                PictureBox temp = new PictureBox();
+                temp.SizeMode = Game_Board.SizeMode;
+                temp.Size = Game_Board.Size;
+                temp.BackColor = this.BackColor;
+                temp.Image = Image.FromFile(Environment.CurrentDirectory + "\\Map parts\\Level " + Current_Level.ToString() + "\\Battle.png");
+                battle = true;
+                Battle First_Battle = new Battle(temp);
+                Game_Board.Controls.Remove(Character);
+                Game_Board.Controls.Add(First_Battle.Get_Background);
+
+                //Dodawanie stworzeń
+                PictureBox entity = new PictureBox();
+                entity.SizeMode = PictureBoxSizeMode.Zoom;
+                entity.BackColor = Color.Transparent;
+                entity.Size = new Size(200, 200);
+
+                entity.Image = Character.Image;
+                entity.Location = new Point(150, (Display_Size - 100) / 2);
+
+                First_Battle.Add_entity('p', 8, 35, entity);
+
+                entity.Image = Objects[1].GetIcon.Image;
+                entity.Location = new Point(Display_Size - 350, (Display_Size - 100)/ 2);
+
+                First_Battle.Add_entity('e', 4, 20, entity);
+
+                foreach (Entity el in First_Battle.Get_Our_team)
+                {
+                    First_Battle.Get_Background.Controls.Add(el.Get_Creature);
+                }
+
+                foreach (Entity el in First_Battle.Get_Opponents)
+                {
+                    First_Battle.Get_Background.Controls.Add(el.Get_Creature);
+                }
+
+            }
+
+            if (Scene_Switch)
             {
                 Game_Board.Image = SetBackGround(Current_Level, MapPositionX, MapPositionY);
                 Level_Hitbox = SetHitbox(Current_Level, MapPositionX, MapPositionY);
 
-                if (MapPositionX == 1 && MapPositionY == 0 && !picked)
+                foreach (Interactive_Object IO in Objects)
                 {
-                    temp.Visible = true;
-                }
-                else
-                {
-                    temp.Visible = false;
+                    if (MapPositionX == IO.Get_Map_X && MapPositionY == IO.Get_Map_Y && !IO.Get_Interaction)
+                    {
+                        Game_Board.Controls.Add(IO.GetIcon);
+                    }
+                    else
+                    {
+                        Game_Board.Controls.Remove(IO.GetIcon);
+                    }
                 }
             }
         }

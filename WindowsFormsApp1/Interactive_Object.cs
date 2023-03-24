@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace WindowsFormsApp1
 {
@@ -13,24 +14,25 @@ namespace WindowsFormsApp1
         int map_pos_x;
         int map_pos_y;
         int interaction_range;
-        //Od tąd
-        int pos_x;
-        int pos_y;
-        Image icon;
-        //Do tąd zamienić na picturebox
+        PictureBox icon;
+        bool interacted;
 
-        public Interactive_Object(int level, int map_x, int map_y, int x, int y, int range, string name)
+        public Interactive_Object(int level, int map_x, int map_y, int x, int y, int size, int range, string name)
         {
+            icon = new PictureBox();
+            icon.SizeMode = PictureBoxSizeMode.Zoom;
             this.level = level;
             map_pos_x = map_x;
             map_pos_y = map_y;
-            pos_x = x;
-            pos_y = y;
+            icon.Image = Image.FromFile(Environment.CurrentDirectory + "\\Map parts\\Level " + level.ToString() + "\\" + name + ".png");
+            icon.BackColor = Color.Transparent;
+            icon.Size = new Size(size, size);
+            icon.Location = new Point(x, y);
             interaction_range = range;
-            icon = Image.FromFile(Environment.CurrentDirectory + "\\Map parts\\Level " + level.ToString() + "\\" + name + ".png");
+            interacted = false;
         }
 
-        public Image GetIcon
+        public PictureBox GetIcon
         {
             get 
             {
@@ -42,7 +44,7 @@ namespace WindowsFormsApp1
         {
             get
             {
-                return pos_x;
+                return icon.Location.X;
             }
         }
 
@@ -50,7 +52,23 @@ namespace WindowsFormsApp1
         {
             get
             {
-                return pos_y;
+                return icon.Location.Y;
+            }
+        }
+
+        public int Get_Map_X
+        {
+            get
+            {
+                return map_pos_x;
+            }
+        }
+
+        public int Get_Map_Y
+        {
+            get
+            {
+                return map_pos_y;
             }
         }
 
@@ -59,6 +77,18 @@ namespace WindowsFormsApp1
             get
             {
                 return interaction_range;
+            }
+        }
+
+        public bool Get_Interaction
+        {
+            get
+            {
+                return interacted;
+            }
+            set
+            {
+                interacted = value;
             }
         }
     }
