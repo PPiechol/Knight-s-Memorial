@@ -19,7 +19,7 @@ namespace WindowsFormsApp1
             Opponents = new List<Entity>();
         }
 
-        public void Add_entity(char team, int damage, int health, PictureBox source)
+        public void Add_entity(char team, int damage, int health, int attackSpeed, PictureBox source)
         {
             PictureBox creature = new PictureBox();
             creature.Image = source.Image;
@@ -28,7 +28,7 @@ namespace WindowsFormsApp1
             creature.SizeMode = source.SizeMode;
             creature.BackColor = source.BackColor;
 
-            Entity temp = new Entity(creature, damage, health);
+            Entity temp = new Entity(creature, damage, health, attackSpeed);
             if(team == 'e')
             {
                 Opponents.Add(temp);

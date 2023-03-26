@@ -31,6 +31,8 @@ namespace WindowsFormsApp1
             this.Dock = DockStyle.Fill;
 
             Game_Board = new PictureBox();
+            
+            
             Display_Size = Width;
             if(Width > Height)
             {
@@ -63,6 +65,11 @@ namespace WindowsFormsApp1
             Game_Board.Controls.Add(Character);
             Character.Location = new Point(Display_Size/2, Display_Size / 2);
 
+            
+            //s = "Punkty: " + Score.ToString();
+            //s = "Punkty: " + Score;
+            //s = String.Format("{0}: {1}", "Punkty", Score);
+            
             //Beta HitBox'a
             Level_Hitbox = SetHitbox(level, MapPositionX, MapPositionY);
 
@@ -206,12 +213,12 @@ namespace WindowsFormsApp1
                 entity.Image = Character.Image;
                 entity.Location = new Point(150, (Display_Size - 100) / 2);
 
-                First_Battle.Add_entity('p', 8, 35, entity);
+                First_Battle.Add_entity('p', 8, 35, 30, entity);
 
                 entity.Image = Objects[1].GetIcon.Image;
                 entity.Location = new Point(Display_Size - 350, (Display_Size - 100)/ 2);
 
-                First_Battle.Add_entity('e', 4, 20, entity);
+                First_Battle.Add_entity('e', 4, 20, 25, entity);
 
                 foreach (Entity el in First_Battle.Get_Our_team)
                 {

@@ -12,11 +12,13 @@ namespace WindowsFormsApp1
         PictureBox creature;
         int health;
         int damage;
-        public Entity(PictureBox creature, int damage ,int max_health)
+        int attackSpeed;
+        public Entity(PictureBox creature, int damage ,int max_health, int attackSpeed)
         {
             this.creature = creature;
             this.damage = damage;
             health = max_health;
+            AttackSpeed = attackSpeed;
         }
 
         public PictureBox Get_Creature
@@ -46,6 +48,18 @@ namespace WindowsFormsApp1
                 return damage;
             }
         }
+
+        public int AttackSpeed 
+        { 
+            get
+            {
+               return attackSpeed;
+            }
+            set
+            {
+                attackSpeed = value;
+            }
+         }
     }
 }
 
