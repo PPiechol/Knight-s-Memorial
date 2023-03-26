@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 namespace WindowsFormsApp1
 {
@@ -23,6 +24,7 @@ namespace WindowsFormsApp1
         int MapPositionY;
         int Current_Level;
         bool battle;
+        
 
         public Display(int Width, int Height)
         {
@@ -71,8 +73,20 @@ namespace WindowsFormsApp1
             Interactive_Object Coin = new Interactive_Object(1, 1, 0, 350, 200, 15, 50, "Coin");
             Objects.Add(Coin);
 
-            Interactive_Object Enemy = new Interactive_Object(1, 1, 1, 700, 700, 50, 100, "Enemy");
+            Interactive_Object Enemy = new Interactive_Object(1, 0, 0, 300, 300, 50, 500, "Enemy");
             Objects.Add(Enemy);
+
+            foreach (Interactive_Object IO in Objects)
+                {
+                    if (MapPositionX == IO.Get_Map_X && MapPositionY == IO.Get_Map_Y && !IO.Get_Interaction)
+                    {
+                        Game_Board.Controls.Add(IO.GetIcon);
+                    }
+                    else
+                    {
+                        Game_Board.Controls.Remove(IO.GetIcon);
+                    }
+                }
 
             battle = false;
         }
@@ -194,7 +208,7 @@ namespace WindowsFormsApp1
                 temp.Image = Image.FromFile(Environment.CurrentDirectory + "\\Map parts\\Level " + Current_Level.ToString() + "\\Battle.png");
                 battle = true;
                 Battle First_Battle = new Battle(temp);
-                Game_Board.Controls.Remove(Character);
+                Character.Visible = false;
                 Game_Board.Controls.Add(First_Battle.Get_Background);
 
                 //Dodawanie stworzeń
@@ -222,7 +236,6 @@ namespace WindowsFormsApp1
                 {
                     First_Battle.Get_Background.Controls.Add(el.Get_Creature);
                 }
-
             }
 
             if (Scene_Switch)

@@ -28,3 +28,14 @@ Z:\Knight\WindowsFormsApp1\obj\Debug\Map_Control.csproj.GenerateResource.cache
 Z:\Knight\WindowsFormsApp1\obj\Debug\Map_Control.csproj.CoreCompileInputs.cache
 Z:\Knight\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
 Z:\Knight\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb
+E:\projekty\Knight's Memorial\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe.config
+E:\projekty\Knight's Memorial\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe
+E:\projekty\Knight's Memorial\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.pdb
+E:\projekty\Knight's Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.MainForm.resources
+E:\projekty\Knight's Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Properties.Resources.resources
+E:\projekty\Knight's Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.GenerateResource.cache
+E:\projekty\Knight's Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.CoreCompileInputs.cache
+E:\projekty\Knight's Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
+E:\projekty\Knight's Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb
+E:\projekty\Knight's Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.AssemblyReference.cache
+E:\projekty\Knight's Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.SuggestedBindingRedirects.cache
