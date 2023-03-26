@@ -73,7 +73,7 @@ namespace WindowsFormsApp1
             Interactive_Object Coin = new Interactive_Object(1, 1, 0, 350, 200, 15, 50, "Coin");
             Objects.Add(Coin);
 
-            Interactive_Object Enemy = new Interactive_Object(1, 0, 0, 300, 300, 50, 500, "Enemy");
+            Interactive_Object Enemy = new Interactive_Object(1, 0, 0, 300, 300, 50, 50, "Enemy");
             Objects.Add(Enemy);
 
             foreach (Interactive_Object IO in Objects)
