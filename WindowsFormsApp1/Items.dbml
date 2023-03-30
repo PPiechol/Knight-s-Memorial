@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Items" Class="EquipmentDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Items.mdf;Integrated Security=True" SettingsObjectName="WindowsFormsApp1.Properties.Settings" SettingsPropertyName="EquipmentConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Items" Member="Items">
+    <Type Name="Items">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Damage" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Type_Of_Action" Type="System.Char" DbType="Char(1) NOT NULL" CanBeNull="false" />
+      <Column Name="Main_Target_Proc_Chance" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Other_Targets_Proc_Chance" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Amount_Of_Jumps" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Damage_After_Jump" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Items_Type_Of_Attack" Member="Type_Of_Attack" ThisKey="Id" OtherKey="Item_Id" Type="Type_Of_Attack" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Effects" Member="Effects">
+    <Type Name="Effects">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Effects_Weapon_Effects" Member="Weapon_Effects" ThisKey="Id" OtherKey="Effect_Id" Type="Weapon_Effects" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Type_Of_Attack" Member="Type_Of_Attack">
+    <Type Name="Type_Of_Attack">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Id_Ability" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Item_Id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Item_Type" Type="System.Char" DbType="Char(1) NOT NULL" CanBeNull="false" />
+      <Association Name="Items_Type_Of_Attack" Member="Items" ThisKey="Item_Id" OtherKey="Id" Type="Items" IsForeignKey="true" />
+      <Association Name="Weapon_Effects_Type_Of_Attack" Member="Weapon_Effects" ThisKey="Id_Ability" OtherKey="Id_Ability" Type="Weapon_Effects" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Weapon_Effects" Member="Weapon_Effects">
+    <Type Name="Weapon_Effects">
+      <Column Name="Id_Ability" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Strength" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Duration" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Effect_Id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Weapon_Effects_Type_Of_Attack" Member="Type_Of_Attack" ThisKey="Id_Ability" OtherKey="Id_Ability" Type="Type_Of_Attack" />
+      <Association Name="Effects_Weapon_Effects" Member="Effects" ThisKey="Effect_Id" OtherKey="Id" Type="Effects" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

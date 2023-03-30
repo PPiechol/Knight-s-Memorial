@@ -73,7 +73,7 @@ namespace WindowsFormsApp1
             Interactive_Object Coin = new Interactive_Object(1, 1, 0, 350, 200, 15, 50, "Coin");
             Objects.Add(Coin);
 
-            Interactive_Object Enemy = new Interactive_Object(1, 0, 0, 300, 300, 50, 50, "Enemy");
+            Interactive_Object Enemy = new Interactive_Object(1, 0, 0, 300, 300, 50, 400, "Enemy");
             Objects.Add(Enemy);
 
             foreach (Interactive_Object IO in Objects)
@@ -207,7 +207,14 @@ namespace WindowsFormsApp1
                 temp.BackColor = this.BackColor;
                 temp.Image = Image.FromFile(Environment.CurrentDirectory + "\\Map parts\\Level " + Current_Level.ToString() + "\\Battle.png");
                 battle = true;
-                Battle First_Battle = new Battle(temp);
+
+                List<int> Inventory = new List<int>();
+                Inventory.Add(1);
+                Inventory.Add(2);
+                Inventory.Add(3);
+                Inventory.Add(4);
+
+                Battle First_Battle = new Battle(temp, Inventory);
                 Character.Visible = false;
                 Game_Board.Controls.Add(First_Battle.Get_Background);
 
@@ -225,7 +232,7 @@ namespace WindowsFormsApp1
                 entity.Image = Objects[1].GetIcon.Image;
                 entity.Location = new Point(Display_Size - 350, (Display_Size - 100)/ 2);
 
-                First_Battle.Add_entity('e', 4, 20, entity);
+                First_Battle.Add_entity('e', 10, 55, entity);
 
                 foreach (Entity el in First_Battle.Get_Our_team)
                 {
