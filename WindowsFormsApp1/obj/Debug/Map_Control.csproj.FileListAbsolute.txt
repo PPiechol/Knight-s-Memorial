@@ -39,3 +39,5 @@ E:\projekty\Knight's Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
 E:\projekty\Knight's Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb
 E:\projekty\Knight's Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.AssemblyReference.cache
 E:\projekty\Knight's Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.SuggestedBindingRedirects.cache
+D:\Tomek\Virtual Studio\Projects\Knigth's Memorial\WindowsFormsApp1\bin\Debug\Items.mdf
+D:\Tomek\Virtual Studio\Projects\Knigth's Memorial\WindowsFormsApp1\bin\Debug\Items_log.ldf

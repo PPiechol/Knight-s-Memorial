@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="Items">
+  <DataContextMoniker Name="/EquipmentDataContext" />
+  <nestedChildShapes>
+    <classShape Id="be8f41ed-4303-44de-a8f6-a7010c911433" absoluteBounds="0.875, 4.125, 2, 2.3478011067708335">
+      <DataClassMoniker Name="/EquipmentDataContext/Items" />
+      <nestedChildShapes>
+        <elementListCompartment Id="31dee273-bb82-4a49-b17e-22ac71e631b7" absoluteBounds="0.88999999999999968, 4.585, 1.9700000000000002, 1.7878011067708335" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="46a4afe8-d304-4677-8c25-741956c15199" absoluteBounds="0.875, 1, 2, 1.1939925130208333">
+      <DataClassMoniker Name="/EquipmentDataContext/Effects" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c862be6e-3050-46ea-a99b-041e12b3a5a8" absoluteBounds="0.88999999999999968, 1.46, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="0bbbf1a0-ae36-4a07-a78c-a50b9be5b0eb" absoluteBounds="3.5, 4.75, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/EquipmentDataContext/Type_Of_Attack" />
+      <nestedChildShapes>
+        <elementListCompartment Id="8bc1a1a1-9c7d-4829-9cc6-003fd24bdcb6" absoluteBounds="3.515, 5.21, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.875 : 5.53929768880208); (3.5 : 5.53929768880208)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/EquipmentDataContext/Items/Items_Type_Of_Attack" />
+      <nodes>
+        <classShapeMoniker Id="be8f41ed-4303-44de-a8f6-a7010c911433" />
+        <classShapeMoniker Id="0bbbf1a0-ae36-4a07-a78c-a50b9be5b0eb" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="556ea419-41d2-4a11-bef2-6db744690cec" absoluteBounds="3.5, 2.125, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/EquipmentDataContext/Weapon_Effects" />
+      <nestedChildShapes>
+        <elementListCompartment Id="aaf476d3-8694-480a-823b-2cacc42d167d" absoluteBounds="3.5149999999999997, 2.585, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(4.5 : 3.70359537760417); (4.5 : 4.75)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/EquipmentDataContext/Weapon_Effects/Weapon_Effects_Type_Of_Attack" />
+      <nodes>
+        <classShapeMoniker Id="556ea419-41d2-4a11-bef2-6db744690cec" />
+        <classShapeMoniker Id="0bbbf1a0-ae36-4a07-a78c-a50b9be5b0eb" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(1.875 : 2.19399251302083); (1.875 : 2.91429768880208); (3.5 : 2.91429768880208)]" fixedFrom="Algorithm" fixedTo="NotFixed">
+      <AssociationMoniker Name="/EquipmentDataContext/Effects/Effects_Weapon_Effects" />
+      <nodes>
+        <classShapeMoniker Id="46a4afe8-d304-4677-8c25-741956c15199" />
+        <classShapeMoniker Id="556ea419-41d2-4a11-bef2-6db744690cec" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>
