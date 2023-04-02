@@ -17,7 +17,7 @@ namespace WindowsFormsApp1
     class Display : Panel
     {
         PictureBox Game_Board;
-        PictureBox Character;
+        public PictureBox Character;
         Bitmap Level_Hitbox;
         List<Interactive_Object> Objects;
         private const int Character_size = 50;
@@ -27,7 +27,8 @@ namespace WindowsFormsApp1
         int MapPositionX;
         int MapPositionY;
         int Current_Level;
-        bool battle;
+        public bool battle;
+        Battle activeBattle;
         
 
         public Display(int Width, int Height)
@@ -259,8 +260,8 @@ namespace WindowsFormsApp1
                 }
             }
         
-         
-            if (Objects[1].Get_Interaction)
+            
+            if (Objects.Count > 1 && Objects[1].Get_Interaction)
             {
                 PictureBox temp = new PictureBox();
                 temp.SizeMode = Game_Board.SizeMode;
@@ -275,7 +276,7 @@ namespace WindowsFormsApp1
                 Inventory.Add(3);
                 Inventory.Add(4);
 
-                Battle First_Battle = new Battle(temp, Inventory);
+                Battle First_Battle = new Battle(temp, Inventory, this);
                 Character.Visible = false;
                 Game_Board.Controls.Add(First_Battle.Get_Background);
 
@@ -293,7 +294,7 @@ namespace WindowsFormsApp1
                 entity.Image = Objects[1].GetIcon.Image;
                 entity.Location = new Point(Display_Size - 350, (Display_Size - 100)/ 2);
 
-                First_Battle.Add_entity('e', 10, 55, entity);
+                First_Battle.Add_entity('e', 10, 10, entity);
 
                 foreach (Entity el in First_Battle.Get_Our_team)
                 {
@@ -304,6 +305,10 @@ namespace WindowsFormsApp1
                 {
                     First_Battle.Get_Background.Controls.Add(el.Get_Creature);
                 }
+
+                Objects.Remove(Objects[1]);
+                activeBattle = First_Battle;
+
             }
 
             if (Scene_Switch)
@@ -413,6 +418,14 @@ namespace WindowsFormsApp1
             }
 
             return distance;
+        }
+
+        public void stopBattle()
+        {
+            Game_Board.Controls.Remove(activeBattle.Get_Background);
+            Character.Visible = true;
+            battle = false;
+            BackColor = Color.Orange;
         }
     }
 }

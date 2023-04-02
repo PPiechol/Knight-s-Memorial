@@ -72,3 +72,18 @@ D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\obj\Debug\Ma
 D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.CopyComplete
 D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
 D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb
+E:\projekty\ciul\WindowsFormsApp1\bin\Debug\Items.mdf
+E:\projekty\ciul\WindowsFormsApp1\bin\Debug\Items_log.ldf
+E:\projekty\ciul\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe.config
+E:\projekty\ciul\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe
+E:\projekty\ciul\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.pdb
+E:\projekty\ciul\WindowsFormsApp1\bin\Debug\System.Numerics.Vectors.dll
+E:\projekty\ciul\WindowsFormsApp1\bin\Debug\System.Numerics.Vectors.xml
+E:\projekty\ciul\WindowsFormsApp1\obj\Debug\Map_Control.csproj.AssemblyReference.cache
+E:\projekty\ciul\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.MainForm.resources
+E:\projekty\ciul\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Properties.Resources.resources
+E:\projekty\ciul\WindowsFormsApp1\obj\Debug\Map_Control.csproj.GenerateResource.cache
+E:\projekty\ciul\WindowsFormsApp1\obj\Debug\Map_Control.csproj.CoreCompileInputs.cache
+E:\projekty\ciul\WindowsFormsApp1\obj\Debug\Map_Control.csproj.CopyComplete
+E:\projekty\ciul\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
+E:\projekty\ciul\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb

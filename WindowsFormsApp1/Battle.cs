@@ -27,8 +27,11 @@ namespace WindowsFormsApp1
         bool Performing_Attack;
         EquipmentDataContext Edc = new EquipmentDataContext();
 
-        public Battle(PictureBox Background, List<int> Inventory)
+
+        Display temp;
+        public Battle(PictureBox Background, List<int> Inventory, Display temp)
         {
+            this.temp = temp;
             this.Background = Background;
             this.Inventory = Inventory;
             Our_team = new List<Entity>();
@@ -44,6 +47,7 @@ namespace WindowsFormsApp1
             Turn.ForeColor = Color.Black;
             Turn.BackColor = Color.FromArgb(100, 255, 255, 255);
             Background.Controls.Add(Turn);
+            Turn.Location = new Point((Background.Width - Turn.Width) / 2, Background.Height / 4 - Turn.Height);
             Selected_Item = new PictureBox();
             Selected_Item.Location = new Point(Background.Location.X + Background.Width / 8, Background.Width / 5 * 4); // ustawienie pozycji wyświetlania broni
             Selected_Item.Size = new Size(Icon_size, Icon_size);
@@ -158,10 +162,9 @@ namespace WindowsFormsApp1
             healthLabel.Text = health.ToString();
             healthLabel.Location = new Point(creature.Location.X + (creature.Width/2), creature.Location.Y - 20);
             healthLabel.AutoSize = true;
-            healthLabel.BackColor = Color.Transparent;
+            healthLabel.BackColor = Color.DarkRed;
             healthLabel.Font = new Font("System", 20);
             healthLabel.ForeColor = Color.WhiteSmoke;
-            healthLabel.BackColor = Color.DarkRed;
             healthLabel.Tag = temp;
             Background.Controls.Add(healthLabel);
         }
@@ -221,6 +224,7 @@ namespace WindowsFormsApp1
             }
             CheckBattleResult();
             Turn.Text = "TURA PRZECIWNIKÓW";
+            Turn.Location = new Point((Background.Width - Turn.Width) / 2, Turn.Location.Y);
             AttackWithDelay(OpponentAttack,1000);
         }
         
@@ -378,6 +382,7 @@ namespace WindowsFormsApp1
             UpdateEffects();
             Performing_Attack = false;
             Turn.Text = "TWOJA TURA";
+            Turn.Location = new Point((Background.Width - Turn.Width) / 2, Turn.Location.Y);
         }
 
         private void UpdateEffects()
@@ -429,33 +434,73 @@ namespace WindowsFormsApp1
 
             if (playerLost || opponentLost)
             {
+                Selected_Item.Visible = false;
+                Label napisik = new Label();
+                napisik.Font = new Font("System", 40);
 
-                Label prompt = new Label();
-                prompt.Location = new Point(Background.Location.X + (Background.Width / 3),
-                                            Background.Height / 4);
-                prompt.ForeColor = Color.Azure;
-                prompt.BackColor = Color.Transparent;
-                prompt.Font = new Font("System", 50);
+                napisik.AutoSize = true;
+                napisik.BringToFront();
                 if (playerLost)
                 {
-                    prompt.Text = "Przegrałeś!";
-                    Thread.Sleep(2000);
+                    napisik.Location = new Point(Background.Width / 2, Background.Height / 2);
+                    napisik.Size = new Size(Background.Width, Background.Height);
+                    napisik.Text = "Przegrałeś!";
+                    napisik.ForeColor = Color.Red;
+                    Background.BackColor = Color.Gray;
+                    temp.BackColor = Color.Gray;
+                    Background.Image = null;
+                    disappear();
+
                 }
                 else
                 {
-                    prompt.Text = "Wygrałeś!";
-                    Thread.Sleep(2000);
+                    napisik.Location = new Point((Background.Width / 2) - napisik.Size.Width, 100);
+                    napisik.Text = "Wygrałeś!";
+                    napisik.ForeColor = Color.LightGoldenrodYellow;
+                    Background.BackColor = Color.Green;
+                    temp.BackColor = Color.Green;
+                    disappear();
                 }
 
-                prompt.AutoSize = true;
-                prompt.BringToFront();
-                Background.Controls.Add(prompt);
-                Background.Dispose();
+                Background.Controls.Add(napisik);
+                Timer timer = new Timer();
+                timer.Interval = 5000;
+                timer.Tick += (sender, args) =>
+                {
+                    napisik.Hide();
+                    timer.Stop();
+                    if(playerLost)
+                    {
+                        Application.Exit();
+                    }
+                    temp.stopBattle();
+                };
+                timer.Start();
             }
             
         }
 
-        
+        private void disappear()
+        {
+            foreach (Control control in Background.Controls)
+            {
+                if (control is Label label && label.Tag is Entity entity && entity == Our_team[0])
+                {
+                    label.Visible = false;
+                }
+            }
+            foreach (Control obj in Background.Controls)
+            {
+                if (obj is Label)
+                {
+                    Background.Controls.Remove(obj as Label);
+                }
+                else if (obj is PictureBox)
+                {
+                    Background.Controls.Remove(obj as PictureBox);
+                }
+            }
+        }
 
         //Our_team = new List<Entity>();
     }
