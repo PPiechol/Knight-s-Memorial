@@ -37,8 +37,10 @@ namespace WindowsFormsApp1
 
             int Icon_size = 100;
             Turn = new Label();
+            Turn.AutoSize = true;
             Turn.Location = new Point((Background.Width - Turn.Width)/2, Background.Height / 4 - Turn.Height);
-            Turn.Text = "Twoja tura";
+            Turn.Font = new Font("Fixedsys Regular", 20);
+            Turn.Text = "TWOJA TURA";
             Turn.ForeColor = Color.Black;
             Turn.BackColor = Color.FromArgb(100, 255, 255, 255);
             Background.Controls.Add(Turn);
@@ -218,7 +220,7 @@ namespace WindowsFormsApp1
                 }
             }
             CheckBattleResult();
-            Turn.Text = "Tura przeciwników";
+            Turn.Text = "TURA PRZECIWNIKÓW";
             AttackWithDelay(OpponentAttack,1000);
         }
         
@@ -375,7 +377,7 @@ namespace WindowsFormsApp1
             CheckBattleResult();
             UpdateEffects();
             Performing_Attack = false;
-            Turn.Text = "Twoja tura";
+            Turn.Text = "TWOJA TURA";
         }
 
         private void UpdateEffects()
@@ -437,10 +439,12 @@ namespace WindowsFormsApp1
                 if (playerLost)
                 {
                     prompt.Text = "Przegrałeś!";
+                    Thread.Sleep(2000);
                 }
                 else
                 {
                     prompt.Text = "Wygrałeś!";
+                    Thread.Sleep(2000);
                 }
 
                 prompt.AutoSize = true;

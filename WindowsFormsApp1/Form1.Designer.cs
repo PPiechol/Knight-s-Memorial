@@ -29,6 +29,8 @@ namespace WindowsFormsApp1
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // MainForm
@@ -49,6 +51,8 @@ namespace WindowsFormsApp1
         }
 
         #endregion
+
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

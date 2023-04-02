@@ -91,5 +91,7 @@ namespace WindowsFormsApp1
                 interacted = value;
             }
         }
+
+        public object Location { get; internal set; }
     }
 }

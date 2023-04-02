@@ -28,5 +28,7 @@ namespace WindowsFormsApp1
             this.Controls.Add(Ekran_glowny);
             Ekran_glowny.Load_Level(1, 0, 0);
         }
+        
+
     }
 }

@@ -4,6 +4,8 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Numerics;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -11,6 +13,7 @@ using System.Windows.Forms.VisualStyles;
 
 namespace WindowsFormsApp1
 {
+    
     class Display : Panel
     {
         PictureBox Game_Board;
@@ -19,6 +22,7 @@ namespace WindowsFormsApp1
         List<Interactive_Object> Objects;
         private const int Character_size = 50;
         private const int speed = 5;
+        private int enemySpeed = 7;
         int Display_Size;
         int MapPositionX;
         int MapPositionY;
@@ -43,8 +47,13 @@ namespace WindowsFormsApp1
             Game_Board.SizeMode = PictureBoxSizeMode.Zoom;
             Game_Board.Location = new Point((Width - Display_Size)/2, (Height - Display_Size) / 2);
             this.Controls.Add(Game_Board);
+            Timer timer = new Timer();
+            timer.Interval = 100; // Set the interval to 100 milliseconds
+            timer.Tick += new EventHandler(OnTimerTick);
+            timer.Start();
         }
-
+        private int EnemyX;
+        private int EnemyY;
         public void Load_Level(int level, int Sx, int Sy)
         {
             MapPositionX = Sx;
@@ -63,7 +72,7 @@ namespace WindowsFormsApp1
             Character.BackColor = Color.Transparent;
 
             Game_Board.Controls.Add(Character);
-            Character.Location = new Point(Display_Size/2, Display_Size / 2);
+            Character.Location = new Point(Display_Size / 2, Display_Size / 2);
 
             //Beta HitBox'a
             Level_Hitbox = SetHitbox(level, MapPositionX, MapPositionY);
@@ -72,25 +81,74 @@ namespace WindowsFormsApp1
             Objects = new List<Interactive_Object>();
             Interactive_Object Coin = new Interactive_Object(1, 1, 0, 350, 200, 15, 50, "Coin");
             Objects.Add(Coin);
-
+            
             Interactive_Object Enemy = new Interactive_Object(1, 0, 0, 300, 300, 50, 100, "Enemy");
             Objects.Add(Enemy);
 
+          
             foreach (Interactive_Object IO in Objects)
+            {
+                if (MapPositionX == IO.Get_Map_X && MapPositionY == IO.Get_Map_Y && !IO.Get_Interaction)
                 {
-                    if (MapPositionX == IO.Get_Map_X && MapPositionY == IO.Get_Map_Y && !IO.Get_Interaction)
-                    {
-                        Game_Board.Controls.Add(IO.GetIcon);
-                    }
-                    else
-                    {
-                        Game_Board.Controls.Remove(IO.GetIcon);
-                    }
+                    Game_Board.Controls.Add(IO.GetIcon);
                 }
-
+                else
+                {
+                    Game_Board.Controls.Remove(IO.GetIcon);
+                }
+            }
+            EnemyX = Enemy.Get_Pos_X;
+            EnemyY = Enemy.Get_Pos_Y;
             battle = false;
         }
 
+        private void OnTimerTick(object sender, EventArgs e)
+        {
+            // Check if there's an enemy in the current scene
+            Interactive_Object enemy = Objects.FirstOrDefault(obj => obj.Get_Map_X == MapPositionX && obj.Get_Map_Y == MapPositionY);
+
+            if (enemy != null)
+            {
+                int dx = Character.Location.X - EnemyX;
+                int dy = Character.Location.Y - EnemyY;
+
+                int directionX = 0;
+                int directionY = 0;
+                int length = (int)Math.Sqrt(dx * dx + dy * dy);
+
+                if (length != 0 && length > 200)
+                {
+                    enemySpeed = 7;
+                    directionX = dx * enemySpeed / length;
+                    directionY = dy * enemySpeed / length;
+                    
+                }
+                else if(length != 0 && length <= 200 && length >= 50)
+                {
+                    
+                    enemySpeed = 15;
+                    directionX = dx * enemySpeed / length;
+                    directionY = dy * enemySpeed / length;
+                    
+                }else if(length == 0 || (length!=0 && length<50))
+                {
+                    KeyEventArgs keyEventArgs = new KeyEventArgs(Keys.Up);
+                    Movement(keyEventArgs);
+                }
+
+                EnemyX += directionX;
+                EnemyY += directionY;
+                enemy.GetIcon.Location = new Point(EnemyX, EnemyY);
+            }
+            
+
+
+
+
+
+
+
+        }
         private Image SetBackGround(int level, int x, int y)
         {
             Image BackGround = Image.FromFile(Environment.CurrentDirectory + "\\Map parts\\Level " + level.ToString() + "\\Map " + x.ToString() + "-" + y.ToString() + ".png");
@@ -125,9 +183,11 @@ namespace WindowsFormsApp1
             return toReturn;
         }
 
+
         public void Movement(KeyEventArgs e)
         {
-            if(battle)
+
+            if (battle)
             {
                 return;
             }
@@ -197,8 +257,8 @@ namespace WindowsFormsApp1
                     }
                 }
             }
-
-            //Ładowanie walki
+        
+         
             if (Objects[1].Get_Interaction)
             {
                 PictureBox temp = new PictureBox();
@@ -263,9 +323,9 @@ namespace WindowsFormsApp1
                 }
             }
         }
-
         private int TestHitbox(int old_x, int new_x, int old_y, int new_y)
         {
+            
             int distance = 0;
             int start_x, start_y, end_x, end_y, direction_x = 1, direction_y = 1;
             int temp = 0;
@@ -350,7 +410,9 @@ namespace WindowsFormsApp1
                     distance++;
                 }
             }
+
             return distance;
         }
     }
 }
+
