@@ -14,10 +14,11 @@ namespace WindowsFormsApp1
         int map_pos_x;
         int map_pos_y;
         int interaction_range;
+        char type;
         PictureBox icon;
         bool interacted;
 
-        public Interactive_Object(int level, int map_x, int map_y, int x, int y, int size, int range, string name)
+        public Interactive_Object(int level, int map_x, int map_y, int x, int y, int size, int range, string name, char type)
         {
             icon = new PictureBox();
             icon.SizeMode = PictureBoxSizeMode.Zoom;
@@ -30,6 +31,7 @@ namespace WindowsFormsApp1
             icon.Location = new Point(x, y);
             interaction_range = range;
             interacted = false;
+            this.type = type;
         }
 
         public PictureBox GetIcon
@@ -89,6 +91,18 @@ namespace WindowsFormsApp1
             set
             {
                 interacted = value;
+            }
+        }
+
+        public char Get_Type
+        {
+            get
+            {
+                return type;
+            }
+            set
+            {
+                type = value;
             }
         }
 

@@ -52,6 +52,7 @@ namespace WindowsFormsApp1
             timer.Tick += new EventHandler(OnTimerTick);
             timer.Start();
         }
+
         private int EnemyX;
         private int EnemyY;
         public void Load_Level(int level, int Sx, int Sy)
@@ -79,10 +80,10 @@ namespace WindowsFormsApp1
 
             //Punkty interakcji
             Objects = new List<Interactive_Object>();
-            Interactive_Object Coin = new Interactive_Object(1, 1, 0, 350, 200, 15, 50, "Coin");
+            Interactive_Object Coin = new Interactive_Object(1, 1, 0, 350, 200, 15, 50, "Coin",'o');
             Objects.Add(Coin);
             
-            Interactive_Object Enemy = new Interactive_Object(1, 0, 0, 300, 300, 50, 100, "Enemy");
+            Interactive_Object Enemy = new Interactive_Object(1, 0, 0, 300, 300, 50, 100, "Enemy",'e');
             Objects.Add(Enemy);
 
           
@@ -105,7 +106,7 @@ namespace WindowsFormsApp1
         private void OnTimerTick(object sender, EventArgs e)
         {
             // Check if there's an enemy in the current scene
-            Interactive_Object enemy = Objects.FirstOrDefault(obj => obj.Get_Map_X == MapPositionX && obj.Get_Map_Y == MapPositionY);
+            Interactive_Object enemy = Objects.FirstOrDefault(obj => obj.Get_Map_X == MapPositionX && obj.Get_Map_Y == MapPositionY && obj.Get_Type == 'e');
 
             if (enemy != null)
             {

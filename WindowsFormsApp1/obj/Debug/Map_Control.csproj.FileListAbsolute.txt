@@ -57,3 +57,18 @@ C:\Users\Yoshi\GAME\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb
 C:\Users\Yoshi\GAME\WindowsFormsApp1\bin\Debug\System.Numerics.Vectors.dll
 C:\Users\Yoshi\GAME\WindowsFormsApp1\bin\Debug\System.Numerics.Vectors.xml
 C:\Users\Yoshi\GAME\WindowsFormsApp1\obj\Debug\Map_Control.csproj.CopyComplete
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\Items.mdf
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\Items_log.ldf
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe.config
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.pdb
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\System.Numerics.Vectors.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\System.Numerics.Vectors.xml
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.AssemblyReference.cache
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.MainForm.resources
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Properties.Resources.resources
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.GenerateResource.cache
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.CoreCompileInputs.cache
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.CopyComplete
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb
