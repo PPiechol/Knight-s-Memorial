@@ -87,3 +87,4 @@ E:\projekty\ciul\WindowsFormsApp1\obj\Debug\Map_Control.csproj.CoreCompileInputs
 E:\projekty\ciul\WindowsFormsApp1\obj\Debug\Map_Control.csproj.CopyComplete
 E:\projekty\ciul\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
 E:\projekty\ciul\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb
+E:\projekty\ciul\WindowsFormsApp1\obj\Debug\Map_Control.csproj.SuggestedBindingRedirects.cache
