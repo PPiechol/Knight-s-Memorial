@@ -29,10 +29,12 @@ namespace WindowsFormsApp1
         int Current_Level;
         public bool battle;
         Battle activeBattle;
+        Form Source;
         
 
-        public Display(int Width, int Height)
+        public Display(int Width, int Height, Form Source_Form)
         {
+            Source = Source_Form;
             this.AutoSize = true;
             this.BackColor = Color.Orange;
             this.Dock = DockStyle.Fill;
@@ -188,7 +190,6 @@ namespace WindowsFormsApp1
 
         public void Movement(KeyEventArgs e)
         {
-
             if (battle)
             {
                 return;
@@ -294,7 +295,7 @@ namespace WindowsFormsApp1
                 entity.Image = Objects[1].GetIcon.Image;
                 entity.Location = new Point(Display_Size - 350, (Display_Size - 100)/ 2);
 
-                First_Battle.Add_entity('e', 10, 10, entity);
+                First_Battle.Add_entity('e', 10, 20, entity);
 
                 foreach (Entity el in First_Battle.Get_Our_team)
                 {
@@ -423,9 +424,11 @@ namespace WindowsFormsApp1
         public void stopBattle()
         {
             Game_Board.Controls.Remove(activeBattle.Get_Background);
+            Game_Board.Controls.Remove(activeBattle);
             Character.Visible = true;
             battle = false;
             BackColor = Color.Orange;
+            Source.Activate();
         }
     }
 }

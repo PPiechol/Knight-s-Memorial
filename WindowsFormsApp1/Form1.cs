@@ -24,11 +24,9 @@ namespace WindowsFormsApp1
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            Ekran_glowny = new Display(this.Width, this.Height);
+            Ekran_glowny = new Display(this.Width, this.Height, this);
             this.Controls.Add(Ekran_glowny);
             Ekran_glowny.Load_Level(1, 0, 0);
         }
-        
-
     }
 }
