@@ -88,3 +88,6 @@ E:\projekty\ciul\WindowsFormsApp1\obj\Debug\Map_Control.csproj.CopyComplete
 E:\projekty\ciul\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
 E:\projekty\ciul\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb
 E:\projekty\ciul\WindowsFormsApp1\obj\Debug\Map_Control.csproj.SuggestedBindingRedirects.cache
+D:\Tomek\Virtual Studio\Projects\Knigth's Memorial\WindowsFormsApp1\bin\Debug\System.Numerics.Vectors.dll
+D:\Tomek\Virtual Studio\Projects\Knigth's Memorial\WindowsFormsApp1\bin\Debug\System.Numerics.Vectors.xml
+D:\Tomek\Virtual Studio\Projects\Knigth's Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.CopyComplete

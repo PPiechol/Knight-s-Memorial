@@ -295,7 +295,7 @@ namespace WindowsFormsApp1
                 entity.Image = Objects[1].GetIcon.Image;
                 entity.Location = new Point(Display_Size - 350, (Display_Size - 100)/ 2);
 
-                First_Battle.Add_entity('e', 10, 20, entity);
+                First_Battle.Add_entity('e', 10, 40, entity);
 
                 foreach (Entity el in First_Battle.Get_Our_team)
                 {
@@ -424,7 +424,6 @@ namespace WindowsFormsApp1
         public void stopBattle()
         {
             Game_Board.Controls.Remove(activeBattle.Get_Background);
-            Game_Board.Controls.Remove(activeBattle);
             Character.Visible = true;
             battle = false;
             BackColor = Color.Orange;

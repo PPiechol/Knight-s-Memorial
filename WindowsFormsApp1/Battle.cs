@@ -74,7 +74,7 @@ namespace WindowsFormsApp1
                 Show_Inventory = new Panel();
                 
                 int Columns = (int)Math.Ceiling(Math.Sqrt(Amount));
-                int Rows = (int)Math.Round((double)Amount / Columns);
+                int Rows = (int)Math.Ceiling((double)Amount / Columns);
                 
                 Show_Inventory.Width = Offset + (Offset + Icon_size) * Columns;
                 Show_Inventory.Height = Offset + (Offset + Icon_size) * Rows;
@@ -361,7 +361,7 @@ namespace WindowsFormsApp1
 
             //tymczasowo
             int Damage = Opponents[0].Get_Damage;
-            if(Opponents[0].Effects.Count == 0)
+            if(Opponents[0].AbleToAttack)
             {
                 if (Our_team[0].Effects.Count > 0)
                 {
@@ -387,26 +387,31 @@ namespace WindowsFormsApp1
 
         private void UpdateEffects()
         {
+            Entity Selected_entity;
             for(int i = 0; i < Our_team.Count; i++)
             {
                 foreach (Weapon_Effects Effect in Our_team[i].Effects.ToList())
                 {
+                    Effect.Duration--;
                     if(Effect.Duration == 0)
                     {
-                        Our_team[i].Effects.Remove(Effect);
+                        Selected_entity = Our_team[i];
+                        Selected_entity.Effects.Remove(Effect);
+                        Our_team[i].Effects = Selected_entity.Effects;
                     }
-                    Effect.Duration--;
                 }
             }
             for (int i = 0; i < Opponents.Count; i++)
             {
                 foreach (Weapon_Effects Effect in Opponents[i].Effects.ToList())
                 {
+                    Effect.Duration--;
                     if (Effect.Duration == 0)
                     {
-                        Opponents[i].Effects.Remove(Effect);
+                        Selected_entity = Opponents[i];
+                        Selected_entity.Effects.Remove(Effect);
+                        Opponents[i].Effects = Selected_entity.Effects;
                     }
-                    Effect.Duration--;
                 }
             }
         }
