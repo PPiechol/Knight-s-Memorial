@@ -27,7 +27,6 @@ namespace WindowsFormsApp1
             health = max_health;
             Able_To_Attack = true;
             Current_Effects = new List<Weapon_Effects>();
-            
         }
 
         
@@ -111,6 +110,7 @@ namespace WindowsFormsApp1
                     }
                     creature.Controls.Add(Show_effect);
                 }
+                creature.Refresh();
             }
         }
 

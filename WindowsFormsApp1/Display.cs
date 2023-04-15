@@ -30,7 +30,10 @@ namespace WindowsFormsApp1
         public bool battle;
         Battle activeBattle;
         Form Source;
-        
+        List<int> Inventory;
+        Timer timer;
+
+
 
         public Display(int Width, int Height, Form Source_Form)
         {
@@ -50,7 +53,8 @@ namespace WindowsFormsApp1
             Game_Board.SizeMode = PictureBoxSizeMode.Zoom;
             Game_Board.Location = new Point((Width - Display_Size)/2, (Height - Display_Size) / 2);
             this.Controls.Add(Game_Board);
-            Timer timer = new Timer();
+
+            timer = new Timer();
             timer.Interval = 100; // Set the interval to 100 milliseconds
             timer.Tick += new EventHandler(OnTimerTick);
             timer.Start();
@@ -63,6 +67,12 @@ namespace WindowsFormsApp1
             MapPositionX = Sx;
             MapPositionY = Sy;
             Current_Level = level;
+
+            Inventory = new List<int>();
+            Inventory.Add(1);
+            Inventory.Add(2);
+            Inventory.Add(3);
+            Inventory.Add(4);
 
             Character = new PictureBox();
 
@@ -85,20 +95,32 @@ namespace WindowsFormsApp1
             Objects = new List<Interactive_Object>();
             Interactive_Object Coin = new Interactive_Object(1, 1, 0, 350, 200, 15, 50, "Coin",'o');
             Objects.Add(Coin);
-            
-            Interactive_Object Enemy = new Interactive_Object(1, 0, 0, 300, 300, 50, 100, "Enemy",'e');
+            Interactive_Object Enemy = new Interactive_Object(1, 0, 0, 300, 300, 50, 50, "Enemy", null);
+            Entity Monster = new Entity(Enemy.Get_Icon,6,20);
+            Enemy.Get_Type = Monster;
             Objects.Add(Enemy);
 
-          
+            Interactive_Object Enemy1 = new Interactive_Object(1, 2, 0, 1000, 800, 50, 50, "Enemy", null);
+            Entity Monster1 = new Entity(Enemy1.Get_Icon, 10, 40);
+            Enemy1.Get_Type = Monster1;
+            Objects.Add(Enemy1);
+
+            
+            Interactive_Object Enemy2 = new Interactive_Object(1, 2, 2, 800, 1000, 80, 50, "Enemy2", null);
+            Entity Monster2 = new Entity(Enemy2.Get_Icon, 12, 55);
+            Enemy2.Get_Type = Monster2;
+            Objects.Add(Enemy2);
+
+
             foreach (Interactive_Object IO in Objects)
             {
                 if (MapPositionX == IO.Get_Map_X && MapPositionY == IO.Get_Map_Y && !IO.Get_Interaction)
                 {
-                    Game_Board.Controls.Add(IO.GetIcon);
+                    Game_Board.Controls.Add(IO.Get_Icon);
                 }
                 else
                 {
-                    Game_Board.Controls.Remove(IO.GetIcon);
+                    Game_Board.Controls.Remove(IO.Get_Icon);
                 }
             }
             EnemyX = Enemy.Get_Pos_X;
@@ -109,50 +131,96 @@ namespace WindowsFormsApp1
         private void OnTimerTick(object sender, EventArgs e)
         {
             // Check if there's an enemy in the current scene
-            Interactive_Object enemy = Objects.FirstOrDefault(obj => obj.Get_Map_X == MapPositionX && obj.Get_Map_Y == MapPositionY && obj.Get_Type == 'e');
-
-            if (enemy != null)
+            foreach(Interactive_Object enemy in Objects)
             {
-                int dx = Character.Location.X - EnemyX;
-                int dy = Character.Location.Y - EnemyY;
-
-                int directionX = 0;
-                int directionY = 0;
-                int length = (int)Math.Sqrt(dx * dx + dy * dy);
-
-                if (length != 0 && length > 200)
+                if (enemy.Get_Type is Entity && enemy.Get_Map_X == MapPositionX && enemy.Get_Map_Y == MapPositionY)
                 {
-                    enemySpeed = 7;
-                    directionX = dx * enemySpeed / length;
-                    directionY = dy * enemySpeed / length;
-                    
+                    int dx = Character.Location.X - EnemyX;
+                    int dy = Character.Location.Y - EnemyY;
+
+                    int directionX = 0;
+                    int directionY = 0;
+                    int length = (int)Math.Sqrt(dx * dx + dy * dy);
+
+                    if (length != 0 && length > 200)
+                    {
+                        enemySpeed = 7;
+                        directionX = dx * enemySpeed / length;
+                        directionY = dy * enemySpeed / length;
+
+                    }
+                    else if (length != 0 && length <= 200 && length >= 50)
+                    {
+
+                        enemySpeed = 15;
+                        directionX = dx * enemySpeed / length;
+                        directionY = dy * enemySpeed / length;
+
+                    }
+                    else if (length == 0 || (length != 0 && length < 50))
+                    {
+                        KeyEventArgs Move_up = new KeyEventArgs(Keys.Up);
+                        Movement(Move_up);
+                        PictureBox temp = new PictureBox();
+                        temp.SizeMode = Game_Board.SizeMode;
+                        temp.Size = Game_Board.Size;
+                        temp.BackColor = this.BackColor;
+
+                        temp.Image = Image.FromFile(Environment.CurrentDirectory + "\\Map parts\\Level " + Current_Level.ToString() + "\\Battle.png");
+                        battle = true;
+
+                        Battle Prepare_Battle = new Battle(temp, Inventory, this);
+                        Character.Visible = false;
+
+                        foreach (Interactive_Object IO in Objects)
+                        {
+                            IO.Get_Icon.Visible = false;
+                        }
+
+                        Game_Board.Controls.Add(Prepare_Battle.Get_Background);
+
+                        //Dodawanie stworzeń
+                        PictureBox fighter = new PictureBox();
+                        fighter.SizeMode = PictureBoxSizeMode.Zoom;
+                        fighter.BackColor = Color.Transparent;
+                        fighter.Size = new Size(200, 200);
+
+                        fighter.Image = Character.Image;
+                        fighter.Location = new Point(150, (Display_Size - 100) / 2);
+
+                        Prepare_Battle.Add_entity('p', 8, 35, fighter);
+
+                        Entity New_Enemy = (enemy.Get_Type as Entity);
+
+                        fighter.Size = new Size(New_Enemy.Get_Creature.Width * 4, New_Enemy.Get_Creature.Height * 4);
+                        fighter.Image = New_Enemy.Get_Creature.Image;
+                        fighter.Location = new Point(Display_Size - 350, (Display_Size - fighter.Height) / 2);
+
+                        Prepare_Battle.Add_entity('e', New_Enemy.Get_Damage, New_Enemy.Get_health, fighter);
+
+                        foreach (Entity el in Prepare_Battle.Get_Our_team)
+                        {
+                            Prepare_Battle.Get_Background.Controls.Add(el.Get_Creature);
+                        }
+
+                        foreach (Entity el in Prepare_Battle.Get_Opponents)
+                        {
+                            Prepare_Battle.Get_Background.Controls.Add(el.Get_Creature);
+                        }
+
+                        Objects.Remove(enemy);
+                        activeBattle = Prepare_Battle;
+                        timer.Enabled = false;
+                    }
+
+                    EnemyX += directionX;
+                    EnemyY += directionY;
+                    enemy.Get_Icon.Location = new Point(EnemyX, EnemyY);
+                    break;
                 }
-                else if(length != 0 && length <= 200 && length >= 50)
-                {
-                    
-                    enemySpeed = 15;
-                    directionX = dx * enemySpeed / length;
-                    directionY = dy * enemySpeed / length;
-                    
-                }else if(length == 0 || (length!=0 && length<50))
-                {
-                    KeyEventArgs keyEventArgs = new KeyEventArgs(Keys.Up);
-                    Movement(keyEventArgs);
-                }
-
-                EnemyX += directionX;
-                EnemyY += directionY;
-                enemy.GetIcon.Location = new Point(EnemyX, EnemyY);
             }
-            
-
-
-
-
-
-
-
         }
+
         private Image SetBackGround(int level, int x, int y)
         {
             Image BackGround = Image.FromFile(Environment.CurrentDirectory + "\\Map parts\\Level " + level.ToString() + "\\Map " + x.ToString() + "-" + y.ToString() + ".png");
@@ -251,67 +319,16 @@ namespace WindowsFormsApp1
             }
             foreach (Interactive_Object IO in Objects)
             {
-                if (Game_Board.Controls.Contains(IO.GetIcon))
+                if (Game_Board.Controls.Contains(IO.Get_Icon))
                 {
                     if (Math.Pow(x - IO.Get_Pos_X, 2) + Math.Pow(y - IO.Get_Pos_Y, 2) <= Math.Pow(IO.Get_Range, 2))
                     {
                         IO.Get_Interaction = true;
-                        Game_Board.Controls.Remove(IO.GetIcon);
+                        Game_Board.Controls.Remove(IO.Get_Icon);
                     }
                 }
             }
         
-            
-            if (Objects.Count > 1 && Objects[1].Get_Interaction)
-            {
-                PictureBox temp = new PictureBox();
-                temp.SizeMode = Game_Board.SizeMode;
-                temp.Size = Game_Board.Size;
-                temp.BackColor = this.BackColor;
-                temp.Image = Image.FromFile(Environment.CurrentDirectory + "\\Map parts\\Level " + Current_Level.ToString() + "\\Battle.png");
-                battle = true;
-
-                List<int> Inventory = new List<int>();
-                Inventory.Add(1);
-                Inventory.Add(2);
-                Inventory.Add(3);
-                Inventory.Add(4);
-
-                Battle First_Battle = new Battle(temp, Inventory, this);
-                Character.Visible = false;
-                Game_Board.Controls.Add(First_Battle.Get_Background);
-
-                //Dodawanie stworzeń
-                PictureBox entity = new PictureBox();
-                entity.SizeMode = PictureBoxSizeMode.Zoom;
-                entity.BackColor = Color.Transparent;
-                entity.Size = new Size(200, 200);
-
-                entity.Image = Character.Image;
-                entity.Location = new Point(150, (Display_Size - 100) / 2);
-
-                First_Battle.Add_entity('p', 8, 35, entity);
-
-                entity.Image = Objects[1].GetIcon.Image;
-                entity.Location = new Point(Display_Size - 350, (Display_Size - 100)/ 2);
-
-                First_Battle.Add_entity('e', 10, 40, entity);
-
-                foreach (Entity el in First_Battle.Get_Our_team)
-                {
-                    First_Battle.Get_Background.Controls.Add(el.Get_Creature);
-                }
-
-                foreach (Entity el in First_Battle.Get_Opponents)
-                {
-                    First_Battle.Get_Background.Controls.Add(el.Get_Creature);
-                }
-
-                Objects.Remove(Objects[1]);
-                activeBattle = First_Battle;
-
-            }
-
             if (Scene_Switch)
             {
                 Game_Board.Image = SetBackGround(Current_Level, MapPositionX, MapPositionY);
@@ -321,11 +338,11 @@ namespace WindowsFormsApp1
                 {
                     if (MapPositionX == IO.Get_Map_X && MapPositionY == IO.Get_Map_Y && !IO.Get_Interaction)
                     {
-                        Game_Board.Controls.Add(IO.GetIcon);
+                        Game_Board.Controls.Add(IO.Get_Icon);
                     }
                     else
                     {
-                        Game_Board.Controls.Remove(IO.GetIcon);
+                        Game_Board.Controls.Remove(IO.Get_Icon);
                     }
                 }
             }
@@ -424,10 +441,18 @@ namespace WindowsFormsApp1
         public void stopBattle()
         {
             Game_Board.Controls.Remove(activeBattle.Get_Background);
+            activeBattle.Dispose();
+            activeBattle = null;
             Character.Visible = true;
             battle = false;
             BackColor = Color.Orange;
             Source.Activate();
+            Source.Focus();
+            timer.Enabled = true;
+            foreach (Interactive_Object IO in Objects)
+            {
+                IO.Get_Icon.Visible = true;
+            }
         }
     }
 }

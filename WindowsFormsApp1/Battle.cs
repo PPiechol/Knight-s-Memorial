@@ -74,8 +74,13 @@ namespace WindowsFormsApp1
                 Show_Inventory = new Panel();
                 
                 int Columns = (int)Math.Ceiling(Math.Sqrt(Amount));
-                int Rows = (int)Math.Ceiling((double)Amount / Columns);
-                
+                int Rows = (int)Math.Round((double)Amount / Columns);
+
+                if(Columns * Rows < Amount)
+                {
+                    Rows++;
+                }
+
                 Show_Inventory.Width = Offset + (Offset + Icon_size) * Columns;
                 Show_Inventory.Height = Offset + (Offset + Icon_size) * Rows;
                 Show_Inventory.BackColor = Color.FromArgb(100, 0, 0, 0);
@@ -222,10 +227,12 @@ namespace WindowsFormsApp1
                     break;
                 }
             }
-            CheckBattleResult();
-            Turn.Text = "TURA PRZECIWNIKÓW";
-            Turn.Location = new Point((Background.Width - Turn.Width) / 2, Turn.Location.Y);
-            AttackWithDelay(OpponentAttack,1000);
+            if(CheckBattleResult())
+            {
+                Turn.Text = "TURA PRZECIWNIKÓW";
+                Turn.Location = new Point((Background.Width - Turn.Width) / 2, Turn.Location.Y);
+                AttackWithDelay(OpponentAttack,1000);
+            }
         }
         
         private void Perform_Action(PictureBox Target)
@@ -249,20 +256,26 @@ namespace WindowsFormsApp1
                                              select WE;
 
                     List<Weapon_Effects> Effects_To_Apply_Solo = new List<Weapon_Effects>();
-                    foreach (Weapon_Effects Effect in Effects_Found_Solo)
+                    foreach (Weapon_Effects Effect_Solo in Effects_Found_Solo)
                     {
+                        Weapon_Effects Effect_clone = new Weapon_Effects();
+                        Effect_clone.Id_Ability = Effect_Solo.Id_Ability;
+                        Effect_clone.Strength = Effect_Solo.Strength;
+                        Effect_clone.Duration = Effect_Solo.Duration;
+                        Effect_clone.Effect_Id = Effect_Solo.Effect_Id;
+
                         var Effect_Chance = from WE in Edc.Weapon_Effects
                                             let EN = WE.Effects
-                                            where EN.Id == Effect.Effect_Id
+                                            where EN.Id == Effect_clone.Effect_Id
                                             select EN;
                         foreach(Effects Type in Effect_Chance)
                         {
                             bool effect_on_list = false;
                             foreach(Weapon_Effects check in Opponents[Target_Id].Effects)
                             {
-                                if(check.Effect_Id == Effect.Effect_Id)
+                                if(check.Effect_Id == Effect_clone.Effect_Id)
                                 {
-                                    check.Duration = Effect.Duration;
+                                    check.Duration = Effect_clone.Duration;
                                     effect_on_list = true;
                                     break;
                                 }
@@ -271,9 +284,9 @@ namespace WindowsFormsApp1
                             {
                                 if(Type.Name == "Stun")
                                 {
-                                    if (Chance.Next() % 100 < Effect.Strength)
+                                    if (Chance.Next() % 100 < Effect_clone.Strength)
                                     {
-                                        Effects_To_Apply_Solo.Add(Effect);
+                                        Effects_To_Apply_Solo.Add(Effect_clone);
                                     }
                                 }
                             }
@@ -298,9 +311,15 @@ namespace WindowsFormsApp1
                                                  select WE;
 
                         List<Weapon_Effects> Effects_To_Apply_Multi = new List<Weapon_Effects>();
-                        foreach (Weapon_Effects Effect in Effects_Found_Multi)
+                        foreach (Weapon_Effects Effect_Multi in Effects_Found_Multi)
                         {
-                            Effects_To_Apply_Multi.Add(Effect);
+                            Weapon_Effects Effect_clone = new Weapon_Effects();
+                            Effect_clone.Id_Ability = Effect_Multi.Id_Ability;
+                            Effect_clone.Strength = Effect_Multi.Strength;
+                            Effect_clone.Duration = Effect_Multi.Duration;
+                            Effect_clone.Effect_Id = Effect_Multi.Effect_Id;
+
+                            Effects_To_Apply_Multi.Add(Effect_clone);
                         }
                         if (Chance.Next() % 100 < (int)Querry.Main_Target_Proc_Chance)
                         {
@@ -346,7 +365,12 @@ namespace WindowsFormsApp1
                         List<Weapon_Effects> Effects_To_Apply = new List<Weapon_Effects>();
                         foreach (Weapon_Effects Effect in Support_Effects)
                         {
-                            Effects_To_Apply.Add(Effect);
+                            Weapon_Effects Effect_clone = new Weapon_Effects();
+                            Effect_clone.Id_Ability = Effect.Id_Ability;
+                            Effect_clone.Strength = Effect.Strength;
+                            Effect_clone.Duration = Effect.Duration;
+                            Effect_clone.Effect_Id = Effect.Effect_Id;
+                            Effects_To_Apply.Add(Effect_clone);
                         }
                         Our_team[Target_Id].Effects = Effects_To_Apply;
                     }
@@ -361,7 +385,7 @@ namespace WindowsFormsApp1
 
             //tymczasowo
             int Damage = Opponents[0].Get_Damage;
-            if(Opponents[0].AbleToAttack)
+            if(Opponents[0].AbleToAttack && Opponents[0].Get_health > 0)
             {
                 if (Our_team[0].Effects.Count > 0)
                 {
@@ -378,11 +402,13 @@ namespace WindowsFormsApp1
                     }
                 }
             }
-            CheckBattleResult();
-            UpdateEffects();
-            Performing_Attack = false;
-            Turn.Text = "TWOJA TURA";
-            Turn.Location = new Point((Background.Width - Turn.Width) / 2, Turn.Location.Y);
+            if(CheckBattleResult())
+            {
+                UpdateEffects();
+                Performing_Attack = false;
+                Turn.Text = "TWOJA TURA";
+                Turn.Location = new Point((Background.Width - Turn.Width) / 2, Turn.Location.Y);
+            }
         }
 
         private void UpdateEffects()
@@ -416,7 +442,7 @@ namespace WindowsFormsApp1
             }
         }
 
-        public void CheckBattleResult()
+        public bool CheckBattleResult()
         {
             bool playerLost = true;
             bool opponentLost = true;
@@ -467,22 +493,27 @@ namespace WindowsFormsApp1
                     disappear();
                 }
 
+                foreach (Entity Heros in Our_team)
+                {
+                    Heros.Get_Creature.Enabled = false;
+                }
                 Background.Controls.Add(napisik);
                 Timer timer = new Timer();
-                timer.Interval = 5000;
+                timer.Interval = 2000;
                 timer.Tick += (sender, args) =>
                 {
                     napisik.Hide();
-                    timer.Stop();
                     if(playerLost)
                     {
                         Application.Exit();
                     }
                     temp.stopBattle();
+                    timer.Stop();
                 };
                 timer.Start();
+                return false;
             }
-            
+            return true;
         }
 
         private void disappear()
@@ -498,15 +529,18 @@ namespace WindowsFormsApp1
             {
                 if (obj is Label)
                 {
-                    Background.Controls.Remove(obj as Label);
+                    Label To_delete = (obj as Label);
+                    To_delete.Visible = false;
+                    Background.Controls.Remove(To_delete);
                 }
                 else if (obj is PictureBox)
                 {
-                    Background.Controls.Remove(obj as PictureBox);
+                    PictureBox To_delete = (obj as PictureBox);
+                    To_delete.Visible = false;
+                    Background.Controls.Remove(To_delete);
                 }
             }
+            Background.Refresh();
         }
-
-        //Our_team = new List<Entity>();
     }
 }
