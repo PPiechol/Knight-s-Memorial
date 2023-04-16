@@ -29,6 +29,7 @@ namespace WindowsFormsApp1
 
 
         Display temp;
+        Bitmap Warrior_Image;
         public Battle(PictureBox Background, List<int> Inventory, Display temp)
         {
             this.temp = temp;
@@ -129,6 +130,15 @@ namespace WindowsFormsApp1
                 Selected_Item.Visible = true;
                 Selected_Item.Image = Temp.Image;
                 Main_Hand = Convert.ToInt32(Temp.Name);
+                Bitmap Item_Image = (Bitmap)Display.Scale(Selected_Item.Image, Selected_Item.Width, Selected_Item.Height);
+                Bitmap New_Background = Redraw_Held_Item_Under(Warrior_Image, Item_Image);
+
+                if (Main_Hand == 2)
+                {
+                    New_Background = Redraw_Held_Item_Above(Warrior_Image, Item_Image);
+                }
+
+                Our_team[0].Get_Creature.Image = New_Background;
             }
         }
 
@@ -150,7 +160,7 @@ namespace WindowsFormsApp1
             creature.SizeMode = source.SizeMode;
             creature.BackColor = source.BackColor;
             creature.Click += AttackButton_Click;
-            
+
             Entity temp = new Entity(creature, damage, health);
             if(team == 'e')
             {
@@ -159,10 +169,22 @@ namespace WindowsFormsApp1
             }
             else if(team == 'p')
             {
+                PictureBox Held_Item = new PictureBox();
+                Held_Item.Size = Selected_Item.Size;
+                Held_Item.Image = Selected_Item.Image;
+
                 creature.Name = Our_team.Count.ToString() + team;
                 Our_team.Add(temp);
+                PictureBox Warrior = Our_team[0].Get_Creature;
+
+                Warrior_Image = (Bitmap)Display.Scale(Warrior.Image, 7 * Warrior.Width / 10, Warrior.Height);
+                Bitmap Item_Image = (Bitmap)Display.Scale(Held_Item.Image, Held_Item.Width, Held_Item.Height);
+                Bitmap New_Background = Redraw_Held_Item_Under(Warrior_Image, Item_Image);
+
+                Warrior.Image = New_Background;
+                Warrior.Size = New_Background.Size;
             }
-            
+
             Label healthLabel = new Label();
             healthLabel.Text = health.ToString();
             healthLabel.Location = new Point(creature.Location.X + (creature.Width/2), creature.Location.Y - 20);
@@ -172,6 +194,69 @@ namespace WindowsFormsApp1
             healthLabel.ForeColor = Color.WhiteSmoke;
             healthLabel.Tag = temp;
             Background.Controls.Add(healthLabel);
+        }
+
+        private Bitmap Redraw_Held_Item_Under(Bitmap Warrior_Image, Bitmap Item_Image)
+        {
+            Bitmap New_Background = new Bitmap((4 * Warrior_Image.Width / 5) + Item_Image.Width, Warrior_Image.Height);
+            for (int y = 0; y < New_Background.Height; y++)
+            {
+                for (int x = 0; x < New_Background.Width; x++)
+                {
+                    New_Background.SetPixel(x, y, Color.Transparent);
+                }
+            }
+            for (int y = 0; y < Item_Image.Height; y++)
+            {
+                for (int x = 0; x < Item_Image.Width; x++)
+                {
+                    New_Background.SetPixel(x + (4 * Warrior_Image.Width / 5), y + (17 * Warrior_Image.Height / 20) - Item_Image.Height, Item_Image.GetPixel(x, y));
+                }
+            }
+            for (int y = 0; y < Warrior_Image.Height; y++)
+            {
+                for (int x = 0; x < Warrior_Image.Width; x++)
+                {
+                    Color Pixel_Color = Warrior_Image.GetPixel(x, y);
+                    if (Pixel_Color != Color.FromArgb(0, 0, 0, 0))
+                    {
+                        New_Background.SetPixel(x, y, Pixel_Color);
+                    }
+                }
+            }
+
+            return New_Background;
+        }
+
+        private Bitmap Redraw_Held_Item_Above(Bitmap Warrior_Image, Bitmap Item_Image)
+        {
+            Bitmap New_Background = new Bitmap((4 * Warrior_Image.Width / 5) + Item_Image.Width, Warrior_Image.Height);
+            for (int y = 0; y < New_Background.Height; y++)
+            {
+                for (int x = 0; x < New_Background.Width; x++)
+                {
+                    New_Background.SetPixel(x, y, Color.FromArgb(0, 0, 0, 0));
+                }
+            }
+            for (int y = 0; y < Item_Image.Height; y++)
+            {
+                for (int x = 0; x < Item_Image.Width; x++)
+                {
+                    New_Background.SetPixel(x + (3 * Warrior_Image.Width / 5), y + (9 * Warrior_Image.Height / 10) - Item_Image.Height, Item_Image.GetPixel(x, y));
+                }
+            }
+            for (int y = 0; y < Warrior_Image.Height; y++)
+            {
+                for (int x = 0; x < Warrior_Image.Width; x++)
+                {;
+                    if (New_Background.GetPixel(x,y) == Color.FromArgb(0, 0, 0, 0))
+                    {
+                        New_Background.SetPixel(x, y, Warrior_Image.GetPixel(x, y));
+                    }
+                }
+            }
+
+            return New_Background;
         }
 
         public List<Entity> Get_Our_team

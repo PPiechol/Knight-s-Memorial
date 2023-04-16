@@ -186,7 +186,7 @@ namespace WindowsFormsApp1
                         fighter.Size = new Size(200, 200);
 
                         fighter.Image = Character.Image;
-                        fighter.Location = new Point(150, (Display_Size - 100) / 2);
+                        fighter.Location = new Point(150, Display_Size / 2 - fighter.Height + 150);
 
                         Prepare_Battle.Add_entity('p', 8, 35, fighter);
 
@@ -194,7 +194,7 @@ namespace WindowsFormsApp1
 
                         fighter.Size = new Size(New_Enemy.Get_Creature.Width * 4, New_Enemy.Get_Creature.Height * 4);
                         fighter.Image = New_Enemy.Get_Creature.Image;
-                        fighter.Location = new Point(Display_Size - 350, (Display_Size - fighter.Height) / 2);
+                        fighter.Location = new Point(Display_Size - 350, Display_Size / 2 - fighter.Height + 150);
 
                         Prepare_Battle.Add_entity('e', New_Enemy.Get_Damage, New_Enemy.Get_health, fighter);
 
