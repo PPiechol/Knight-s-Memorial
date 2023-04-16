@@ -16,22 +16,23 @@ namespace WindowsFormsApp1
         Display Ekran_glowny;
         PictureBox pictureBox1;
 
-        
+
         public MainForm()
         {
             InitializeComponent();
 
             Panel panelLeft = new Panel();
-            panelLeft.Location = new Point(0, 0); // Set the desired location
-            panelLeft.Size = new Size(420, 250);
+            panelLeft.Location = new Point(0, 0);
+            panelLeft.Size = new Size(Screen.PrimaryScreen.Bounds.Width / 5, 250);
             panelLeft.Visible = true;
+            
             this.Controls.Add(panelLeft);
             pictureBox1 = new PictureBox();
             Player player = new Player(pictureBox1, 1, 35, 8, 10, 1, panelLeft);
 
         }
 
-        
+
 
 
         private void KeyIsDown(object sender, KeyEventArgs e)

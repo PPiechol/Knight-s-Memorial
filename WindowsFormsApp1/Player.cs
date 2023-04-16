@@ -12,7 +12,7 @@ namespace WindowsFormsApp1
     class Player
     {
         PictureBox Character;
-        
+
         int health;
         int attackSpeed;
         int critHitChance;
@@ -37,6 +37,8 @@ namespace WindowsFormsApp1
             Level.Left = 10;
             Level.Location = new Point(10, 10);
             Level.AutoSize = true;
+            
+            
             panelLeft.Controls.Add(Level);
 
             Label Health = new Label();
@@ -58,7 +60,7 @@ namespace WindowsFormsApp1
             panelLeft.Controls.Add(AttackSpeed);
 
             Label crit = new Label();
-            crit.Text = "Critical hit chance: " + critHitChance;
+            crit.Text = "Critic: " + critHitChance + "%";
             crit.Font = new Font("Arial", 24, FontStyle.Bold);
             crit.AutoSize = true;
             crit.Top = AttackSpeed.Bottom + 15;

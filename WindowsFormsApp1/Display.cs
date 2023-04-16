@@ -14,14 +14,16 @@ using System.Windows.Forms.VisualStyles;
 
 namespace WindowsFormsApp1
 {
-    
+
     class Display : Panel
     {
         PictureBox Game_Board;
-        Panel panelMenu;
-        System.Windows.Forms.Label stopButton;
+
+        
         System.Windows.Forms.Label continueButton;
         System.Windows.Forms.Label exitButton;
+        System.Windows.Forms.Label menu;
+        System.Windows.Forms.Label menuText;
         public PictureBox Character;
         Bitmap Level_Hitbox;
         List<Interactive_Object> Objects;
@@ -34,6 +36,7 @@ namespace WindowsFormsApp1
         int Current_Level;
         public bool battle;
         
+        Panel panelMenu;
         Battle activeBattle;
         Form Source;
         List<int> Inventory;
@@ -58,45 +61,90 @@ namespace WindowsFormsApp1
         public void PanelMenu()
         {
 
-            
-            Panel panelMenu = new Panel();
-            panelMenu.Location = new Point(0, 250);
-            panelMenu.Size = new Size(420, 250);
+            menu = new System.Windows.Forms.Label();
+            menu.Location = new Point(Screen.PrimaryScreen.Bounds.Width - 50, 0);
+            menu.Image = Image.FromFile(Environment.CurrentDirectory + "\\Icons\\menu.png");
+            menu.Size = new Size(50 , 50);
+            menu.BackColor = Color.Gray;
+            menu.Click += menuButton_Click;
+            this.Controls.Add(menu);
+
+            panelMenu = new Panel();
+            panelMenu.Visible = false;
+            panelMenu.Location = new Point(Screen.PrimaryScreen.Bounds.Width/2 - Screen.PrimaryScreen.Bounds.Height / 5, Screen.PrimaryScreen.Bounds.Height /3);
+            panelMenu.Size = new Size(Screen.PrimaryScreen.Bounds.Width / 5, 250);
             panelMenu.BackColor = Color.Gray;
             this.Controls.Add(panelMenu);
-            
-            // Create a button for the "Menu" option
 
-            stopButton = new System.Windows.Forms.Label();
-            stopButton.Text = "Stop";
-            stopButton.Font = new Font("Arial", 16, FontStyle.Bold);
-            stopButton.Visible = true;
-            stopButton.Size = new Size(200, 50);
-            stopButton.Location = new Point((panelMenu.Width - stopButton.Width) / 2, (panelMenu.Height / 2));
-            panelMenu.Controls.Add(stopButton);
+            menuText = new System.Windows.Forms.Label();
+            menuText.Text = "Game paused";
+            menuText.Visible = true;
+            menuText.BackColor = Color.White;
+            menuText.Padding = new Padding(5);
+            menuText.Size = new Size(200, 50);
+            menuText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            menuText.Font = new Font("Arial", 16, FontStyle.Bold);
+            menuText.BackColor = Color.Transparent;
+            menuText.Location = new Point((panelMenu.Width - menuText.Width) / 2, (panelMenu.Height/2-60));
+            panelMenu.Controls.Add(menuText);
 
             continueButton = new System.Windows.Forms.Label();
             continueButton.Text = "Continue";
             continueButton.Visible = true;
-            continueButton.Font = new Font("Arial", 16, FontStyle.Bold);
+            continueButton.BackColor = Color.White;
+            continueButton.Padding = new Padding(5);
             continueButton.Size = new Size(200, 50);
-            continueButton.Location = new Point((panelMenu.Width - continueButton.Width) / 2, (panelMenu.Height / 2) - 50);
+            continueButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            continueButton.Paint += (sender, e) =>
+            {
+                ControlPaint.DrawBorder(e.Graphics, continueButton.ClientRectangle, Color.Black, ButtonBorderStyle.Solid);
+            };
+            continueButton.Font = new Font("Arial", 16, FontStyle.Bold);
+
+            continueButton.Location = new Point((panelMenu.Width - menuText.Width) / 2, (panelMenu.Height / 2));
             panelMenu.Controls.Add(continueButton);
 
 
             exitButton = new System.Windows.Forms.Label();
             exitButton.Text = "Exit";
             exitButton.Visible = true;
-            exitButton.Font = new Font("Arial", 16, FontStyle.Bold);
+            exitButton.BackColor = Color.White; // Set background color to white
+            exitButton.Padding = new Padding(5);
             exitButton.Size = new Size(200, 50);
-            exitButton.Location = new Point((panelMenu.Width - exitButton.Width) / 2, (panelMenu.Height / 2) + 50);
+            exitButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            exitButton.Paint += (sender, e) =>
+            {
+                ControlPaint.DrawBorder(e.Graphics, exitButton.ClientRectangle, Color.Black, ButtonBorderStyle.Solid);
+            };
+            exitButton.Font = new Font("Arial", 16, FontStyle.Bold);
+
+            exitButton.Location = new Point((panelMenu.Width - exitButton.Width) / 2, (panelMenu.Height / 2) + 60);
             panelMenu.Controls.Add(exitButton);
 
-            stopButton.Click += StopButton_Click;
+            ;
             continueButton.Click += ContinueButton_Click;
             exitButton.Click += ExitButton_Click;
             panelMenu.TabStop = true;
+
+        }
+
+        private void menuButton_Click(object sender, EventArgs e)
+        {
+            panelMenu.Visible = !panelMenu.Visible;
+            if (panelMenu.Visible)
+            {
+                speed = 0;
+                timer.Enabled = false;
+                
+            }
+            else
+            {
+                speed = 5;
+                timer.Enabled = true;
+                
+            }
             
+
         }
 
         private void ExitButton_Click(object sender, EventArgs e)
@@ -106,29 +154,16 @@ namespace WindowsFormsApp1
 
         private void ContinueButton_Click(object sender, EventArgs e)
         {
-            stopButton.Enabled = true;
-            
-            timer.Enabled = true;
-            enemySpeed = 7;
-            speed = 5;
-            continueButton.Enabled = false;
-            
+            menuButton_Click(null,null);
         }
-        private void StopButton_Click(object sender, EventArgs e)
-        {
-            stopButton.Enabled = false;
-            enemySpeed = 0;
-            speed = 0;
-            timer.Enabled = false;
-            continueButton.Enabled = true;
-            
-        }
+          
+        
         public Display(int Width, int Height, Form Source_Form)
         {
 
             PanelMenu();
             Source = Source_Form;
-            
+
             this.AutoSize = true;
             this.BackgroundImage = Image.FromFile(Environment.CurrentDirectory + "\\BackGround\\Background.png");
             this.BackgroundImageLayout = ImageLayout.Stretch;
@@ -136,29 +171,29 @@ namespace WindowsFormsApp1
 
             Game_Board = new PictureBox();
             Display_Size = Width;
-            if(Width > Height)
+            if (Width > Height)
             {
                 Display_Size = Height;
             }
             Game_Board.Size = new Size(Display_Size, Display_Size);
             Game_Board.BackColor = Color.Red;
             Game_Board.SizeMode = PictureBoxSizeMode.Zoom;
-            Game_Board.Location = new Point((Width - Display_Size)/2, (Height - Display_Size) / 2);
+            Game_Board.Location = new Point((Width - Display_Size) / 2, (Height - Display_Size) / 2);
             this.Controls.Add(Game_Board);
 
             timer = new Timer();
             timer.Interval = 100; // Set the interval to 100 milliseconds
             timer.Tick += new EventHandler(OnTimerTick);
             timer.Start();
-            
+
         }
 
         private int EnemyX;
         private int EnemyY;
         public void Load_Level(int level, int Sx, int Sy)
         {
-            
-            
+
+
             MapPositionX = Sx;
             MapPositionY = Sy;
             Current_Level = level;
@@ -188,10 +223,10 @@ namespace WindowsFormsApp1
 
             //Punkty interakcji
             Objects = new List<Interactive_Object>();
-            Interactive_Object Coin = new Interactive_Object(1, 1, 0, 350, 200, 15, 50, "Coin",'o');
+            Interactive_Object Coin = new Interactive_Object(1, 1, 0, 350, 200, 15, 50, "Coin", 'o');
             Objects.Add(Coin);
             Interactive_Object Enemy = new Interactive_Object(1, 0, 0, 300, 300, 50, 50, "Enemy", null);
-            Entity Monster = new Entity(Enemy.Get_Icon,6,20);
+            Entity Monster = new Entity(Enemy.Get_Icon, 6, 20);
             Enemy.Get_Type = Monster;
             Objects.Add(Enemy);
 
@@ -200,7 +235,7 @@ namespace WindowsFormsApp1
             Enemy1.Get_Type = Monster1;
             Objects.Add(Enemy1);
 
-            
+
             Interactive_Object Enemy2 = new Interactive_Object(1, 2, 2, 800, 1000, 80, 50, "Enemy2", null);
             Entity Monster2 = new Entity(Enemy2.Get_Icon, 12, 55);
             Enemy2.Get_Type = Monster2;
@@ -221,16 +256,16 @@ namespace WindowsFormsApp1
             EnemyX = Enemy.Get_Pos_X;
             EnemyY = Enemy.Get_Pos_Y;
             battle = false;
-            
-            
+
+
         }
 
-        
-        
+
+
         private void OnTimerTick(object sender, EventArgs e)
         {
             // Check if there's an enemy in the current scene
-            foreach(Interactive_Object enemy in Objects)
+            foreach (Interactive_Object enemy in Objects)
             {
                 if (enemy.Get_Type is Entity && enemy.Get_Map_X == MapPositionX && enemy.Get_Map_Y == MapPositionY)
                 {
@@ -267,7 +302,7 @@ namespace WindowsFormsApp1
 
                         temp.Image = Image.FromFile(Environment.CurrentDirectory + "\\Map parts\\Level " + Current_Level.ToString() + "\\Battle.png");
                         battle = true;
-
+                        menu.Visible = false;
                         Battle Prepare_Battle = new Battle(temp, Inventory, this);
                         Character.Visible = false;
 
@@ -427,7 +462,7 @@ namespace WindowsFormsApp1
                     }
                 }
             }
-        
+
             if (Scene_Switch)
             {
                 Game_Board.Image = SetBackGround(Current_Level, MapPositionX, MapPositionY);
@@ -448,7 +483,7 @@ namespace WindowsFormsApp1
         }
         private int TestHitbox(int old_x, int new_x, int old_y, int new_y)
         {
-            
+
             int distance = 0;
             int start_x, start_y, end_x, end_y, direction_x = 1, direction_y = 1;
             int temp = 0;
@@ -470,14 +505,14 @@ namespace WindowsFormsApp1
                     direction_x = 1;
                 }
                 temp = start_y;
-                while(start_x != end_x)
+                while (start_x != end_x)
                 {
                     start_y = temp;
-                    while(start_y != end_y)
+                    while (start_y != end_y)
                     {
                         if (start_x < Display_Size && start_x >= 0)
                         {
-                            if(Level_Hitbox.GetPixel(start_x, start_y).ToArgb() != Color.White.ToArgb())
+                            if (Level_Hitbox.GetPixel(start_x, start_y).ToArgb() != Color.White.ToArgb())
                             {
                                 return distance;
                             }
@@ -547,6 +582,7 @@ namespace WindowsFormsApp1
             Source.Activate();
             Source.Focus();
             timer.Enabled = true;
+            menu.Visible = true;
             foreach (Interactive_Object IO in Objects)
             {
                 IO.Get_Icon.Visible = true;
