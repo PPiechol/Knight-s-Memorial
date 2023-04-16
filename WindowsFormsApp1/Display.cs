@@ -127,10 +127,11 @@ namespace WindowsFormsApp1
         {
 
             PanelMenu();
-            
+            Source = Source_Form;
             
             this.AutoSize = true;
-            this.BackColor = Color.Orange;
+            this.BackgroundImage = Image.FromFile(Environment.CurrentDirectory + "\\BackGround\\Background.png");
+            this.BackgroundImageLayout = ImageLayout.Stretch;
             this.Dock = DockStyle.Fill;
 
             Game_Board = new PictureBox();
@@ -543,7 +544,6 @@ namespace WindowsFormsApp1
             activeBattle = null;
             Character.Visible = true;
             battle = false;
-            BackColor = Color.Orange;
             Source.Activate();
             Source.Focus();
             timer.Enabled = true;
