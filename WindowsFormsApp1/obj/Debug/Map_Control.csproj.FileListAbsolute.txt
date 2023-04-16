@@ -107,3 +107,19 @@ E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\obj\D
 E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.CopyComplete
 E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
 E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\Items.mdf
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\Items_log.ldf
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe.config
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.pdb
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.AssemblyReference.cache
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.SuggestedBindingRedirects.cache
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.MainForm.resources
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Properties.Resources.resources
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.GenerateResource.cache
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.CoreCompileInputs.cache
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.CopyComplete
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb
