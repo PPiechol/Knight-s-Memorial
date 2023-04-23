@@ -120,14 +120,29 @@ namespace WindowsFormsApp1
         }
         public void PanelHero()
         {
-            panelRight = new Panel();
-            panelRight.Size = new Size(Screen.PrimaryScreen.Bounds.Width/2 - labelSize*3, Screen.PrimaryScreen.Bounds.Height / 2 - labelSize*3);
-            panelRight.Location = new Point(Screen.PrimaryScreen.Bounds.Height/2, 0);
-            
-            panelRight.Visible = false;
-            this.Controls.Add(panelRight);
 
 
+            if (Screen.PrimaryScreen.WorkingArea.Height < 1050 || Screen.PrimaryScreen.WorkingArea.Width < 1600)
+            {
+                labelSize = 35;
+                spacing = 5;
+                panelRight = new Panel();
+                panelRight.Size = new Size(Screen.PrimaryScreen.Bounds.Width / 2 - labelSize * 6, Screen.PrimaryScreen.Bounds.Height / 2 - labelSize * 6);
+                panelRight.Location = new Point(Screen.PrimaryScreen.Bounds.Height / 2, 0);
+                panelRight.AutoSize = true;
+                panelRight.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+                panelRight.Visible = false;
+                this.Controls.Add(panelRight);
+            }
+            else
+            {
+                panelRight = new Panel();
+                panelRight.Size = new Size(Screen.PrimaryScreen.Bounds.Width / 2 - labelSize * 3, Screen.PrimaryScreen.Bounds.Height / 2 - labelSize * 3);
+                panelRight.Location = new Point(Screen.PrimaryScreen.Bounds.Height / 2, 0);
+
+                panelRight.Visible = false;
+                this.Controls.Add(panelRight);
+            }
             panelRight.Paint += (sender, e) =>
             {
                 LinearGradientBrush gradientBrush = new LinearGradientBrush(
@@ -161,23 +176,32 @@ namespace WindowsFormsApp1
                     label.BackColor = Color.LightGray; // Zmieniamy kolor na czarny
                     label.BorderStyle = BorderStyle.FixedSingle;
                     label.Location = new Point(j * (labelSize + spacing)+spacing, i * (labelSize + spacing) + labelSize / 2);
-                    label.Margin = new Padding(15,0,0,0);
+                    label.Margin = new Padding(spacing,0,0,0);
                     label.AllowDrop = true;
                     panelRight.Controls.Add(label);
                 }
             }
-
-
             PictureBox heroImage = new PictureBox();
-            heroImage.Size = new Size(panelRight.Width / 2, panelRight.Height);
-            heroImage.Location = new Point(panelRight.Bounds.Width / 2 + labelSize, panelRight.Height / 2 - heroImage.Height / 2);
+            heroImage.SizeMode = PictureBoxSizeMode.Zoom;
+            heroImage.MinimumSize = new Size(panelRight.Width, panelRight.Height);
+            heroImage.Location = new Point((panelRight.Bounds.Width+heroImage.Size.Width) / 2 + labelSize, panelRight.Height / 2 - heroImage.Height / 2);
             heroImage.Image = Image.FromFile(Environment.CurrentDirectory + "\\Characters\\hero.png");
             heroImage.BackColor = Color.Transparent;
-            
+            /*if (Screen.PrimaryScreen.Bounds.Height < 1050 || Screen.PrimaryScreen.Bounds.Width < 1400)
+            {
+                heroImage.SizeMode = PictureBoxSizeMode.Zoom;
+            }*/
             panelRight.Controls.Add(heroImage);
-
+            
+            
+            
+            
+            
             panelBottom = new TableLayoutPanel();
             panelBottom.Size = new Size(panelRight.Width, panelRight.Height / 2);
+            panelBottom.AutoSize = true;
+            panelBottom.MinimumSize = new Size(panelRight.Width, panelRight.Height);
+            panelBottom.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             panelBottom.Location = new Point(Screen.PrimaryScreen.Bounds.Height / 2, panelRight.Height);
             panelBottom.Padding = new Padding(0, panelBottom.Height / 4, 0, panelBottom.Height / 4);
             panelBottom.ColumnCount = 5;
