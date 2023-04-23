@@ -135,7 +135,7 @@ namespace WindowsFormsApp1
             crittext.Text = critHitChance.ToString();
             crittext.Font = new Font("Old English Text MT", 24, FontStyle.Bold);
             crittext.Size = new Size(Leveltext.Width, Leveltext.Height + 10);
-            crittext.Top = heroAttackSpeed.Bottom + 15;
+            crittext.Top = heroCrit.Bottom + 15;
             crittext.Left = 10;
             crittext.TextAlign = ContentAlignment.MiddleCenter;
             crittext.BackColor = Color.Transparent;
