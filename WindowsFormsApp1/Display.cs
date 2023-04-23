@@ -5,7 +5,6 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Numerics;
-using System.Reflection.Emit;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,8 +17,9 @@ namespace WindowsFormsApp1
     class Display : Panel
     {
         PictureBox Game_Board;
+        Player player;
 
-        
+
         System.Windows.Forms.Label continueButton;
         System.Windows.Forms.Label exitButton;
         System.Windows.Forms.Label menu;
@@ -35,29 +35,18 @@ namespace WindowsFormsApp1
         int MapPositionY;
         int Current_Level;
         public bool battle;
-        
+        PictureBox pictureBox1;
+        Panel panelRight;
+        TableLayoutPanel panelBottom;
         Panel panelMenu;
+        Panel menuLeft;
         Battle activeBattle;
         Form Source;
         List<int> Inventory;
         Timer timer = new Timer();
-
-        public void StartTimer()
-        {
-            // Start the timer
-            timer.Enabled = true;
-        }
-
-        public void StopTimer()
-        {
-            // Stop the timer
-            timer.Enabled = false;
-        }
-        public void UpdateEnemySpeed(int newEnemySpeed)
-        {
-            enemySpeed = newEnemySpeed;
-        }
-
+        int labelSize = 50;
+        int spacing = 10;
+        
         public void PanelMenu()
         {
 
@@ -127,7 +116,113 @@ namespace WindowsFormsApp1
             panelMenu.TabStop = true;
 
         }
+        public void PanelHero()
+        {
+            panelRight = new Panel();
+            panelRight.Size = new Size(Screen.PrimaryScreen.Bounds.Width/2 - labelSize*3, Screen.PrimaryScreen.Bounds.Height / 2 - labelSize*3);
+            panelRight.Location = new Point(Screen.PrimaryScreen.Bounds.Height/2, 0);
+            
+            panelRight.Visible = false;
+            this.Controls.Add(panelRight);
 
+
+            panelRight.Paint += (sender, e) =>
+            {
+                LinearGradientBrush gradientBrush = new LinearGradientBrush(
+                    panelRight.ClientRectangle,
+                    Color.Black,
+                    Color.LightGray,
+                    LinearGradientMode.Vertical
+                );
+
+                e.Graphics.FillRectangle(gradientBrush, panelRight.ClientRectangle);
+                gradientBrush.Dispose();
+            };
+
+            
+            for (int i = 0; i < 6; i++)
+            {
+                for (int j = 0; j < 7; j++)
+                {
+                    Label label = new Label();
+                    label.Size = new Size(labelSize, labelSize);
+                    label.BackColor = Color.LightGray; // Zmieniamy kolor na czarny
+                    label.BorderStyle = BorderStyle.FixedSingle;
+                    label.Location = new Point(j * (labelSize + spacing)+spacing, i * (labelSize + spacing) + labelSize / 2);
+                    label.Margin = new Padding(15,0,0,0);
+                    label.AllowDrop = true;
+                    panelRight.Controls.Add(label);
+                }
+            }
+
+
+            PictureBox heroImage = new PictureBox();
+            heroImage.Size = new Size(panelRight.Width / 2, panelRight.Height);
+            heroImage.Location = new Point(panelRight.Bounds.Width / 2 + labelSize, panelRight.Height / 2 - heroImage.Height / 2);
+            heroImage.Image = Image.FromFile(Environment.CurrentDirectory + "\\Characters\\hero.png");
+            heroImage.BackColor = Color.Transparent;
+            
+            panelRight.Controls.Add(heroImage);
+
+            panelBottom = new TableLayoutPanel();
+            panelBottom.Size = new Size(panelRight.Width, panelRight.Height / 2);
+            panelBottom.Location = new Point(Screen.PrimaryScreen.Bounds.Height / 2, panelRight.Height);
+            panelBottom.Padding = new Padding(0, panelBottom.Height / 4, 0, panelBottom.Height / 4);
+            panelBottom.ColumnCount = 5;
+            panelBottom.Visible = false;
+            panelBottom.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            panelBottom.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            panelBottom.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            panelBottom.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            panelBottom.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            this.Controls.Add(panelBottom);
+
+            panelBottom.Paint += (sender, e) =>
+            {
+                LinearGradientBrush gradientBrush = new LinearGradientBrush(
+                    panelBottom.ClientRectangle,
+                    Color.LightGray,
+                    Color.Black,
+                    
+                    LinearGradientMode.Vertical
+                ) ;
+
+                e.Graphics.FillRectangle(gradientBrush, panelBottom.ClientRectangle);
+                gradientBrush.Dispose();
+            };
+
+
+
+            menuLeft = new Panel();
+            menuLeft.Location = new Point(0, 0);
+            menuLeft.BackgroundImage = Image.FromFile(Environment.CurrentDirectory + "\\Icons\\menu.png");
+            menuLeft.Size = new Size(50, 50);
+            menuLeft.BackColor = Color.Gray;
+            menuLeft.BackgroundImageLayout = ImageLayout.Center;
+            menuLeft.Click += menuLeftButton_Click;
+            menuLeft.Visible = true;
+            this.Controls.Add(menuLeft);
+            
+
+        }
+        private void menuLeftButton_Click(object sender, EventArgs e)
+        {
+            panelRight.Visible = !panelBottom.Visible;
+            panelBottom.Visible = !panelBottom.Visible;
+            if (panelRight.Visible && panelBottom.Visible)
+            {
+                speed = 0;
+                timer.Enabled = false;
+                menu.Visible = false;
+            }
+            else
+            {
+                speed = 5;
+                timer.Enabled = true;
+                menu.Visible = true;
+            }
+
+        }
         private void menuButton_Click(object sender, EventArgs e)
         {
             panelMenu.Visible = !panelMenu.Visible;
@@ -135,13 +230,13 @@ namespace WindowsFormsApp1
             {
                 speed = 0;
                 timer.Enabled = false;
-                
+                menuLeft.Visible= false;
             }
             else
             {
                 speed = 5;
                 timer.Enabled = true;
-                
+                menuLeft.Visible = true;
             }
             
 
@@ -160,10 +255,11 @@ namespace WindowsFormsApp1
         
         public Display(int Width, int Height, Form Source_Form)
         {
-
+            
             PanelMenu();
+            PanelHero();
             Source = Source_Form;
-
+            
             this.AutoSize = true;
             this.BackgroundImage = Image.FromFile(Environment.CurrentDirectory + "\\BackGround\\Background.png");
             this.BackgroundImageLayout = ImageLayout.Stretch;
@@ -241,7 +337,7 @@ namespace WindowsFormsApp1
             Enemy2.Get_Type = Monster2;
             Objects.Add(Enemy2);
 
-
+            player = new Player(Character, 1, 60, 8, 10, 1, panelBottom);
             foreach (Interactive_Object IO in Objects)
             {
                 if (MapPositionX == IO.Get_Map_X && MapPositionY == IO.Get_Map_Y && !IO.Get_Interaction)
@@ -322,7 +418,7 @@ namespace WindowsFormsApp1
                         fighter.Image = Character.Image;
                         fighter.Location = new Point(150, Display_Size / 2 - fighter.Height + 150);
 
-                        Prepare_Battle.Add_entity('p', 8, 35, fighter);
+                        Prepare_Battle.Add_entity('p', 8, player.Health, fighter);
 
                         Entity New_Enemy = (enemy.Get_Type as Entity);
 
@@ -353,6 +449,7 @@ namespace WindowsFormsApp1
                     break;
                 }
             }
+            
         }
 
         private Image SetBackGround(int level, int x, int y)
@@ -414,6 +511,7 @@ namespace WindowsFormsApp1
                 case Keys.Up:
                     {
                         Character.Location = new Point(x, y - TestHitbox(x, x, y, y - speed));
+                        
                         break;
                     }
                 case Keys.Down:
@@ -462,6 +560,7 @@ namespace WindowsFormsApp1
                     }
                 }
             }
+            
 
             if (Scene_Switch)
             {
@@ -583,6 +682,8 @@ namespace WindowsFormsApp1
             Source.Focus();
             timer.Enabled = true;
             menu.Visible = true;
+            player.AddCoins(10);
+            player.AddExp(11);
             foreach (Interactive_Object IO in Objects)
             {
                 IO.Get_Icon.Visible = true;
