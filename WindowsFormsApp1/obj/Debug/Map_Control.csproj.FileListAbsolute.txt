@@ -99,7 +99,6 @@ E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\D
 E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\System.Numerics.Vectors.dll
 E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\System.Numerics.Vectors.xml
 E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.AssemblyReference.cache
-E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.SuggestedBindingRedirects.cache
 E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.MainForm.resources
 E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Properties.Resources.resources
 E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.GenerateResource.cache
