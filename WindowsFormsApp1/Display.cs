@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Configuration;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -20,10 +22,10 @@ namespace WindowsFormsApp1
         Player player;
 
 
-        System.Windows.Forms.Label continueButton;
-        System.Windows.Forms.Label exitButton;
-        System.Windows.Forms.Label menu;
-        System.Windows.Forms.Label menuText;
+        Label continueButton;
+        Label exitButton;
+        Label menu;
+        Label menuText;
         public PictureBox Character;
         Bitmap Level_Hitbox;
         List<Interactive_Object> Objects;
@@ -35,7 +37,6 @@ namespace WindowsFormsApp1
         int MapPositionY;
         int Current_Level;
         public bool battle;
-        PictureBox pictureBox1;
         Panel panelRight;
         TableLayoutPanel panelBottom;
         Panel panelMenu;
@@ -46,7 +47,8 @@ namespace WindowsFormsApp1
         Timer timer = new Timer();
         int labelSize = 50;
         int spacing = 10;
-        
+        EquipmentDataContext Edc = new EquipmentDataContext();
+
         public void PanelMenu()
         {
 
@@ -60,8 +62,8 @@ namespace WindowsFormsApp1
 
             panelMenu = new Panel();
             panelMenu.Visible = false;
-            panelMenu.Location = new Point(Screen.PrimaryScreen.Bounds.Width/2 - Screen.PrimaryScreen.Bounds.Height / 5, Screen.PrimaryScreen.Bounds.Height /3);
             panelMenu.Size = new Size(Screen.PrimaryScreen.Bounds.Width / 5, 250);
+            panelMenu.Location = new Point((Screen.PrimaryScreen.Bounds.Width - panelMenu.Width) / 2, (Screen.PrimaryScreen.Bounds.Height - panelMenu.Height) / 2);
             panelMenu.BackColor = Color.Gray;
             this.Controls.Add(panelMenu);
 
@@ -145,6 +147,16 @@ namespace WindowsFormsApp1
                 for (int j = 0; j < 7; j++)
                 {
                     Label label = new Label();
+                    if(6 * i + j < Inventory.Count)
+                    {
+                        var First_Weapon = from Item in Edc.Items
+                                           where Item.Id == Inventory[6 * i + j]
+                                           select Item;
+                        foreach (Items Querry in First_Weapon)
+                        {
+                            label.Image = Image.FromFile(Environment.CurrentDirectory + "\\Items\\" + Querry.Name.ToString() + ".png");
+                        }
+                    }
                     label.Size = new Size(labelSize, labelSize);
                     label.BackColor = Color.LightGray; // Zmieniamy kolor na czarny
                     label.BorderStyle = BorderStyle.FixedSingle;
@@ -255,9 +267,21 @@ namespace WindowsFormsApp1
         
         public Display(int Width, int Height, Form Source_Form)
         {
-            
+            Inventory = new List<int>();
+            string SectionName = "Player_Items";
+            var ApplicationConfig = ConfigurationManager.GetSection(SectionName) as NameValueCollection;
+            foreach(var key in ApplicationConfig.AllKeys)
+            {
+                string[] Player_Items = ApplicationConfig[key].Split(',');
+                foreach(string Item_id in Player_Items)
+                {
+                    Inventory.Add(Convert.ToInt32(Item_id));
+                }
+            }
+
             PanelMenu();
             PanelHero();
+
             Source = Source_Form;
             
             this.AutoSize = true;
@@ -284,21 +308,12 @@ namespace WindowsFormsApp1
 
         }
 
-        private int EnemyX;
-        private int EnemyY;
         public void Load_Level(int level, int Sx, int Sy)
         {
-
 
             MapPositionX = Sx;
             MapPositionY = Sy;
             Current_Level = level;
-
-            Inventory = new List<int>();
-            Inventory.Add(1);
-            Inventory.Add(2);
-            Inventory.Add(3);
-            Inventory.Add(4);
 
             Character = new PictureBox();
 
@@ -319,25 +334,42 @@ namespace WindowsFormsApp1
 
             //Punkty interakcji
             Objects = new List<Interactive_Object>();
-            Interactive_Object Coin = new Interactive_Object(1, 1, 0, 350, 200, 15, 50, "Coin", 'o');
-            Objects.Add(Coin);
-            Interactive_Object Enemy = new Interactive_Object(1, 0, 0, 300, 300, 50, 50, "Enemy", null);
-            Entity Monster = new Entity(Enemy.Get_Icon, 6, 20);
-            Enemy.Get_Type = Monster;
-            Objects.Add(Enemy);
 
-            Interactive_Object Enemy1 = new Interactive_Object(1, 2, 0, 1000, 800, 50, 50, "Enemy", null);
-            Entity Monster1 = new Entity(Enemy1.Get_Icon, 10, 40);
-            Enemy1.Get_Type = Monster1;
-            Objects.Add(Enemy1);
+            string SectionName = "Map_" + Current_Level.ToString() + "_Data/Map_Objects";
+            var ApplicationConfig = ConfigurationManager.GetSection(SectionName) as NameValueCollection;
+            foreach (var key in ApplicationConfig.AllKeys)
+            {
+                string[] Object_Data = ApplicationConfig[key].Split(',');
+                int[] Int_data = new int[7];
+                int i = 0;
+                foreach(string Int_num in Object_Data)
+                {
+                    Int_data[i] = Convert.ToInt32(Int_num);
+                    i++;
+                    if(i == Int_data.Length)
+                    {
+                        break;
+                    }
+                }
 
-
-            Interactive_Object Enemy2 = new Interactive_Object(1, 2, 2, 800, 1000, 80, 50, "Enemy2", null);
-            Entity Monster2 = new Entity(Enemy2.Get_Icon, 12, 55);
-            Enemy2.Get_Type = Monster2;
-            Objects.Add(Enemy2);
-
-            player = new Player(Character, 1, 60, 8, 10, 1, panelBottom);
+                if (Object_Data[7] == "Coin")
+                {
+                    Interactive_Object New_Object = new Interactive_Object(Int_data[0], Int_data[1], Int_data[2],
+                                                        Int_data[3], Int_data[4], Int_data[5],
+                                                        Int_data[6], Object_Data[7], Object_Data[8]);
+                    Objects.Add(New_Object);
+                }
+                else if (Object_Data[7].Length >= 5 && Object_Data[7].Substring(0, 5) == "Enemy")
+                {
+                    Interactive_Object New_Object = new Interactive_Object(Int_data[0], Int_data[1], Int_data[2],
+                                                        Int_data[3], Int_data[4], Int_data[5],
+                                                        Int_data[6], Object_Data[7], null);
+                    Entity Monster = new Entity(New_Object.Get_Icon, Convert.ToInt32(Object_Data[8]), Convert.ToInt32(Object_Data[9]));
+                    New_Object.Get_Type = Monster;
+                    Objects.Add(New_Object);
+                }
+            }
+           
             foreach (Interactive_Object IO in Objects)
             {
                 if (MapPositionX == IO.Get_Map_X && MapPositionY == IO.Get_Map_Y && !IO.Get_Interaction)
@@ -349,11 +381,9 @@ namespace WindowsFormsApp1
                     Game_Board.Controls.Remove(IO.Get_Icon);
                 }
             }
-            EnemyX = Enemy.Get_Pos_X;
-            EnemyY = Enemy.Get_Pos_Y;
             battle = false;
 
-
+            player = new Player(Character, 1, 60, 8, 10, 1, panelBottom);
         }
 
 
@@ -365,6 +395,8 @@ namespace WindowsFormsApp1
             {
                 if (enemy.Get_Type is Entity && enemy.Get_Map_X == MapPositionX && enemy.Get_Map_Y == MapPositionY)
                 {
+                    int EnemyX = enemy.Get_Pos_X;
+                    int EnemyY = enemy.Get_Pos_Y;
                     int dx = Character.Location.X - EnemyX;
                     int dy = Character.Location.Y - EnemyY;
 
