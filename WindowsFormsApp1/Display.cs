@@ -613,6 +613,10 @@ namespace WindowsFormsApp1
                     {
                         IO.Get_Interaction = true;
                         Game_Board.Controls.Remove(IO.Get_Icon);
+                        if(IO.Get_Type is "o")
+                        {
+                            player.AddCoins(10);
+                        }
                     }
                 }
             }
