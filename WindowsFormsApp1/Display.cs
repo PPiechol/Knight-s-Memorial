@@ -383,6 +383,13 @@ namespace WindowsFormsApp1
                                                         Int_data[6], Object_Data[7], Object_Data[8]);
                     Objects.Add(New_Object);
                 }
+                else if(Object_Data[7] == "Weapon")
+                {
+                    Interactive_Object New_Object = new Interactive_Object(Int_data[0], Int_data[1], Int_data[2],
+                                                        Int_data[3], Int_data[4], Int_data[5],
+                                                        Int_data[6], Object_Data[7], Convert.ToInt32(Object_Data[8]));
+                    Objects.Add(New_Object);
+                }
                 else if (Object_Data[7].Length >= 5 && Object_Data[7].Substring(0, 5) == "Enemy")
                 {
                     Interactive_Object New_Object = new Interactive_Object(Int_data[0], Int_data[1], Int_data[2],
@@ -616,6 +623,10 @@ namespace WindowsFormsApp1
                         if(IO.Get_Type is "o")
                         {
                             player.AddCoins(10);
+                        }
+                        else if(IO.Get_Name == "Weapon")
+                        {
+                            Inventory.Add((int)IO.Get_Icon.Tag);
                         }
                     }
                 }

@@ -17,6 +17,7 @@ namespace WindowsFormsApp1
         object type;
         PictureBox icon;
         bool interacted;
+        EquipmentDataContext Edc = new EquipmentDataContext();
 
         public Interactive_Object(int level, int map_x, int map_y, int x, int y, int size, int range, string name, object type)
         {
@@ -25,7 +26,22 @@ namespace WindowsFormsApp1
             this.level = level;
             map_pos_x = map_x;
             map_pos_y = map_y;
-            icon.Image = Image.FromFile(Environment.CurrentDirectory + "\\Map parts\\Level " + level.ToString() + "\\" + name + ".png");
+            icon.Name = name;
+            if(name == "Weapon")
+            {
+                var First_Weapon = from Item in Edc.Items
+                                   where Item.Id == Convert.ToInt32(type)
+                                   select Item;
+                foreach (Items Querry in First_Weapon)
+                {
+                    icon.Image = Image.FromFile(Environment.CurrentDirectory + "\\Items\\" + Querry.Name.ToString() + ".png");
+                }
+                icon.Tag = Convert.ToInt32(type);
+            }
+            else
+            {
+                icon.Image = Image.FromFile(Environment.CurrentDirectory + "\\Map parts\\Level " + level.ToString() + "\\" + name + ".png");
+            }
             icon.BackColor = Color.Transparent;
             icon.Size = new Size(size, size);
             icon.Location = new Point(x, y);
@@ -91,6 +107,14 @@ namespace WindowsFormsApp1
             set
             {
                 interacted = value;
+            }
+        }
+
+        public string Get_Name
+        {
+            get
+            {
+                return icon.Name;
             }
         }
 
