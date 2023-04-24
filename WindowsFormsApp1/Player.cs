@@ -155,7 +155,7 @@ namespace WindowsFormsApp1
             panelBottom.Refresh();
             AddCoins(10);
         }
-        
+
         public void AddCoins(int amount)
         {
             coins += amount;

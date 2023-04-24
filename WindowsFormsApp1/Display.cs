@@ -128,7 +128,7 @@ namespace WindowsFormsApp1
                 spacing = 5;
                 panelRight = new Panel();
                 panelRight.Size = new Size(Screen.PrimaryScreen.Bounds.Width / 2 - labelSize * 6, Screen.PrimaryScreen.Bounds.Height / 2 - labelSize * 6);
-                panelRight.Location = new Point(Screen.PrimaryScreen.Bounds.Height / 2, 0);
+                panelRight.Location = new Point((Screen.PrimaryScreen.Bounds.Height - panelRight.Width) / 2, 0);
                 panelRight.AutoSize = true;
                 panelRight.AutoSizeMode = AutoSizeMode.GrowAndShrink;
                 panelRight.Visible = false;
@@ -202,7 +202,7 @@ namespace WindowsFormsApp1
             panelBottom.AutoSize = true;
             panelBottom.MinimumSize = new Size(panelRight.Width, panelRight.Height);
             panelBottom.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            panelBottom.Location = new Point(Screen.PrimaryScreen.Bounds.Height / 2, panelRight.Height);
+            panelBottom.Location = new Point(panelRight.Location.X, panelRight.Height);
             panelBottom.Padding = new Padding(0, panelBottom.Height / 4, 0, panelBottom.Height / 4);
             panelBottom.ColumnCount = 5;
             panelBottom.Visible = false;
@@ -238,8 +238,23 @@ namespace WindowsFormsApp1
             menuLeft.Click += menuLeftButton_Click;
             menuLeft.Visible = true;
             this.Controls.Add(menuLeft);
-            
+        }
 
+        public void AddItem(int eq, PictureBox pic)
+        {
+            Inventory.Add(eq);
+            foreach(var obj in panelRight.Controls)
+            {
+                if(obj is Label)
+                {
+                    Label Slot = obj as Label;
+                    if (Slot.Image == null)
+                    {
+                        Slot.Image = pic.Image;
+                        break;
+                    }
+                }
+            }
         }
         private void menuLeftButton_Click(object sender, EventArgs e)
         {
@@ -303,8 +318,7 @@ namespace WindowsFormsApp1
                 }
             }
 
-            PanelMenu();
-            PanelHero();
+           
 
             Source = Source_Form;
             
@@ -334,7 +348,6 @@ namespace WindowsFormsApp1
 
         public void Load_Level(int level, int Sx, int Sy)
         {
-
             MapPositionX = Sx;
             MapPositionY = Sy;
             Current_Level = level;
@@ -380,7 +393,7 @@ namespace WindowsFormsApp1
                 {
                     Interactive_Object New_Object = new Interactive_Object(Int_data[0], Int_data[1], Int_data[2],
                                                         Int_data[3], Int_data[4], Int_data[5],
-                                                        Int_data[6], Object_Data[7], Object_Data[8]);
+                                                        Int_data[6], Object_Data[7], Convert.ToInt32(Object_Data[8]));
                     Objects.Add(New_Object);
                 }
                 else if(Object_Data[7] == "Weapon")
@@ -413,8 +426,16 @@ namespace WindowsFormsApp1
                 }
             }
             battle = false;
+            PanelMenu();
+            PanelHero();
 
             player = new Player(Character, 1, 60, 8, 10, 1, panelBottom);
+            
+            
+            panelBottom.BringToFront();
+            panelRight.BringToFront();
+            panelMenu.BringToFront();
+            menuLeft.BringToFront();
         }
 
 
@@ -620,13 +641,13 @@ namespace WindowsFormsApp1
                     {
                         IO.Get_Interaction = true;
                         Game_Board.Controls.Remove(IO.Get_Icon);
-                        if(IO.Get_Type is "o")
+                        if(IO.Get_Name == "Coin")
                         {
-                            player.AddCoins(10);
+                            player.AddCoins((int)IO.Get_Type);
                         }
                         else if(IO.Get_Name == "Weapon")
                         {
-                            Inventory.Add((int)IO.Get_Icon.Tag);
+                            AddItem((int)IO.Get_Type, IO.Get_Icon);
                         }
                     }
                 }
