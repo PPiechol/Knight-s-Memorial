@@ -27,12 +27,13 @@ namespace WindowsFormsApp1
 
         private void KeyIsDown(object sender, KeyEventArgs e)
         {
-            Ekran_glowny.Movement(e);
+           Ekran_glowny.Movement(e);
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            
+            /*Form2 temp = new Form2();
+            temp.Show();*/
             Ekran_glowny = new Display(this.Width, this.Height, this);
             this.Controls.Add(Ekran_glowny);
             Ekran_glowny.Load_Level(1, 0, 0);

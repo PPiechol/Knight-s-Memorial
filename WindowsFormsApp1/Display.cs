@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using System.Xml;
 
 namespace WindowsFormsApp1
 {
@@ -26,6 +27,7 @@ namespace WindowsFormsApp1
         Label exitButton;
         Label menu;
         Label menuText;
+        Label dodaj;
         public PictureBox Character;
         Bitmap Level_Hitbox;
         List<Interactive_Object> Objects;
@@ -95,6 +97,8 @@ namespace WindowsFormsApp1
             continueButton.Location = new Point((panelMenu.Width - menuText.Width) / 2, (panelMenu.Height / 2));
             panelMenu.Controls.Add(continueButton);
 
+            
+
 
             exitButton = new System.Windows.Forms.Label();
             exitButton.Text = "Exit";
@@ -118,6 +122,7 @@ namespace WindowsFormsApp1
             panelMenu.TabStop = true;
 
         }
+        
         public void PanelHero()
         {
 
