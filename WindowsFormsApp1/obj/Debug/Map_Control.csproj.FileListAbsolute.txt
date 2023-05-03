@@ -138,3 +138,4 @@ D:\Student\Desktop\game\WindowsFormsApp1\obj\Debug\Map_Control.csproj.CopyComple
 D:\Student\Desktop\game\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
 D:\Student\Desktop\game\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb
 C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Form2.resources
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Form2.resources

@@ -27,7 +27,6 @@ namespace WindowsFormsApp1
         Label exitButton;
         Label menu;
         Label menuText;
-        Label dodaj;
         public PictureBox Character;
         Bitmap Level_Hitbox;
         List<Interactive_Object> Objects;
@@ -382,7 +381,7 @@ namespace WindowsFormsApp1
             foreach (var key in ApplicationConfig.AllKeys)
             {
                 string[] Object_Data = ApplicationConfig[key].Split(',');
-                int[] Int_data = new int[7];
+                int[] Int_data = new int[6];
                 int i = 0;
                 foreach(string Int_num in Object_Data)
                 {
@@ -394,26 +393,26 @@ namespace WindowsFormsApp1
                     }
                 }
 
-                if (Object_Data[7] == "Coin")
+                if (Object_Data[6] == "Coin")
                 {
-                    Interactive_Object New_Object = new Interactive_Object(Int_data[0], Int_data[1], Int_data[2],
+                    Interactive_Object New_Object = new Interactive_Object(Current_Level, Int_data[0], Int_data[1], Int_data[2],
                                                         Int_data[3], Int_data[4], Int_data[5],
-                                                        Int_data[6], Object_Data[7], Convert.ToInt32(Object_Data[8]));
+                                                        Object_Data[6], Convert.ToInt32(Object_Data[7]));
                     Objects.Add(New_Object);
                 }
-                else if(Object_Data[7] == "Weapon")
+                else if(Object_Data[6] == "Weapon")
                 {
-                    Interactive_Object New_Object = new Interactive_Object(Int_data[0], Int_data[1], Int_data[2],
+                    Interactive_Object New_Object = new Interactive_Object(Current_Level, Int_data[0], Int_data[1], Int_data[2],
                                                         Int_data[3], Int_data[4], Int_data[5],
-                                                        Int_data[6], Object_Data[7], Convert.ToInt32(Object_Data[8]));
+                                                        Object_Data[6], Convert.ToInt32(Object_Data[7]));
                     Objects.Add(New_Object);
                 }
-                else if (Object_Data[7].Length >= 5 && Object_Data[7].Substring(0, 5) == "Enemy")
+                else if (Object_Data[6].Length >= 5 && Object_Data[6].Substring(0, 5) == "Enemy")
                 {
-                    Interactive_Object New_Object = new Interactive_Object(Int_data[0], Int_data[1], Int_data[2],
+                    Interactive_Object New_Object = new Interactive_Object(Current_Level, Int_data[0], Int_data[1], Int_data[2],
                                                         Int_data[3], Int_data[4], Int_data[5],
-                                                        Int_data[6], Object_Data[7], null);
-                    Entity Monster = new Entity(New_Object.Get_Icon, Convert.ToInt32(Object_Data[8]), Convert.ToInt32(Object_Data[9]));
+                                                        Object_Data[6], null);
+                    Entity Monster = new Entity(New_Object.Get_Icon, Convert.ToInt32(Object_Data[7]), Convert.ToInt32(Object_Data[8]));
                     New_Object.Get_Type = Monster;
                     Objects.Add(New_Object);
                 }
@@ -530,12 +529,12 @@ namespace WindowsFormsApp1
                         Objects.Remove(enemy);
                         activeBattle = Prepare_Battle;
                         timer.Enabled = false;
+                        break;
                     }
 
                     EnemyX += directionX;
                     EnemyY += directionY;
                     enemy.Get_Icon.Location = new Point(EnemyX, EnemyY);
-                    break;
                 }
             }
             
