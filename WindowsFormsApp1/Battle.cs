@@ -289,7 +289,11 @@ namespace WindowsFormsApp1
             timer.Tick += (sender, args) =>
             {
                 timer.Stop();
-                action.Invoke();
+
+                if(action != null)
+                {
+                    action.Invoke();
+                }
             };
             timer.Start();
         }
@@ -302,14 +306,14 @@ namespace WindowsFormsApp1
             Performing_Attack = true;
             PictureBox pb = (sender as PictureBox);
             Perform_Action(pb);
+
             // aktualizacja etykiety healthLabel
             foreach (Control control in Background.Controls)
             {
-                if (control is Label label && label.Tag is Entity entity && entity == Opponents[0])
+                if (control is Label label && label.Tag is Entity entity)
                 {
-                    label.Text = Opponents[0].Get_health.ToString();
-                    Background.Refresh();
-                    break;
+                        label.Text = entity.Get_health.ToString();
+                        Background.Refresh();
                 }
             }
             if(CheckBattleResult())
@@ -436,6 +440,7 @@ namespace WindowsFormsApp1
                             }
                         }
                     }
+
                 }
                 else if(Target_Team == 'p')
                 {
@@ -469,24 +474,32 @@ namespace WindowsFormsApp1
             var target = random.Next(Our_team.Count);
 
             //tymczasowo
-            int Damage = Opponents[0].Get_Damage;
-            if(Opponents[0].AbleToAttack && Opponents[0].Get_health > 0)
+            foreach(Entity enemy in Opponents)
             {
-                if (Our_team[0].Effects.Count > 0)
+                int Damage = enemy.Get_Damage;
+                if (enemy.AbleToAttack && enemy.Get_health > 0)
                 {
-                    Damage = Damage * (100 - (int)Our_team[0].Effects[0].Strength) / 100;
-                }
-                Our_team[target].Get_health -= Damage;
-                foreach (Control control in Background.Controls)
-                {
-                    if (control is Label label && label.Tag is Entity entity && entity == Our_team[target])
+                    //Tarcza
+                    if (Our_team[0].Effects.Count > 0)
                     {
-                        label.Text = Our_team[target].Get_health.ToString();
-                        Background.Refresh();
-                        break;
+                        Damage = Damage * (100 - (int)Our_team[0].Effects[0].Strength) / 100;
                     }
+                    Our_team[target].Get_health -= Damage;
+                    
+                    foreach (Control control in Background.Controls)
+                    {
+                        if (control is Label label && label.Tag is Entity entity && entity == Our_team[target])
+                        {
+
+                            label.Text = Our_team[target].Get_health.ToString();
+                            Background.Refresh();
+                        }
+                    }
+                    Thread.Sleep(1000);
                 }
             }
+
+            
             if(CheckBattleResult())
             {
                 UpdateEffects();
@@ -539,29 +552,42 @@ namespace WindowsFormsApp1
                     break;
                 }
             }
-            foreach (Entity entity in Opponents)
+            for(int i = 0; i < Opponents.Count; i++)
             {
-                if (entity.Get_health > 0)
+                if (Opponents[i].Get_health > 0)
                 {
                     opponentLost = false;
-                    break;
+
+                }
+                else
+                {
+                    Background.Controls.Remove(Opponents[i].Get_Creature);
+                    foreach(Control control in Background.Controls)
+                    {
+                        if(control is Label label && label.Tag is Entity entity && entity == Opponents[i])
+                        {
+                            Background.Controls.Remove(label);
+                            break;
+                        }
+                    }
+                    Opponents.Remove(Opponents[i]);
                 }
             }
 
             if (playerLost || opponentLost)
             {
                 Selected_Item.Visible = false;
-                Label napisik = new Label();
-                napisik.Font = new Font("System", 40);
+                Label resultText = new Label();
+                resultText.Font = new Font("System", 40);
 
-                napisik.AutoSize = true;
-                napisik.BringToFront();
+                resultText.AutoSize = true;
+                resultText.BringToFront();
                 if (playerLost)
                 {
-                    napisik.Location = new Point(Background.Width / 2, Background.Height / 2);
-                    napisik.Size = new Size(Background.Width, Background.Height);
-                    napisik.Text = "Przegrałeś!";
-                    napisik.ForeColor = Color.Red;
+                    resultText.Location = new Point(Background.Width / 2, Background.Height / 2);
+                    resultText.Size = new Size(Background.Width, Background.Height);
+                    resultText.Text = "Przegrałeś!";
+                    resultText.ForeColor = Color.Red;
                     Background.BackColor = Color.Gray;
                     temp.BackColor = Color.Gray;
                     Background.Image = null;
@@ -570,9 +596,9 @@ namespace WindowsFormsApp1
                 }
                 else
                 {
-                    napisik.Location = new Point((Background.Width / 2) - napisik.Size.Width, 100);
-                    napisik.Text = "Wygrałeś!";
-                    napisik.ForeColor = Color.LightGoldenrodYellow;
+                    resultText.Location = new Point((Background.Width / 2) - resultText.Size.Width, 100);
+                    resultText.Text = "Wygrałeś!";
+                    resultText.ForeColor = Color.LightGoldenrodYellow;
                     Background.BackColor = Color.Green;
                     temp.BackColor = Color.Green;
                     disappear();
@@ -582,12 +608,12 @@ namespace WindowsFormsApp1
                 {
                     Heros.Get_Creature.Enabled = false;
                 }
-                Background.Controls.Add(napisik);
+                Background.Controls.Add(resultText);
                 Timer timer = new Timer();
                 timer.Interval = 2000;
                 timer.Tick += (sender, args) =>
                 {
-                    napisik.Hide();
+                    resultText.Hide();
                     if(playerLost)
                     {
                         Application.Exit();

@@ -56,7 +56,7 @@ namespace WindowsFormsApp1
             menu = new System.Windows.Forms.Label();
             menu.Location = new Point(Screen.PrimaryScreen.Bounds.Width - 50, 0);
             menu.Image = Image.FromFile(Environment.CurrentDirectory + "\\Icons\\menu.png");
-            menu.Size = new Size(50 , 50);
+            menu.Size = new Size(50, 50);
             menu.BackColor = Color.Gray;
             menu.Click += menuButton_Click;
             this.Controls.Add(menu);
@@ -77,7 +77,7 @@ namespace WindowsFormsApp1
             menuText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             menuText.Font = new Font("Arial", 16, FontStyle.Bold);
             menuText.BackColor = Color.Transparent;
-            menuText.Location = new Point((panelMenu.Width - menuText.Width) / 2, (panelMenu.Height/2-60));
+            menuText.Location = new Point((panelMenu.Width - menuText.Width) / 2, (panelMenu.Height  /  2  -  60));
             panelMenu.Controls.Add(menuText);
 
             continueButton = new System.Windows.Forms.Label();
@@ -96,7 +96,7 @@ namespace WindowsFormsApp1
             continueButton.Location = new Point((panelMenu.Width - menuText.Width) / 2, (panelMenu.Height / 2));
             panelMenu.Controls.Add(continueButton);
 
-            
+
 
 
             exitButton = new System.Windows.Forms.Label();
@@ -269,6 +269,7 @@ namespace WindowsFormsApp1
                 speed = 0;
                 timer.Enabled = false;
                 menu.Visible = false;
+                
             }
             else
             {
@@ -447,12 +448,12 @@ namespace WindowsFormsApp1
         private void OnTimerTick(object sender, EventArgs e)
         {
             // Check if there's an enemy in the current scene
-            foreach (Interactive_Object enemy in Objects)
+            foreach (Interactive_Object enemies in Objects)
             {
-                if (enemy.Get_Type is Entity && enemy.Get_Map_X == MapPositionX && enemy.Get_Map_Y == MapPositionY)
+                if (enemies.Get_Type is Entity && enemies.Get_Map_X == MapPositionX && enemies.Get_Map_Y == MapPositionY)
                 {
-                    int EnemyX = enemy.Get_Pos_X;
-                    int EnemyY = enemy.Get_Pos_Y;
+                    int EnemyX = enemies.Get_Pos_X;
+                    int EnemyY = enemies.Get_Pos_Y;
                     int dx = Character.Location.X - EnemyX;
                     int dy = Character.Location.Y - EnemyY;
 
@@ -487,6 +488,7 @@ namespace WindowsFormsApp1
                         temp.Image = Image.FromFile(Environment.CurrentDirectory + "\\Map parts\\Level " + Current_Level.ToString() + "\\Battle.png");
                         battle = true;
                         menu.Visible = false;
+                        menuLeft.Visible = false;
                         Battle Prepare_Battle = new Battle(temp, Inventory, this);
                         Character.Visible = false;
 
@@ -497,7 +499,7 @@ namespace WindowsFormsApp1
 
                         Game_Board.Controls.Add(Prepare_Battle.Get_Background);
 
-                        //Dodawanie stworzeń
+                        //Dodawanie gracz
                         PictureBox fighter = new PictureBox();
                         fighter.SizeMode = PictureBoxSizeMode.Zoom;
                         fighter.BackColor = Color.Transparent;
@@ -508,13 +510,28 @@ namespace WindowsFormsApp1
 
                         Prepare_Battle.Add_entity('p', 8, player.Health, fighter);
 
-                        Entity New_Enemy = (enemy.Get_Type as Entity);
+                        //Dodawanie stworzeń
+                        for (int i = 0; i < Objects.Count; i++)
+                        {
+                            Interactive_Object enemies_nearby = Objects[i];
+                            if (enemies_nearby.Get_Type is Entity && enemies_nearby.Get_Map_X == MapPositionX && enemies_nearby.Get_Map_Y == MapPositionY 
+                                && Math.Pow(enemies.Get_Pos_X - enemies_nearby.Get_Pos_X, 2) + Math.Pow(enemies.Get_Pos_Y - enemies_nearby.Get_Pos_Y, 2) <= 2 * Math.Pow(enemies_nearby.Get_Range, 2))
+                            {
+                                PictureBox Opponent = new PictureBox();
+                                Opponent.SizeMode = PictureBoxSizeMode.Zoom;
+                                Opponent.BackColor = Color.Transparent;
 
-                        fighter.Size = new Size(New_Enemy.Get_Creature.Width * 4, New_Enemy.Get_Creature.Height * 4);
-                        fighter.Image = New_Enemy.Get_Creature.Image;
-                        fighter.Location = new Point(Display_Size - 350, Display_Size / 2 - fighter.Height + 150);
+                                Entity Next_Enemy = (enemies_nearby.Get_Type as Entity);
 
-                        Prepare_Battle.Add_entity('e', New_Enemy.Get_Damage, New_Enemy.Get_health, fighter);
+                                Opponent.Size = new Size(Next_Enemy.Get_Creature.Width * 4, Next_Enemy.Get_Creature.Height * 4);
+                                Opponent.Image = Next_Enemy.Get_Creature.Image;
+                                Opponent.Location = new Point(Display_Size - 200*(1 + Prepare_Battle.Get_Opponents.Count), Display_Size / 2 - Opponent.Height + 150);
+
+                                Prepare_Battle.Add_entity('e', Next_Enemy.Get_Damage, Next_Enemy.Get_health, Opponent);
+
+                                Objects.Remove(enemies_nearby);
+                            }
+                        }
 
                         foreach (Entity el in Prepare_Battle.Get_Our_team)
                         {
@@ -526,7 +543,7 @@ namespace WindowsFormsApp1
                             Prepare_Battle.Get_Background.Controls.Add(el.Get_Creature);
                         }
 
-                        Objects.Remove(enemy);
+                        Objects.Remove(enemies);
                         activeBattle = Prepare_Battle;
                         timer.Enabled = false;
                         break;
@@ -534,7 +551,7 @@ namespace WindowsFormsApp1
 
                     EnemyX += directionX;
                     EnemyY += directionY;
-                    enemy.Get_Icon.Location = new Point(EnemyX, EnemyY);
+                    enemies.Get_Icon.Location = new Point(EnemyX, EnemyY);
                 }
             }
             
@@ -778,6 +795,7 @@ namespace WindowsFormsApp1
             Source.Focus();
             timer.Enabled = true;
             menu.Visible = true;
+            menuLeft.Visible = true;
             player.AddCoins(10);
             player.AddExp(11);
             foreach (Interactive_Object IO in Objects)
