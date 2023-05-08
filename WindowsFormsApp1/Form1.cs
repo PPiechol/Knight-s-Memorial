@@ -26,7 +26,6 @@ namespace WindowsFormsApp1
 
         private void KeyIsDown(object sender, KeyEventArgs e)
         {
-           //Zakumentuj poniżej gdy używasz form2 
            Ekran_glowny.Movement(e);
         }
 

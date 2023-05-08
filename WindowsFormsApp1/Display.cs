@@ -511,11 +511,12 @@ namespace WindowsFormsApp1
                         Prepare_Battle.Add_entity('p', 8, player.Health, fighter);
 
                         //Dodawanie stworzeń
+                        int Position_x = Display_Size;
                         for (int i = 0; i < Objects.Count; i++)
                         {
                             Interactive_Object enemies_nearby = Objects[i];
                             if (enemies_nearby.Get_Type is Entity && enemies_nearby.Get_Map_X == MapPositionX && enemies_nearby.Get_Map_Y == MapPositionY 
-                                && Math.Pow(enemies.Get_Pos_X - enemies_nearby.Get_Pos_X, 2) + Math.Pow(enemies.Get_Pos_Y - enemies_nearby.Get_Pos_Y, 2) <= 2 * Math.Pow(enemies_nearby.Get_Range, 2))
+                                && Math.Pow(enemies.Get_Pos_X - enemies_nearby.Get_Pos_X, 2) + Math.Pow(enemies.Get_Pos_Y - enemies_nearby.Get_Pos_Y, 2) <= 10 * Math.Pow(enemies_nearby.Get_Range, 2))
                             {
                                 PictureBox Opponent = new PictureBox();
                                 Opponent.SizeMode = PictureBoxSizeMode.Zoom;
@@ -525,7 +526,9 @@ namespace WindowsFormsApp1
 
                                 Opponent.Size = new Size(Next_Enemy.Get_Creature.Width * 4, Next_Enemy.Get_Creature.Height * 4);
                                 Opponent.Image = Next_Enemy.Get_Creature.Image;
-                                Opponent.Location = new Point(Display_Size - 200*(1 + Prepare_Battle.Get_Opponents.Count), Display_Size / 2 - Opponent.Height + 150);
+
+                                Position_x = Position_x - Opponent.Width;
+                                Opponent.Location = new Point(Position_x, Display_Size / 2 - Opponent.Height + 150);
 
                                 Prepare_Battle.Add_entity('e', Next_Enemy.Get_Damage, Next_Enemy.Get_health, Opponent);
 
