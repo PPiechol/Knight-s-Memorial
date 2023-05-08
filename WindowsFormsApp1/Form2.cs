@@ -102,7 +102,7 @@ namespace WindowsFormsApp1
             damage_nup.Value = 1;
             damage_nup.Minimum = 0;
             damage_nup.Maximum = 999;
-            health_nup.Name = "Damage";
+            damage_nup.Name = "Damage";
             damage_nup.Location = new Point(health_nup.Location.X, health_nup.Location.Y + 27);
             groupBox_Inside.Controls.Add(damage_nup);
         }
@@ -218,7 +218,7 @@ namespace WindowsFormsApp1
                     return;
                 }
                 value = numericUpDown_Map_Y.Value + "," + numericUpDown_Map_X.Value + "," + numericUpDown_X.Value + "," + numericUpDown_Y.Value + ","
-                    + numericUpDown_range.Value + "," + numericUpDown_size.Value + "," + source + "," + damage + "," + health;
+                     + numericUpDown_size.Value + "," + numericUpDown_range.Value + "," + source + "," + damage + "," + health;
                 enemyIDCounter++;
             }
             else
