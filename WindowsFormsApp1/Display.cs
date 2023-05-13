@@ -378,47 +378,8 @@ namespace WindowsFormsApp1
             Objects = new List<Interactive_Object>();
 
             string SectionName = "Map_" + Current_Level.ToString() + "_Data/Map_Objects";
-            var ApplicationConfig = ConfigurationManager.GetSection(SectionName) as NameValueCollection;
-            foreach (var key in ApplicationConfig.AllKeys)
-            {
-                string[] Object_Data = ApplicationConfig[key].Split(',');
-                int[] Int_data = new int[6];
-                int i = 0;
-                foreach(string Int_num in Object_Data)
-                {
-                    Int_data[i] = Convert.ToInt32(Int_num);
-                    i++;
-                    if(i == Int_data.Length)
-                    {
-                        break;
-                    }
-                }
+            Retrive_Interactive_Objects(SectionName, Current_Level, Objects);
 
-                if (Object_Data[6] == "Coin")
-                {
-                    Interactive_Object New_Object = new Interactive_Object(Current_Level, Int_data[0], Int_data[1], Int_data[2],
-                                                        Int_data[3], Int_data[4], Int_data[5],
-                                                        Object_Data[6], Convert.ToInt32(Object_Data[7]));
-                    Objects.Add(New_Object);
-                }
-                else if(Object_Data[6] == "Weapon")
-                {
-                    Interactive_Object New_Object = new Interactive_Object(Current_Level, Int_data[0], Int_data[1], Int_data[2],
-                                                        Int_data[3], Int_data[4], Int_data[5],
-                                                        Object_Data[6], Convert.ToInt32(Object_Data[7]));
-                    Objects.Add(New_Object);
-                }
-                else if (Object_Data[6].Length >= 5 && Object_Data[6].Substring(0, 5) == "Enemy")
-                {
-                    Interactive_Object New_Object = new Interactive_Object(Current_Level, Int_data[0], Int_data[1], Int_data[2],
-                                                        Int_data[3], Int_data[4], Int_data[5],
-                                                        Object_Data[6], null);
-                    Entity Monster = new Entity(New_Object.Get_Icon, Convert.ToInt32(Object_Data[7]), Convert.ToInt32(Object_Data[8]));
-                    New_Object.Get_Type = Monster;
-                    Objects.Add(New_Object);
-                }
-            }
-           
             foreach (Interactive_Object IO in Objects)
             {
                 if (MapPositionX == IO.Get_Map_X && MapPositionY == IO.Get_Map_Y && !IO.Get_Interaction)
@@ -435,15 +396,57 @@ namespace WindowsFormsApp1
             PanelHero();
 
             player = new Player(Character, 1, 60, 8, 10, 1, panelBottom);
-            
-            
+
+
             panelBottom.BringToFront();
             panelRight.BringToFront();
             panelMenu.BringToFront();
             menuLeft.BringToFront();
         }
 
+        public static void Retrive_Interactive_Objects(string SectionName, int Current_Level, List<Interactive_Object> Object_list)
+        {
+            var ApplicationConfig = ConfigurationManager.GetSection(SectionName) as NameValueCollection;
+            foreach (var key in ApplicationConfig.AllKeys)
+            {
+                string[] Object_Data = ApplicationConfig[key].Split(',');
+                int[] Int_data = new int[6];
+                int i = 0;
+                foreach (string Int_num in Object_Data)
+                {
+                    Int_data[i] = Convert.ToInt32(Int_num);
+                    i++;
+                    if (i == Int_data.Length)
+                    {
+                        break;
+                    }
+                }
 
+                if (Object_Data[6] == "Coin")
+                {
+                    Interactive_Object New_Object = new Interactive_Object(Current_Level, Int_data[0], Int_data[1], Int_data[2],
+                                                        Int_data[3], Int_data[4], Int_data[5],
+                                                        Object_Data[6], Convert.ToInt32(Object_Data[7]));
+                    Object_list.Add(New_Object);
+                }
+                else if (Object_Data[6] == "Weapon")
+                {
+                    Interactive_Object New_Object = new Interactive_Object(Current_Level, Int_data[0], Int_data[1], Int_data[2],
+                                                        Int_data[3], Int_data[4], Int_data[5],
+                                                        Object_Data[6], Convert.ToInt32(Object_Data[7]));
+                    Object_list.Add(New_Object);
+                }
+                else if (Object_Data[6].Length >= 5 && Object_Data[6].Substring(0, 5) == "Enemy")
+                {
+                    Interactive_Object New_Object = new Interactive_Object(Current_Level, Int_data[0], Int_data[1], Int_data[2],
+                                                        Int_data[3], Int_data[4], Int_data[5],
+                                                        Object_Data[6], null);
+                    Entity Monster = new Entity(New_Object.Get_Icon, Convert.ToInt32(Object_Data[7]), Convert.ToInt32(Object_Data[8]));
+                    New_Object.Get_Type = Monster;
+                    Object_list.Add(New_Object);
+                }
+            }
+        }
 
         private void OnTimerTick(object sender, EventArgs e)
         {

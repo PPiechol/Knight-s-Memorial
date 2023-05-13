@@ -43,12 +43,12 @@
             this.groupBox_type = new System.Windows.Forms.GroupBox();
             this.groupBox_Location = new System.Windows.Forms.GroupBox();
             this.groupBox_parameters = new System.Windows.Forms.GroupBox();
+            this.groupBox_Inside = new System.Windows.Forms.GroupBox();
             this.numericUpDown_range = new System.Windows.Forms.NumericUpDown();
             this.label_size = new System.Windows.Forms.Label();
             this.numericUpDown_size = new System.Windows.Forms.NumericUpDown();
             this.label_range = new System.Windows.Forms.Label();
             this.add_button = new System.Windows.Forms.Button();
-            this.groupBox_Inside = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Map_Y)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Map_X)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Y)).BeginInit();
@@ -99,7 +99,7 @@
             // 
             // numericUpDown_Map_Y
             // 
-            this.numericUpDown_Map_Y.Location = new System.Drawing.Point(129, 14);
+            this.numericUpDown_Map_Y.Location = new System.Drawing.Point(128, 42);
             this.numericUpDown_Map_Y.Name = "numericUpDown_Map_Y";
             this.numericUpDown_Map_Y.Size = new System.Drawing.Size(120, 20);
             this.numericUpDown_Map_Y.TabIndex = 3;
@@ -107,7 +107,7 @@
             // 
             // numericUpDown_Map_X
             // 
-            this.numericUpDown_Map_X.Location = new System.Drawing.Point(129, 41);
+            this.numericUpDown_Map_X.Location = new System.Drawing.Point(128, 14);
             this.numericUpDown_Map_X.Name = "numericUpDown_Map_X";
             this.numericUpDown_Map_X.Size = new System.Drawing.Size(120, 20);
             this.numericUpDown_Map_X.TabIndex = 4;
@@ -225,6 +225,14 @@
             this.groupBox_parameters.TabStop = false;
             this.groupBox_parameters.Text = "Właściwości obiektu";
             // 
+            // groupBox_Inside
+            // 
+            this.groupBox_Inside.Location = new System.Drawing.Point(0, 68);
+            this.groupBox_Inside.Name = "groupBox_Inside";
+            this.groupBox_Inside.Size = new System.Drawing.Size(254, 99);
+            this.groupBox_Inside.TabIndex = 18;
+            this.groupBox_Inside.TabStop = false;
+            // 
             // numericUpDown_range
             // 
             this.numericUpDown_range.Location = new System.Drawing.Point(128, 15);
@@ -282,14 +290,6 @@
             this.add_button.UseVisualStyleBackColor = true;
             this.add_button.Click += new System.EventHandler(this.add_button_Click);
             // 
-            // groupBox_Inside
-            // 
-            this.groupBox_Inside.Location = new System.Drawing.Point(0, 68);
-            this.groupBox_Inside.Name = "groupBox_Inside";
-            this.groupBox_Inside.Size = new System.Drawing.Size(254, 99);
-            this.groupBox_Inside.TabIndex = 18;
-            this.groupBox_Inside.TabStop = false;
-            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -305,6 +305,7 @@
             this.Name = "Form2";
             this.Text = "Form2";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form2_FormClosing);
             this.Load += new System.EventHandler(this.Form2_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Map_Y)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Map_X)).EndInit();
