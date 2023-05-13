@@ -17,6 +17,7 @@ namespace WindowsFormsApp1
     public partial class MainForm : Form
     {
         Display Ekran_glowny;
+        bool edit_mode = true;
         
         public MainForm()
         {
@@ -31,15 +32,18 @@ namespace WindowsFormsApp1
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            /*
-            Form2 temp = new Form2();
-            temp.Show();
-            */
-            
-            Ekran_glowny = new Display(this.Width, this.Height, this);
-            this.Controls.Add(Ekran_glowny);
-            Ekran_glowny.Load_Level(1, 0, 0);
-
+            if(edit_mode)
+            {
+                Form2 temp = new Form2(this);
+                temp.Show();
+                this.Hide();
+            }
+            else
+            {
+                Ekran_glowny = new Display(this.Width, this.Height, this);
+                this.Controls.Add(Ekran_glowny);
+                Ekran_glowny.Load_Level(1, 0, 0);
+            }
         }
     }
 }
