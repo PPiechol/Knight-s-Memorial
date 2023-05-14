@@ -307,6 +307,7 @@ namespace WindowsFormsApp1
                 if (numericUpDown_Map_X.Value == MO.Get_Object.Get_Map_X && numericUpDown_Map_Y.Value == MO.Get_Object.Get_Map_Y)
                 {
                     pictureBox_display.Controls.Add(MO);
+                    
                 }
                 else
                 {
