@@ -230,7 +230,7 @@ namespace WindowsFormsApp1
                 key_label.Visible = true; //Do sprawdzenia
 
                 Graphics g = Graphics.FromImage(Selected_Object.Image);
-                g.DrawRectangle(new Pen(Color.Green, (float)Math.Ceiling((double)10 * (Selected_Object.Image.Width / Selected_Object.Width)))
+                g.DrawRectangle(new Pen(Color.Green, (float)Math.Round((double)10 * (Selected_Object.Image.Width / Selected_Object.Width)))
                     , 0, 0, Selected_Object.Image.Width - 1, Selected_Object.Image.Height - 1); ;
                 Selected_Object.Refresh();
                 add_button.Text = "Zapisz Obiekt";
