@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -20,6 +20,7 @@ namespace WindowsFormsApp1
         bool Entity_editor;
         List<Map_Object> Objects;
         Map_Object Selected_Object;
+        Label keyLabel;
         int Current_Level;
 
         public Form2(Form source)
@@ -38,9 +39,9 @@ namespace WindowsFormsApp1
             }
             catch
             {
-                if((sender as NumericUpDown) == numericUpDown_Map_Y)
+                if ((sender as NumericUpDown) == numericUpDown_Map_Y)
                 {
-                    if(numericUpDown_Map_Y.Value == 0)
+                    if (numericUpDown_Map_Y.Value == 0)
                     {
                         numericUpDown_Map_Y.Value++;
                     }
@@ -76,8 +77,17 @@ namespace WindowsFormsApp1
             pictureBox_display.BackColor = Color.Red;
 
             add_button.Location = new Point(this.Width - add_button.Width - 15, 15);
+            add_button.BackColor = Color.Green;
+            add_button.ForeColor = Color.White;
+            add_button.MouseHover += Add_button_MouseHover;
+            add_button.MouseLeave += Add_button_MouseLeave;
+            
             delete_button.Location = new Point(this.Width - delete_button.Width - 15, add_button.Bounds.Height + delete_button.Height);
-
+            delete_button.Text = "Delete object";
+            delete_button.BackColor = Color.Red;
+            delete_button.ForeColor = Color.White;
+            delete_button.MouseHover += Delete_button_MouseHover;
+            delete_button.MouseLeave += Delete_button_MouseLeave;
             Entity_editor = true;
 
             //dla monet i broni
@@ -151,6 +161,27 @@ namespace WindowsFormsApp1
             Show_Objects();
         }
 
+        private void Add_button_MouseLeave(object sender, EventArgs e)
+        {
+            add_button.BackColor = Color.Green;
+        }
+
+        private void Delete_button_MouseLeave(object sender, EventArgs e)
+        {
+            delete_button.BackColor = Color.DarkRed;
+        }
+
+        private void Delete_button_MouseHover(object sender, EventArgs e)
+        {
+            delete_button.BackColor = Color.FromArgb(128, 225, 59, 53);
+        }
+
+        private void Add_button_MouseHover(object sender, EventArgs e)
+        {
+            add_button.BackColor = Color.FromArgb(128, 71, 240, 39);
+        }
+
+
         private void Retrive_Map_Objects(string SectionName, int Current_Level, List<Map_Object> Object_list)
         {
             var ApplicationConfig = ConfigurationManager.GetSection(SectionName) as NameValueCollection;
@@ -168,13 +199,13 @@ namespace WindowsFormsApp1
                         break;
                     }
                 }
-                
+
                 if (Object_Data[6] == "Coin")
                 {
                     Interactive_Object New_Object = new Interactive_Object(Current_Level, Int_data[0], Int_data[1], Int_data[2],
                                                         Int_data[3], Int_data[4], Int_data[5],
                                                         Object_Data[6], Convert.ToInt32(Object_Data[7]));
-                    Object_list.Add(new Map_Object(New_Object,key));
+                    Object_list.Add(new Map_Object(New_Object, key));
                 }
                 else if (Object_Data[6] == "Weapon")
                 {
@@ -207,19 +238,17 @@ namespace WindowsFormsApp1
                 return;
             }
 
-            if(Selected_Object == temp)
+            if (Selected_Object == temp)
             {
                 Selected_Object.Image = (Bitmap)Selected_Object.Get_Object.Get_Icon.Image.Clone();
                 Selected_Object.Refresh();
 
                 Selected_Object = null;
                 add_button.Text = "Dodaj Obiekt";
-
-                Switch_Type_Modification(true);
             }
             else
             {
-                if(Selected_Object != null)
+                if (Selected_Object != null)
                 {
                     Selected_Object.Image = (Bitmap)Selected_Object.Get_Object.Get_Icon.Image.Clone();
                     Selected_Object.Refresh();
@@ -227,41 +256,27 @@ namespace WindowsFormsApp1
                 Selected_Object = temp;
 
                 key_label_Txt.Text = Selected_Object.Get_Key;
-                key_label.Visible = true; //Do sprawdzenia
-
+                key_label.Visible = true;
                 Graphics g = Graphics.FromImage(Selected_Object.Image);
-                g.DrawRectangle(new Pen(Color.Green, (float)Math.Round((double)10 * (Selected_Object.Image.Width / Selected_Object.Width)))
-                    , 0, 0, Selected_Object.Image.Width - 1, Selected_Object.Image.Height - 1); ;
+                g.DrawRectangle(new Pen(Color.Green, 10), 0, 0, Selected_Object.Image.Width - 1, Selected_Object.Image.Height - 1);
                 Selected_Object.Refresh();
-                add_button.Text = "Zapisz Obiekt";
 
-                Switch_Type_Modification(false);
+                add_button.Text = "Zapisz Obiekt";
             }
             Load_Object_Data();
         }
 
-        private void Switch_Type_Modification(bool mode)
-        {
-            foreach (Control RadioButton in groupBox_type.Controls)
-            {
-                if (RadioButton is RadioButton)
-                {
-                    (RadioButton as RadioButton).Enabled = mode;
-                }
-            }
-        }
-
         private void Load_Object_Data()
         {
-            if(Selected_Object != null)
+            if (Selected_Object != null)
             {
                 numericUpDown_X.Value = Selected_Object.Get_Object.Get_Pos_X;
                 numericUpDown_Y.Value = Selected_Object.Get_Object.Get_Pos_Y;
                 numericUpDown_size.Value = Selected_Object.Get_Object.Get_Icon.Size.Width;
                 numericUpDown_range.Value = Selected_Object.Get_Object.Get_Range;
-                if(Selected_Object.Get_Object.Get_Type is Entity)
+                if (Selected_Object.Get_Object.Get_Type is Entity)
                 {
-                    if(!Entity_editor)
+                    if (!Entity_editor)
                     {
                         radioButtonEnemy.Checked = true;
                     }
@@ -322,7 +337,7 @@ namespace WindowsFormsApp1
                 if (numericUpDown_Map_X.Value == MO.Get_Object.Get_Map_X && numericUpDown_Map_Y.Value == MO.Get_Object.Get_Map_Y)
                 {
                     pictureBox_display.Controls.Add(MO);
-                    
+
                 }
                 else
                 {
@@ -341,6 +356,7 @@ namespace WindowsFormsApp1
 
         private void add_button_Click(object sender, EventArgs e)
         {
+
             //dodawanie nowych kluczy do App.config
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
@@ -354,17 +370,17 @@ namespace WindowsFormsApp1
 
             foreach (XmlElement Node_object in Object_list)
             {
-                foreach(XmlNode Single_Node in Node_object)
+                foreach (XmlNode Single_Node in Node_object)
                 {
-                    if(Single_Node.InnerText == "")
+                    if (Single_Node.InnerText == "")
                     {
-                        if(Selected_Object != null && Single_Node.Attributes["key"].Value == Selected_Object.Get_Key)
+                        if (Selected_Object != null && Single_Node.Attributes["key"].Value == Selected_Object.Get_Key)
                         {
                             Existing_Node = Single_Node;
                         }
 
                         string[] Node_values = Single_Node.Attributes["value"].Value.Split(',');
-                        if(Node_values[6] == "Coin")
+                        if (Node_values[6] == "Coin")
                         {
                             coinIDCounter++;
                         }
@@ -393,7 +409,7 @@ namespace WindowsFormsApp1
                     string existingKey = node.GetAttribute("key");
                     if (existingKey.StartsWith("Enemy"))
                     {
-                         enemyKeyCount++;
+                        enemyKeyCount++;
                     }
                 }
             }
@@ -459,7 +475,7 @@ namespace WindowsFormsApp1
                     }
                 }
                 value = numericUpDown_Map_X.Value + "," + numericUpDown_Map_Y.Value + "," + numericUpDown_X.Value + "," + numericUpDown_Y.Value + ","
-                    + numericUpDown_size.Value + "," + numericUpDown_range.Value + ",Coin," + coin_value;
+                    + numericUpDown_range.Value + "," + numericUpDown_size.Value + ",Coin," + coin_value;
                 coinIDCounter++;
             }
             else if (radioButtonEnemy.Checked)
@@ -483,7 +499,7 @@ namespace WindowsFormsApp1
                         }
 
                     }
-                    else if(obiekt is TextBox)
+                    else if (obiekt is TextBox)
                     {
                         TextBox temp = obiekt as TextBox;
                         source = temp.Text;
@@ -493,15 +509,15 @@ namespace WindowsFormsApp1
                 //Test czy istnieje plik z przeciwnikiem
                 bool Enemy_exist = false;
                 string[] file_list = Directory.GetFiles(Environment.CurrentDirectory + "\\Map parts\\Level " + Current_Level + "\\");
-                foreach(string file in file_list)
+                foreach (string file in file_list)
                 {
-                    if(file == Environment.CurrentDirectory + "\\Map parts\\Level " + Current_Level + "\\" + source + ".png")
+                    if (file == Environment.CurrentDirectory + "\\Map parts\\Level " + Current_Level + "\\" + source + ".png")
                     {
                         Enemy_exist = true;
                         break;
                     }
                 }
-                if(!Enemy_exist)
+                if (!Enemy_exist)
                 {
                     MessageBox.Show("Brak pliku graficznego odpowiadającego nazwie");
                     return;
@@ -531,25 +547,25 @@ namespace WindowsFormsApp1
                 var Held = from Item in Edc.Items
                            where Item.Id == weapon_id
                            select Item;
-                if(Held == null)
+                if (Held == null)
                 {
                     MessageBox.Show("Brak przedmiotu o podanym id");
                     return;
                 }
                 value = numericUpDown_Map_X.Value + "," + numericUpDown_Map_Y.Value + "," + numericUpDown_X.Value + "," + numericUpDown_Y.Value + ","
-                    + numericUpDown_size.Value + "," + numericUpDown_range.Value + ",Weapon," + weapon_id;
+                    + numericUpDown_range.Value + "," + numericUpDown_size.Value + ",Weapon," + weapon_id;
                 weaponIDCounter++;
             }
 
             //dodaj klucz i wartość
             nodeRegion.SetAttribute("key", key);
             nodeRegion.SetAttribute("value", value);
-            if(Existing_Node != null)
+            if (Existing_Node != null)
             {
                 Existing_Node.Attributes["value"].Value = value;
                 Selected_Object = null;
                 add_button.Text = "Dodaj Obiekt";
-                
+
             }
             else
             {
@@ -571,15 +587,13 @@ namespace WindowsFormsApp1
                 MO.Click += Map_Object_Click;
             }
             Show_Objects();
-
-            Switch_Type_Modification(true);
         }
 
         private void radioButton_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButtonEnemy.Checked)
             {
-                if(!Entity_editor)
+                if (!Entity_editor)
                 {
                     Swap_Visible();
                     Entity_editor = true;
@@ -616,7 +630,7 @@ namespace WindowsFormsApp1
                     if (obiekt is Label)
                     {
                         Label temp = obiekt as Label;
-                        if(temp.Visible)
+                        if (temp.Visible)
                         {
                             temp.Text = "Id broni";
                         }
@@ -654,41 +668,36 @@ namespace WindowsFormsApp1
 
         private void delete_button_Click(object sender, EventArgs e)
         {
+
+
             if (Selected_Object != null)
             {
-                // Usuń klucz i wartość z pliku konfiguracyjnego
+                
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.Load(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
 
-                
+
 
                 xmlDoc.Load(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
                 XmlNode objectToDelete = xmlDoc.SelectSingleNode("//Map_1_Data/Map_Objects/add[@key='" + Selected_Object.Get_Key + "']");
-                
+
                 objectToDelete.ParentNode.RemoveChild(objectToDelete);
 
                 xmlDoc.Save(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
                 ConfigurationManager.RefreshSection("Map_1_Data/Map_Objects");
-                
+
                 File.Copy(Environment.CurrentDirectory + "\\WindowsFormsApp1.exe.config", Environment.CurrentDirectory.Replace("\\bin\\Debug", "") + "\\App.config", true);
 
-                
 
-                // Usuń obiekt z listy Objects
                 Objects.Remove(Selected_Object);
 
-                // Usuń obiekt z kontrolki PictureBox
                 pictureBox_display.Controls.Remove(Selected_Object);
 
-                // Czyść dane i odśwież interfejs użytkownika
                 Selected_Object = null;
-                add_button.Text = "Dodaj Obiekt";
                 Load_Object_Data();
                 Show_Objects();
-
-                Switch_Type_Modification(true);
             }
         }
     }
-    
+
 }
