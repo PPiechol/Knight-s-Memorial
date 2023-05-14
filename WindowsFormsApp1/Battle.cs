@@ -586,7 +586,7 @@ namespace WindowsFormsApp1
                 {
                     resultText.Location = new Point(Background.Width / 2, Background.Height / 2);
                     resultText.Size = new Size(Background.Width, Background.Height);
-                    resultText.Text = "Przegrałeś!";
+                    resultText.Text = "YOU LOOSE!";
                     resultText.ForeColor = Color.Red;
                     Background.BackColor = Color.Gray;
                     temp.BackColor = Color.Gray;
@@ -597,7 +597,7 @@ namespace WindowsFormsApp1
                 else
                 {
                     resultText.Location = new Point((Background.Width / 2) - resultText.Size.Width, 100);
-                    resultText.Text = "Wygrałeś!";
+                    resultText.Text = "YOU WIN!";
                     resultText.ForeColor = Color.LightGoldenrodYellow;
                     Background.BackColor = Color.Green;
                     temp.BackColor = Color.Green;

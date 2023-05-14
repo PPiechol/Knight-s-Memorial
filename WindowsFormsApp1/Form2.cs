@@ -20,6 +20,7 @@ namespace WindowsFormsApp1
         bool Entity_editor;
         List<Map_Object> Objects;
         Map_Object Selected_Object;
+        Label keyLabel;
         int Current_Level;
 
         public Form2(Form source)
@@ -76,7 +77,8 @@ namespace WindowsFormsApp1
             pictureBox_display.BackColor = Color.Red;
 
             add_button.Location = new Point(this.Width - add_button.Width - 15, 15);
-
+            delete_button.Location = new Point(this.Width - delete_button.Width - 15, add_button.Bounds.Height + delete_button.Height);
+            delete_button.Text = "Delete object";
             Entity_editor = true;
 
             //dla monet i broni
@@ -85,6 +87,8 @@ namespace WindowsFormsApp1
             CW_label.Text = "Wartość Monety";
             groupBox_Inside.Controls.Add(CW_label);
             CW_label.Visible = false;
+
+
 
             NumericUpDown CW_value_nup = new NumericUpDown();
             CW_value_nup.Value = 10;
@@ -131,6 +135,13 @@ namespace WindowsFormsApp1
             damage_nup.Location = new Point(health_nup.Location.X, health_nup.Location.Y + 27);
             groupBox_Inside.Controls.Add(damage_nup);
 
+            key_label = new Label();
+            key_label.AutoSize = true;
+            key_label.Location = new Point(damage_nup.Location.X, damage_nup.Location.Y + 27);
+            key_label.Visible = false;
+            groupBox_Inside.Controls.Add(key_label); // Dodanie Labela do panelu
+
+            key_label_Txt.Text = "ID";
 
             string SectionName = "Map_" + Current_Level.ToString() + "_Data/Map_Objects";
             Retrive_Map_Objects(SectionName, Current_Level, Objects);
@@ -158,7 +169,7 @@ namespace WindowsFormsApp1
                         break;
                     }
                 }
-
+                
                 if (Object_Data[6] == "Coin")
                 {
                     Interactive_Object New_Object = new Interactive_Object(Current_Level, Int_data[0], Int_data[1], Int_data[2],
@@ -214,6 +225,8 @@ namespace WindowsFormsApp1
                 }
                 Selected_Object = temp;
 
+                key_label_Txt.Text = Selected_Object.Get_Key;
+                key_label.Visible = true;
                 Graphics g = Graphics.FromImage(Selected_Object.Image);
                 g.DrawRectangle(new Pen(Color.Green, 10), 0, 0, Selected_Object.Image.Width - 1, Selected_Object.Image.Height - 1);
                 Selected_Object.Refresh();
@@ -350,7 +363,63 @@ namespace WindowsFormsApp1
                     }
                 }
             }
-            
+
+            int enemyKeyCount = 0;
+            int coinKeyCount = 0;
+            //sprawdza ilość kluczy zaczynających się od Enemy,
+            //aby nie nadpisywać lub dodawać tego samego klucza 
+            //do app.configu
+            XmlNodeList objectNodes = xmlDoc.SelectNodes("//Map_1_Data/Map_Objects/add");
+            if (objectNodes != null)
+            {
+                foreach (XmlElement node in objectNodes)
+                {
+                    string existingKey = node.GetAttribute("key");
+                    if (existingKey.StartsWith("Enemy"))
+                    {
+                         enemyKeyCount++;
+                    }
+                }
+            }
+            //ustawia enemyIdCounter na taką wartość której w konfigu nie ma
+            for (int i = 0; i < enemyKeyCount; i++)
+            {
+                string keyToCheck = "Enemy" + i.ToString();
+                XmlNode existingNode = xmlDoc.SelectSingleNode("//Map_1_Data/Map_Objects/add[@key='" + keyToCheck + "']");
+
+                if (existingNode == null)
+                {
+                    enemyIDCounter = i;
+                }
+            }
+
+
+            //sprawdza ilość kluczy zaczynających się od Coin,
+            //aby nie nadpisywać lub dodawać tego samego klucza 
+            //do app.configu
+            if (objectNodes != null)
+            {
+                foreach (XmlElement node in objectNodes)
+                {
+                    string existingKey = node.GetAttribute("key");
+                    if (existingKey.StartsWith("Coin"))
+                    {
+                        coinKeyCount++;
+                    }
+                }
+            }
+            //ustawia coinIdCounter na taką wartość której w konfigu nie ma
+            for (int i = 0; i <= coinKeyCount; i++)
+            {
+                string keyToCheck = "Coin" + i.ToString();
+                XmlNode existingNode = xmlDoc.SelectSingleNode("//Map_1_Data/Map_Objects/add[@key='" + keyToCheck + "']");
+
+                if (existingNode == null)
+                {
+                    coinIDCounter = i;
+                }
+            }
+
             var nodeRegion = xmlDoc.CreateElement("add");
             string enemy_name = "Enemy" + enemyIDCounter.ToString();
             string coin_name = "Coin" + coinIDCounter.ToString();
@@ -464,6 +533,7 @@ namespace WindowsFormsApp1
                 Existing_Node.Attributes["value"].Value = value;
                 Selected_Object = null;
                 add_button.Text = "Dodaj Obiekt";
+                
             }
             else
             {
@@ -562,6 +632,41 @@ namespace WindowsFormsApp1
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
         {
             source.Close();
+        }
+
+        private void delete_button_Click(object sender, EventArgs e)
+        {
+            if (Selected_Object != null)
+            {
+                // Usuń klucz i wartość z pliku konfiguracyjnego
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.Load(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
+
+                
+
+                xmlDoc.Load(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
+                XmlNode objectToDelete = xmlDoc.SelectSingleNode("//Map_1_Data/Map_Objects/add[@key='" + Selected_Object.Get_Key + "']");
+                
+                objectToDelete.ParentNode.RemoveChild(objectToDelete);
+
+                xmlDoc.Save(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
+                ConfigurationManager.RefreshSection("Map_1_Data/Map_Objects");
+                
+                File.Copy(Environment.CurrentDirectory + "\\WindowsFormsApp1.exe.config", Environment.CurrentDirectory.Replace("\\bin\\Debug", "") + "\\App.config", true);
+
+                
+
+                // Usuń obiekt z listy Objects
+                Objects.Remove(Selected_Object);
+
+                // Usuń obiekt z kontrolki PictureBox
+                pictureBox_display.Controls.Remove(Selected_Object);
+
+                // Czyść dane i odśwież interfejs użytkownika
+                Selected_Object = null;
+                Load_Object_Data();
+                Show_Objects();
+            }
         }
     }
     

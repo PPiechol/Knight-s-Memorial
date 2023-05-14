@@ -48,7 +48,10 @@
             this.label_size = new System.Windows.Forms.Label();
             this.numericUpDown_size = new System.Windows.Forms.NumericUpDown();
             this.label_range = new System.Windows.Forms.Label();
+            this.key_label = new System.Windows.Forms.Label();
             this.add_button = new System.Windows.Forms.Button();
+            this.delete_button = new System.Windows.Forms.Button();
+            this.key_label_Txt = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Map_Y)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Map_X)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Y)).BeginInit();
@@ -184,12 +187,14 @@
             // 
             // groupBox_type
             // 
+            this.groupBox_type.Controls.Add(this.key_label_Txt);
             this.groupBox_type.Controls.Add(this.radioButtonCoin);
+            this.groupBox_type.Controls.Add(this.key_label);
             this.groupBox_type.Controls.Add(this.radioButtonWeapon);
             this.groupBox_type.Controls.Add(this.radioButtonEnemy);
             this.groupBox_type.Location = new System.Drawing.Point(12, 144);
             this.groupBox_type.Name = "groupBox_type";
-            this.groupBox_type.Size = new System.Drawing.Size(200, 100);
+            this.groupBox_type.Size = new System.Drawing.Size(200, 120);
             this.groupBox_type.TabIndex = 14;
             this.groupBox_type.TabStop = false;
             this.groupBox_type.Text = "Typ obiektu";
@@ -218,7 +223,7 @@
             this.groupBox_parameters.Controls.Add(this.label_size);
             this.groupBox_parameters.Controls.Add(this.numericUpDown_size);
             this.groupBox_parameters.Controls.Add(this.label_range);
-            this.groupBox_parameters.Location = new System.Drawing.Point(12, 250);
+            this.groupBox_parameters.Location = new System.Drawing.Point(12, 270);
             this.groupBox_parameters.Name = "groupBox_parameters";
             this.groupBox_parameters.Size = new System.Drawing.Size(254, 166);
             this.groupBox_parameters.TabIndex = 16;
@@ -280,6 +285,16 @@
             this.label_range.TabIndex = 10;
             this.label_range.Text = "Zasięg";
             // 
+            // key_label
+            // 
+            this.key_label.AutoSize = true;
+            this.key_label.Cursor = System.Windows.Forms.Cursors.No;
+            this.key_label.Location = new System.Drawing.Point(6, 94);
+            this.key_label.Name = "key_label";
+            this.key_label.Size = new System.Drawing.Size(52, 13);
+            this.key_label.TabIndex = 0;
+            this.key_label.Text = "Object ID";
+            // 
             // add_button
             // 
             this.add_button.Location = new System.Drawing.Point(1088, 12);
@@ -290,12 +305,30 @@
             this.add_button.UseVisualStyleBackColor = true;
             this.add_button.Click += new System.EventHandler(this.add_button_Click);
             // 
+            // delete_button
+            // 
+            this.delete_button.Location = new System.Drawing.Point(1088, 52);
+            this.delete_button.Name = "delete_button";
+            this.delete_button.Size = new System.Drawing.Size(86, 34);
+            this.delete_button.TabIndex = 18;
+            this.delete_button.Text = "Usuń obiekt";
+            this.delete_button.UseVisualStyleBackColor = true;
+            this.delete_button.Click += new System.EventHandler(this.delete_button_Click);
+            // 
+            // key_label_Txt
+            // 
+            this.key_label_Txt.Location = new System.Drawing.Point(94, 94);
+            this.key_label_Txt.Name = "key_label_Txt";
+            this.key_label_Txt.Size = new System.Drawing.Size(100, 20);
+            this.key_label_Txt.TabIndex = 19;
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(1186, 667);
+            this.Controls.Add(this.delete_button);
             this.Controls.Add(this.add_button);
             this.Controls.Add(this.groupBox_parameters);
             this.Controls.Add(this.groupBox_Location);
@@ -347,5 +380,8 @@
         private System.Windows.Forms.Label label_range;
         private System.Windows.Forms.Button add_button;
         private System.Windows.Forms.GroupBox groupBox_Inside;
+        private System.Windows.Forms.Button delete_button;
+        private System.Windows.Forms.Label key_label;
+        private System.Windows.Forms.TextBox key_label_Txt;
     }
 }
