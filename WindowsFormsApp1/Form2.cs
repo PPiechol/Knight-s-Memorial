@@ -20,7 +20,6 @@ namespace WindowsFormsApp1
         bool Entity_editor;
         List<Map_Object> Objects;
         Map_Object Selected_Object;
-        Label keyLabel;
         int Current_Level;
 
         public Form2(Form source)
@@ -78,7 +77,7 @@ namespace WindowsFormsApp1
 
             add_button.Location = new Point(this.Width - add_button.Width - 15, 15);
             delete_button.Location = new Point(this.Width - delete_button.Width - 15, add_button.Bounds.Height + delete_button.Height);
-            delete_button.Text = "Delete object";
+
             Entity_editor = true;
 
             //dla monet i broni
@@ -215,6 +214,8 @@ namespace WindowsFormsApp1
 
                 Selected_Object = null;
                 add_button.Text = "Dodaj Obiekt";
+
+                Switch_Type_Modification(true);
             }
             else
             {
@@ -226,14 +227,28 @@ namespace WindowsFormsApp1
                 Selected_Object = temp;
 
                 key_label_Txt.Text = Selected_Object.Get_Key;
-                key_label.Visible = true;
-                Graphics g = Graphics.FromImage(Selected_Object.Image);
-                g.DrawRectangle(new Pen(Color.Green, 10), 0, 0, Selected_Object.Image.Width - 1, Selected_Object.Image.Height - 1);
-                Selected_Object.Refresh();
+                key_label.Visible = true; //Do sprawdzenia
 
+                Graphics g = Graphics.FromImage(Selected_Object.Image);
+                g.DrawRectangle(new Pen(Color.Green, (float)Math.Ceiling((double)10 * (Selected_Object.Image.Width / Selected_Object.Width)))
+                    , 0, 0, Selected_Object.Image.Width - 1, Selected_Object.Image.Height - 1); ;
+                Selected_Object.Refresh();
                 add_button.Text = "Zapisz Obiekt";
+
+                Switch_Type_Modification(false);
             }
             Load_Object_Data();
+        }
+
+        private void Switch_Type_Modification(bool mode)
+        {
+            foreach (Control RadioButton in groupBox_type.Controls)
+            {
+                if (RadioButton is RadioButton)
+                {
+                    (RadioButton as RadioButton).Enabled = mode;
+                }
+            }
         }
 
         private void Load_Object_Data()
@@ -444,7 +459,7 @@ namespace WindowsFormsApp1
                     }
                 }
                 value = numericUpDown_Map_X.Value + "," + numericUpDown_Map_Y.Value + "," + numericUpDown_X.Value + "," + numericUpDown_Y.Value + ","
-                    + numericUpDown_range.Value + "," + numericUpDown_size.Value + ",Coin," + coin_value;
+                    + numericUpDown_size.Value + "," + numericUpDown_range.Value + ",Coin," + coin_value;
                 coinIDCounter++;
             }
             else if (radioButtonEnemy.Checked)
@@ -522,7 +537,7 @@ namespace WindowsFormsApp1
                     return;
                 }
                 value = numericUpDown_Map_X.Value + "," + numericUpDown_Map_Y.Value + "," + numericUpDown_X.Value + "," + numericUpDown_Y.Value + ","
-                    + numericUpDown_range.Value + "," + numericUpDown_size.Value + ",Weapon," + weapon_id;
+                    + numericUpDown_size.Value + "," + numericUpDown_range.Value + ",Weapon," + weapon_id;
                 weaponIDCounter++;
             }
 
@@ -556,6 +571,8 @@ namespace WindowsFormsApp1
                 MO.Click += Map_Object_Click;
             }
             Show_Objects();
+
+            Switch_Type_Modification(true);
         }
 
         private void radioButton_CheckedChanged(object sender, EventArgs e)
@@ -665,8 +682,11 @@ namespace WindowsFormsApp1
 
                 // Czyść dane i odśwież interfejs użytkownika
                 Selected_Object = null;
+                add_button.Text = "Dodaj Obiekt";
                 Load_Object_Data();
                 Show_Objects();
+
+                Switch_Type_Modification(true);
             }
         }
     }
