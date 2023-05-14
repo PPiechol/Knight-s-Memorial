@@ -402,6 +402,7 @@ namespace WindowsFormsApp1
             panelRight.BringToFront();
             panelMenu.BringToFront();
             menuLeft.BringToFront();
+
         }
 
         public static void Retrive_Interactive_Objects(string SectionName, int Current_Level, List<Interactive_Object> Object_list)
