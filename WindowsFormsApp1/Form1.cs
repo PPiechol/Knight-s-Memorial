@@ -22,6 +22,9 @@ namespace WindowsFormsApp1
         PictureBox background = new PictureBox();
         private List<Image> backgroundImages;
         int currentImageIndex = 0;
+        Button exitButton;
+        Button playButton;
+        Button editButton;
         public MainForm()
         {
             InitializeComponent();
@@ -29,10 +32,7 @@ namespace WindowsFormsApp1
         }
 
 
-        private void KeyIsDown(object sender, KeyEventArgs e)
-        {
-           Ekran_glowny.Movement(e);
-        }
+        
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -77,7 +77,7 @@ namespace WindowsFormsApp1
             int buttonWidth = 150;
             int buttonHeight = 40;
             
-            Button editButton = new Button();
+            editButton = new Button();
             editButton.Text = "Edytuj";
             editButton.Width = buttonWidth;
             editButton.Height = buttonHeight;
@@ -92,7 +92,7 @@ namespace WindowsFormsApp1
             editButton.BringToFront();
 
 
-            Button playButton = new Button();
+            playButton = new Button();
             playButton.Text = "Graj";
             playButton.Width = buttonWidth;
             playButton.Height = buttonHeight;
@@ -106,7 +106,7 @@ namespace WindowsFormsApp1
             Controls.Add(playButton);
             playButton.BringToFront();
 
-            Button exitButton = new Button();
+            exitButton = new Button();
             exitButton.Text = "Wyjście";
             exitButton.Width = buttonWidth;
             exitButton.Height = buttonHeight;
@@ -142,13 +142,26 @@ namespace WindowsFormsApp1
             form2.Show();
             Hide();
         }
-
+        private void KeyIsDown(object sender, KeyEventArgs e)
+        {
+            Ekran_glowny.Movement(e);
+        }
         private void PlayButton_Click(object sender, EventArgs e)
         {
+            
+
+            this.Controls.Remove(exitButton);
+            this.Controls.Remove(playButton);
+            this.Controls.Remove(editButton);
             // Rozpoczęcie gry
             Ekran_glowny = new Display(Width, Height, this);
+            Ekran_glowny.KeyDown += KeyIsDown;
             Controls.Add(Ekran_glowny);
             Ekran_glowny.Load_Level(1, 0, 0);
+            Ekran_glowny.BringToFront();
+            
+            
+            
         }
 
         
