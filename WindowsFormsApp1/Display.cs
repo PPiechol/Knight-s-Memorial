@@ -24,7 +24,6 @@ namespace WindowsFormsApp1
         PictureBox Game_Board;
         Player player;
 
-        TextBox messageBox;
         Label continueButton;
         Label exitButton;
         Label menu;
@@ -407,8 +406,8 @@ namespace WindowsFormsApp1
             panelMenu.BringToFront();
             menuLeft.BringToFront();
 
-            //showMessage(
-            //   "Tylko poprzez pokonanie bestii i potworów zdoła ocalić królestwo i przywrócić spokój jego mieszkańcom. Teraz Ty wcielasz się w jego rolę. Dasz radę temu podołać?");
+            showMessage(
+               "Tylko poprzez pokonanie bestii i potworów zdoła ocalić królestwo i przywrócić spokój jego mieszkańcom. Teraz Ty wcielasz się w jego rolę. Dasz radę temu podołać?");
         }
 
         public static void Retrive_Interactive_Objects(string SectionName, int Current_Level, List<Interactive_Object> Object_list)
@@ -817,38 +816,39 @@ namespace WindowsFormsApp1
         {
             StopMovement();
             Panel panel = new Panel();
-            panel.Width = Screen.PrimaryScreen.Bounds.Width / 4;
+            panel.Width = Screen.PrimaryScreen.Bounds.Width /2;
             panel.Height = 300;
-            panel.Location = new Point(panel.Width, Screen.PrimaryScreen.Bounds.Height - panel.Height);
-            panel.BackgroundImage = Image.FromFile(Environment.CurrentDirectory + "\\BackGround\\textBack.jpg");
+            panel.Location = new Point((Game_Board.Width - panel.Width)/2, Game_Board.Height - panel.Height);
+            panel.BackgroundImage = Image.FromFile(Environment.CurrentDirectory + "\\BackGround\\textBackGround.png");
             panel.Visible = true;
-            this.Controls.Add(panel);
+            panel.Name = "message box";
+            panel.BackgroundImageLayout = ImageLayout.Stretch;
+            panel.BackColor = Color.Transparent;
+            Game_Board.Controls.Add(panel);
             panel.BringToFront();
 
 
-            TextBox textBox = new TextBox();
+            Label text = new Label();
 
-            textBox.TextAlign = HorizontalAlignment.Center;
-            textBox.Width = panel.Width;
-            textBox.Height = panel.Height;
-            textBox.Multiline = true;
-            textBox.ReadOnly = true;
-            textBox.Parent = panel;
-            textBox.Location = new Point(panel.Location.X, panel.Location.Y);
-            textBox.Font = new Font("Terminal", 18, FontStyle.Regular);
-            textBox.BackColor = Color.LightGray;
-            this.Controls.Add(textBox);
-            textBox.BringToFront();
+            text.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            text.Width = Convert.ToInt32(panel.Width*0.8);
+            text.Height = panel.Height;
+            text.Parent = panel;
+            text.Location = new Point((panel.Width - text.Width)/2, text.Height / 4);
+            text.Font = new Font("Terminal", 18, FontStyle.Regular);
+            text.BackColor = Color.Transparent;
 
             string currentText = string.Empty;
 
             foreach (char letter in message)
             {
                 currentText += letter;
-                textBox.Text = currentText;
+                text.Text = currentText;
 
                 await Task.Delay(20);
             }
+
+            text.Click += messageBox_Click;
 
 
 
@@ -857,7 +857,13 @@ namespace WindowsFormsApp1
         private void messageBox_Click(object sender, EventArgs e)
         {
             EnableMovement();
-
+            foreach(Control ctrl in Game_Board.Controls)
+            {
+                if(ctrl is Panel panel && panel.Name == "message box")
+                {
+                    Game_Board.Controls.Remove(ctrl);
+                }
+            }
         }
 
         public void stopBattle()

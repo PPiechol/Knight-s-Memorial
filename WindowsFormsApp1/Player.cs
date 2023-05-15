@@ -168,7 +168,7 @@ namespace WindowsFormsApp1
         }
         private void CheckHeroLvl(int expGained)
         {
-            exp += expGained;
+            
             if(exp >= level * 10)
             {
                 level++;
