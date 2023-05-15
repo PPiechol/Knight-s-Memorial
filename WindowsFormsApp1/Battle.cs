@@ -619,6 +619,7 @@ namespace WindowsFormsApp1
                         Application.Exit();
                     }
                     temp.stopBattle();
+                    
                     timer.Stop();
                 };
                 timer.Start();
