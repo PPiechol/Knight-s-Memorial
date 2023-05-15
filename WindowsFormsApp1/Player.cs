@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NAudio.Wave;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace WindowsFormsApp1
         int coins;
         int level;
         int exp;
-
+        
 
         public Player(PictureBox Character, int level, int health, int attackSpeed, int critHitChance, int coins, Panel panelBottom, int exp=0)
         {
@@ -168,12 +169,22 @@ namespace WindowsFormsApp1
         }
         private void CheckHeroLvl(int expGained)
         {
-            
-            if(exp >= level * 10)
+            var wo = new WaveOutEvent();
+            AudioFileReader levelUp = new AudioFileReader(Environment.CurrentDirectory + "\\Sounds\\levelUp.mp3");
+            if (exp >= level * 10)
             {
                 level++;
+                wo.Init(levelUp);
+                wo.Play();
+                if (wo.PlaybackState == PlaybackState.Playing) { }
+                else
+                {
+                    wo.Stop();
+                    wo.Dispose();
+                }
                 Leveltext.Text = level.ToString();
                 exp = 0;
+                
             }
             
         }

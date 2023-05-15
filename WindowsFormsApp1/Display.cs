@@ -11,10 +11,19 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NAudio.Utils;
+using NAudio.FileFormats.Mp3;
 using System.Windows.Forms.VisualStyles;
 using System.Xml;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using TextBox = System.Windows.Forms.TextBox;
+using NAudio.Wave;
+using NAudio.Gui;
+using TrackBar = System.Windows.Forms.TrackBar;
+using ProgressBar = System.Windows.Forms.ProgressBar;
+using System.Threading;
+using Timer = System.Windows.Forms.Timer;
+using NAudio.Wave.SampleProviders;
 
 namespace WindowsFormsApp1
 {
@@ -23,7 +32,6 @@ namespace WindowsFormsApp1
     {
         PictureBox Game_Board;
         Player player;
-
         Label continueButton;
         Label exitButton;
         Label menu;
@@ -50,10 +58,37 @@ namespace WindowsFormsApp1
         int labelSize = 50;
         int spacing = 10;
         EquipmentDataContext Edc = new EquipmentDataContext();
+        List<string> battleMusicThemes = new List<string>();
 
+        
+
+        //muzyka
+        WaveOutEvent wo = new WaveOutEvent();
+        AudioFileReader MainMusic = new AudioFileReader(Environment.CurrentDirectory + "\\Sounds\\mainMusic.mp3");
+        
+        
+        WaveOutEvent wo2 = new WaveOutEvent();
+        AudioFileReader fight = new AudioFileReader(Environment.CurrentDirectory + "\\Sounds\\battle1.mp3");
+        
+
+        WaveOutEvent wo3 = new WaveOutEvent();
+        AudioFileReader messageSound = new AudioFileReader(Environment.CurrentDirectory + "\\Sounds\\message.mp3");
+        
+        WaveOutEvent wo4 = new WaveOutEvent();
+        AudioFileReader coinPicking = new AudioFileReader(Environment.CurrentDirectory + "\\Sounds\\coinPicking.mp3");
+
+        WaveOutEvent wo5 = new WaveOutEvent();
+        AudioFileReader weaponPicking = new AudioFileReader(Environment.CurrentDirectory + "\\Sounds\\weaponPicking.mp3");
+
+        WaveOutEvent wo6 = new WaveOutEvent();
+        AudioFileReader buttonClicking = new AudioFileReader(Environment.CurrentDirectory + "\\Sounds\\buttonsSound.mp3");
+
+        
+        
 
         public void PanelMenu()
         {
+            
 
             menu = new System.Windows.Forms.Label();
             menu.Location = new Point(Screen.PrimaryScreen.Bounds.Width - 50, 0);
@@ -79,7 +114,7 @@ namespace WindowsFormsApp1
             menuText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             menuText.Font = new Font("Arial", 16, FontStyle.Bold);
             menuText.BackColor = Color.Transparent;
-            menuText.Location = new Point((panelMenu.Width - menuText.Width) / 2, (panelMenu.Height / 2 - 60));
+            menuText.Location = new Point((panelMenu.Width - menuText.Width) / 2, (panelMenu.Height / 2 - 100));
             panelMenu.Controls.Add(menuText);
 
             continueButton = new System.Windows.Forms.Label();
@@ -95,10 +130,8 @@ namespace WindowsFormsApp1
             };
             continueButton.Font = new Font("Arial", 16, FontStyle.Bold);
 
-            continueButton.Location = new Point((panelMenu.Width - menuText.Width) / 2, (panelMenu.Height / 2));
+            continueButton.Location = new Point((panelMenu.Width - menuText.Width) / 2, (panelMenu.Height / 2 - 50));
             panelMenu.Controls.Add(continueButton);
-
-
 
 
             exitButton = new System.Windows.Forms.Label();
@@ -114,14 +147,45 @@ namespace WindowsFormsApp1
             };
             exitButton.Font = new Font("Arial", 16, FontStyle.Bold);
 
-            exitButton.Location = new Point((panelMenu.Width - exitButton.Width) / 2, (panelMenu.Height / 2) + 60);
+            exitButton.Location = new Point((panelMenu.Width - exitButton.Width) / 2, (panelMenu.Height / 2)+10);
             panelMenu.Controls.Add(exitButton);
 
-            ;
+            TrackBar volumeSlider = new System.Windows.Forms.TrackBar();
+            volumeSlider.Visible = true;
+            volumeSlider.BackColor = Color.White;
+            volumeSlider.Padding = new Padding(5);
+            volumeSlider.Size = new Size(200, 20);
+            volumeSlider.Location = new Point((panelMenu.Width - menuText.Width) / 2, (panelMenu.Height / 2) + 70);
+            volumeSlider.Minimum = 0;
+            volumeSlider.Maximum = 200;
+            volumeSlider.SmallChange = 1;
+            volumeSlider.LargeChange = 1;
+            volumeSlider.BackColor = Color.White;
+            volumeSlider.GotFocus += VolumeSlider_GotFocus;
+            panelMenu.Controls.Add(volumeSlider);
+
+            volumeSlider.ValueChanged += VolumeSlider_ValueChanged;
             continueButton.Click += ContinueButton_Click;
             exitButton.Click += ExitButton_Click;
             panelMenu.TabStop = true;
 
+
+
+        }
+
+        private void VolumeSlider_GotFocus(object sender, EventArgs e)
+        {
+            Source.Activate();
+            Source.Focus();
+        }
+
+        private void VolumeSlider_ValueChanged(object sender, EventArgs e)
+        {
+            TrackBar volumeSlider = (TrackBar)sender;
+            float volume = (float)volumeSlider.Value / volumeSlider.Maximum;
+            wo.Volume = volume;
+            wo2.Volume = volume;
+            wo3.Volume = volume;
         }
 
         public void PanelHero()
@@ -264,6 +328,21 @@ namespace WindowsFormsApp1
         }
         private void menuLeftButton_Click(object sender, EventArgs e)
         {
+            buttonClicking.Position = 0;
+            wo6.Init(buttonClicking);
+            wo6.Play();
+            if (wo.PlaybackState == PlaybackState.Playing) {
+                wo6.Stop();
+                buttonClicking.Position = 0;
+                wo6.Dispose();
+            }
+            else
+            {
+                wo6.Stop();
+
+                wo6.Dispose();
+            }
+            
             panelRight.Visible = !panelBottom.Visible;
             panelBottom.Visible = !panelBottom.Visible;
             if (panelRight.Visible && panelBottom.Visible)
@@ -283,6 +362,21 @@ namespace WindowsFormsApp1
         }
         private void menuButton_Click(object sender, EventArgs e)
         {
+            buttonClicking.Position = 0;
+            wo6.Init(buttonClicking);
+            wo6.Play();
+            if (wo.PlaybackState == PlaybackState.Playing)
+            {
+                wo6.Stop();
+                buttonClicking.Position = 0;
+                wo6.Dispose();
+            }
+            else
+            {
+                wo6.Stop();
+
+                wo6.Dispose();
+            }
             panelMenu.Visible = !panelMenu.Visible;
             if (panelMenu.Visible)
             {
@@ -307,12 +401,44 @@ namespace WindowsFormsApp1
 
         private void ContinueButton_Click(object sender, EventArgs e)
         {
+            buttonClicking.Position = 0;
+            wo6.Init(buttonClicking);
+            wo6.Play();
+            if (wo.PlaybackState == PlaybackState.Playing) {
+                wo6.Stop();
+                buttonClicking.Position = 0;
+                wo6.Dispose();
+            }
+            else
+            {
+                wo6.Stop();
+
+                wo6.Dispose();
+            }
             menuButton_Click(null, null);
         }
 
 
         public Display(int Width, int Height, Form Source_Form)
         {
+            string battle1 = "\\Sounds\\battle1.mp3";
+            string battle2 = "\\Sounds\\battle2.mp3";
+            string battle3 = "\\Sounds\\battle3.mp3";
+            string battle4 = "\\\\Sounds\\battle4.mp3";
+            string battle5 = "\\Sounds\\battle5.mp3";
+            string battle6 = "\\Sounds\\battle6.mp3";
+
+            battleMusicThemes.Add(battle1);
+            battleMusicThemes.Add(battle2);
+            battleMusicThemes.Add(battle3);
+            battleMusicThemes.Add(battle4);
+            battleMusicThemes.Add(battle5);
+            battleMusicThemes.Add(battle6);
+            FadeInOutSampleProvider fade = new FadeInOutSampleProvider(MainMusic, true);
+            fade.BeginFadeIn(2000);
+            wo.Volume = 0.1f;
+            wo.Init(fade);
+            wo.Play();
 
             Inventory = new List<int>();
             string SectionName = "Player_Items";
@@ -359,7 +485,7 @@ namespace WindowsFormsApp1
             MapPositionX = Sx;
             MapPositionY = Sy;
             Current_Level = level;
-
+            
             Character = new PictureBox();
 
             Game_Board.Image = SetBackGround(level, MapPositionX, MapPositionY);
@@ -496,6 +622,14 @@ namespace WindowsFormsApp1
 
                         temp.Image = Image.FromFile(Environment.CurrentDirectory + "\\Map parts\\Level " + Current_Level.ToString() + "\\Battle.png");
                         battle = true;
+
+                        wo.Stop();
+                        Random randomMusicTrack = new Random();
+                        
+                        fight = new AudioFileReader(Environment.CurrentDirectory+battleMusicThemes[randomMusicTrack.Next(0, 6)]);
+                        wo2.Volume = 0.2f;
+                        wo2.Init(fight);
+                        wo2.Play();
                         menu.Visible = false;
                         menuLeft.Visible = false;
                         Battle Prepare_Battle = new Battle(temp, Inventory, this);
@@ -606,6 +740,7 @@ namespace WindowsFormsApp1
 
         public void Movement(KeyEventArgs e)
         {
+            
             if (battle)
             {
                 return;
@@ -676,11 +811,31 @@ namespace WindowsFormsApp1
                         Game_Board.Controls.Remove(IO.Get_Icon);
                         if (IO.Get_Name == "Coin")
                         {
+                            coinPicking.Position = 0;
+                            wo4.Init(coinPicking);
+                            wo4.Play();
+                            if(wo.PlaybackState == PlaybackState.Playing) { }
+                            else
+                            {
+                                wo4.Stop();
+                                
+                                wo4.Dispose();
+                            }
                             player.AddCoins((int)IO.Get_Type);
                         }
                         else if (IO.Get_Name == "Weapon")
                         {
                             AddItem((int)IO.Get_Type, IO.Get_Icon);
+                            weaponPicking.Position = 0;
+                            wo5.Init(weaponPicking);
+                            wo5.Play();
+                            if (wo.PlaybackState == PlaybackState.Playing) { }
+                            else
+                            {
+                                wo5.Stop();
+
+                                wo5.Dispose();
+                            }
                         }
                     }
                 }
@@ -796,6 +951,7 @@ namespace WindowsFormsApp1
             return distance;
         }
 
+        
         public void StopMovement()
         {
             speed = 0;
@@ -814,6 +970,10 @@ namespace WindowsFormsApp1
         //godzina 24, a ja dostaje pierdolca
         public async void showMessage(string message)
         {
+
+            wo3.Init(messageSound);
+            wo3.Play();
+
             StopMovement();
             Panel panel = new Panel();
             panel.Width = Screen.PrimaryScreen.Bounds.Width /2;
@@ -835,7 +995,7 @@ namespace WindowsFormsApp1
             text.Height = panel.Height;
             text.Parent = panel;
             text.Location = new Point((panel.Width - text.Width)/2, text.Height / 4);
-            text.Font = new Font("Terminal", 18, FontStyle.Regular);
+            text.Font = new Font("Ink Free", 18, FontStyle.Bold);
             text.BackColor = Color.Transparent;
 
             string currentText = string.Empty;
@@ -868,6 +1028,16 @@ namespace WindowsFormsApp1
 
         public void stopBattle()
         {
+            
+            wo2.Pause();
+            wo2.Dispose();
+            fight.Position = 0;
+            wo2.Init(fight);
+            
+            Thread.Sleep(1000);           
+            MainMusic.Position = 0;
+            wo.Play();           
+
             Game_Board.Controls.Remove(activeBattle.Get_Background);
             activeBattle.Dispose();
             activeBattle = null;

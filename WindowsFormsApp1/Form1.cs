@@ -6,13 +6,16 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
-
+using NAudio.FileFormats.Mp3;
+using NAudio.Utils;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Button = System.Windows.Forms.Button;
+using NAudio.Wave;
+using System.Reflection;
 
 namespace WindowsFormsApp1
 {
@@ -25,6 +28,12 @@ namespace WindowsFormsApp1
         Button exitButton;
         Button playButton;
         Button editButton;
+        IWavePlayer wo = new WaveOutEvent();
+        
+        DirectSoundOut outputDevice = new DirectSoundOut();
+        AudioFileReader intro = new AudioFileReader(Environment.CurrentDirectory + "\\Sounds\\mainMenuIntro.mp3");
+
+
         public MainForm()
         {
             InitializeComponent();
@@ -32,13 +41,30 @@ namespace WindowsFormsApp1
         }
 
 
-        
+
+        private async void FadeIn()
+        {
+            while (Opacity < 1) // Pętla do momentu, gdy osiągniemy pełną widoczność
+            {
+                Opacity += 0.1; // Zwiększaj przezroczystość stopniowo
+                await Task.Delay(150); // Poczekaj krótki czas przed kolejną iteracją
+            }
+            Opacity = 1; // Ustaw pełną widoczność na zakończenie animacji
+        }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            ShowIntroMenu();
-        }
+            Opacity = 0; // Ustaw przezroczystość na 0 (niewidoczne)
+            FadeIn();
 
+            ShowIntroMenu();
+            intro.Volume = 0.3f;
+            outputDevice.Init(intro);
+            outputDevice.Play();
+
+
+        }
+        
 
         private void InitializeBackground()
         {
@@ -60,6 +86,8 @@ namespace WindowsFormsApp1
         private void timer1_Tick(object sender, EventArgs e)
         {
             ChangeBackgroundImage();
+           
+            
         }
 
         private void ChangeBackgroundImage()
@@ -138,18 +166,23 @@ namespace WindowsFormsApp1
         private void EditButton_Click(object sender, EventArgs e)
         {
             // Otwarcie Form2 w trybie edycji
+            outputDevice.Stop();
+            outputDevice.Dispose();
             Form2 form2 = new Form2(this);
             form2.Show();
             Hide();
         }
+        
+        
         private void KeyIsDown(object sender, KeyEventArgs e)
         {
             Ekran_glowny.Movement(e);
         }
         private void PlayButton_Click(object sender, EventArgs e)
         {
-            
 
+            outputDevice.Stop();
+            outputDevice.Dispose();
             this.Controls.Remove(exitButton);
             this.Controls.Remove(playButton);
             this.Controls.Remove(editButton);
