@@ -334,7 +334,6 @@ namespace WindowsFormsApp1
             PictureBox Target = Target_Entity.Get_Creature;
 
             Label Selected_Label = null;
-            Label Target_Label = null;
 
 
             foreach (Control control in Background.Controls)
@@ -346,7 +345,7 @@ namespace WindowsFormsApp1
             }
 
             Point Offset = new Point(Selected_Label.Location.X - Selected.Location.X, Selected_Label.Location.Y - Selected.Location.Y);
-            Target_Label = Get_Target_Label(Target_Entity);
+            Label Target_Label = Get_Target_Label(Target_Entity);
 
             //Aktualna pozycja - Start == x, distance
             int distance = Selected.Location.X - Target.Location.X;
@@ -404,6 +403,59 @@ namespace WindowsFormsApp1
             Background.Refresh();
         }
 
+
+        private async Task Return_Leap_Animation(Entity Selected_Entity, Entity Target_Entity, Point Starting_pos)
+        {
+            const double angle = 0.001;
+            const int DelayMS = 10;
+            PictureBox Selected = Selected_Entity.Get_Creature;
+            PictureBox Target = Target_Entity.Get_Creature;
+
+            Label Selected_Label = null;
+
+            foreach (Control control in Background.Controls)
+            {
+                if (control is Label label && label.Tag is Entity entity && entity == Selected_Entity)
+                {
+                    Selected_Label = label;
+                }
+            }
+
+            Point Offset = new Point(Selected_Label.Location.X - Selected.Location.X, Selected_Label.Location.Y - Selected.Location.Y);
+
+
+            //Aktualna pozycja - Start == x, distance
+            int StartX = Starting_pos.X;
+            int StartY = Starting_pos.Y;
+            int distance = Selected.Location.X - Target.Location.X;
+
+            if (distance < 0)
+            {
+                while (Selected.Location.X > distance + Target.Location.X)
+                {
+                    await Task.Delay(DelayMS);
+                    Selected.Location = new Point(Selected.Location.X + distance / 10, Selected.Location.Y);
+                    int x = Selected.Location.X - StartX;
+                    Selected.Location = new Point(Selected.Location.X, (int)Math.Round(StartY + angle * x * (x + distance)));
+                    Selected_Label.Location = new Point(Offset.X + Selected.Location.X, Offset.Y + Selected.Location.Y);
+                }
+            }
+            else
+            {
+                while (Selected.Location.X < distance + Target.Location.X)
+                {
+                    await Task.Delay(DelayMS);
+                    Selected.Location = new Point(Selected.Location.X + distance / 10, Selected.Location.Y);
+                    int x = Selected.Location.X - StartX;
+                    Selected.Location = new Point(Selected.Location.X, (int)Math.Round(StartY + angle * x * (x + distance)));
+                    Selected_Label.Location = new Point(Offset.X + Selected.Location.X, Offset.Y + Selected.Location.Y);
+                }
+            }
+            Background.Refresh();
+        }
+
+
+
         private Label Get_Target_Label(Entity Target_Entity)
         {
             foreach (Control control in Background.Controls)
@@ -433,7 +485,7 @@ namespace WindowsFormsApp1
             Target.Get_Creature.Image = BM;
             Target.Get_health -= Damage;
 
-            if(Target.Get_health < 0)
+            if(Target.Get_health <= 0)
             {
                 EnemyDied(Convert.ToInt32(Target.Get_Creature.Name.Substring(0, 1)));
             }
@@ -510,7 +562,9 @@ namespace WindowsFormsApp1
                             int Damage = (int)Querry.Damage;
                             Opponents[Target_Id].Effects = Effects_To_Apply_Solo;
 
+                            Point Start = new Point(Our_team[0].Get_Creature.Location.X, Our_team[0].Get_Creature.Location.Y);
                             await Attack_Leap_Animation(Our_team[0] ,Opponents[Target_Id], Damage);
+                            await Return_Leap_Animation(Our_team[0] ,Opponents[Target_Id], Start);
                         }
                     }
                     else if (Querry.Type_Of_Action == 'c')
@@ -537,33 +591,46 @@ namespace WindowsFormsApp1
                             int Damage = (int)Querry.Damage;
                             Opponents[Target_Id].Effects = Effects_To_Apply_Solo;
 
+                            Point Start = new Point(Our_team[0].Get_Creature.Location.X, Our_team[0].Get_Creature.Location.Y);
                             await Attack_Leap_Animation(Our_team[0], Opponents[Target_Id], Damage);
 
                             if (Chance.Next() % 100 < (int)Querry.Other_Targets_Proc_Chance)
                             {
                                 int Targets_Count = Opponents.Count;
-                                int Next_Target = Target_Id + 1;
-                                int Jumps = (int)Querry.Amount_Of_Jumps;
-
-                                while (Jumps > 0)
+                                int Next_Target = -1;
+                                foreach(Entity E in Opponents)
                                 {
-                                    if (Next_Target >= Targets_Count)
+                                    Next_Target = -1;
+                                    if (E.Get_Creature.Visible && E != Opponents[Target_Id])
                                     {
-                                        Next_Target = 0;
-                                    }
-
-                                    if (Next_Target == Target_Id)
-                                    {
+                                        Next_Target = Opponents.IndexOf(E);
                                         break;
                                     }
+                                }
+
+                                int Jumps = (int)Querry.Amount_Of_Jumps;
+
+                                while (Jumps > 0 && Next_Target != -1)
+                                {
+
                                     Damage = Damage * (int)Querry.Damage_After_Jump / 100;
-                                    //await DamageFlash(Opponents[Next_Target], Get_Target_Label(Opponents[Next_Target]), Damage);
-                                    Opponents[Next_Target].Get_health -= Damage;
+                                    await DamageFlash(Opponents[Next_Target], Get_Target_Label(Opponents[Next_Target]), Damage);
 
                                     Opponents[Target_Id].Effects = Effects_To_Apply_Multi;
                                     Jumps--;
+
+                                    foreach (Entity E in Opponents)
+                                    {
+                                        Next_Target = -1;
+                                        if (E.Get_Creature.Visible && E != Opponents[Target_Id])
+                                        {
+                                            Next_Target = Opponents.IndexOf(E);
+                                            break;
+                                        }
+                                    }
                                 }
                             }
+                            await Return_Leap_Animation(Our_team[0], Opponents[Target_Id], Start);
                         }
                     }
                 }
@@ -607,10 +674,12 @@ namespace WindowsFormsApp1
                     //Tarcza
                     if (Our_team[0].Effects.Count > 0)
                     {
-                        Damage = Damage * (100 - (int)Our_team[0].Effects[0].Strength) / 100;
+                        Damage = Damage * (100 - Our_team[0].Effects[0].Strength) / 100;
                     }
 
+                    Point Start = new Point(enemy.Get_Creature.Location.X, enemy.Get_Creature.Location.Y);
                     await Attack_Leap_Animation(enemy, Our_team[target], Damage);
+                    await Return_Leap_Animation(enemy, Our_team[target], Start);
 
                     Thread.Sleep(1000);
                 }
@@ -740,36 +809,38 @@ namespace WindowsFormsApp1
         {
             Background.Controls.Remove(Opponents[i].Get_Creature);
             Opponents[i].Get_Creature.Visible = false;
+            Label Defeted_Enemy_Label = null;
             foreach (Control control in Background.Controls)
             {
                 if (control is Label label && label.Tag is Entity entity && entity == Opponents[i])
                 {
                     Background.Controls.Remove(label);
+                    Defeted_Enemy_Label = label;
                     break;
                 }
             }
 
-            int Enemy_Id = Convert.ToInt32(Opponents[i].Get_Creature.Name.Substring(0, 1));
-
             Entity Show_Next_Enemy = null;
-            for (int j = 0; j < Opponents.Count; j++)
+            foreach(Entity E in Opponents)
             {
-                int Next_Enemy_Id = Convert.ToInt32(Opponents[j].Get_Creature.Name.Substring(0, 1));
-                if (Enemy_Id != Next_Enemy_Id && Enemy_Id % 2 == Next_Enemy_Id % 2)
+                if (!E.Get_Creature.Visible && E != Opponents[i] && E.Get_health > 0)
                 {
-                    Show_Next_Enemy = Opponents[j];
-                    Show_Next_Enemy.Get_Creature.Visible = true;
+                    E.Get_Creature.Visible = true;
+                    Show_Next_Enemy = E;
                     break;
                 }
             }
 
             if (Show_Next_Enemy != null)
             {
+                int size_difference = Opponents[i].Get_Creature.Width - Show_Next_Enemy.Get_Creature.Width;
+                Show_Next_Enemy.Get_Creature.Location = new Point(Opponents[i].Get_Creature.Location.X + size_difference, Show_Next_Enemy.Get_Creature.Location.Y);
                 foreach (Control control in Background.Controls)
                 {
                     if (control is Label label && label.Tag is Entity entity && entity == Show_Next_Enemy)
                     {
                         label.Visible = true;
+                        label.Location = new Point(Defeted_Enemy_Label.Location.X + size_difference, label.Location.Y);
                         break;
                     }
                 }
