@@ -157,6 +157,7 @@ namespace WindowsFormsApp1
             creature.Image = source.Image;
             creature.Location = source.Location;
             creature.Size = source.Size;
+            creature.Visible = source.Visible;
             creature.SizeMode = source.SizeMode;
             creature.BackColor = source.BackColor;
             creature.Click += AttackButton_Click;
@@ -193,6 +194,7 @@ namespace WindowsFormsApp1
             healthLabel.Font = new Font("System", 20);
             healthLabel.ForeColor = Color.WhiteSmoke;
             healthLabel.Tag = temp;
+            healthLabel.Visible = creature.Visible;
             Background.Controls.Add(healthLabel);
         }
 
@@ -203,7 +205,7 @@ namespace WindowsFormsApp1
             {
                 for (int x = 0; x < New_Background.Width; x++)
                 {
-                    New_Background.SetPixel(x, y, Color.Transparent);
+                    New_Background.SetPixel(x, y, Color.FromArgb(0, 0, 0, 0));
                 }
             }
             for (int y = 0; y < Item_Image.Height; y++)
@@ -312,8 +314,8 @@ namespace WindowsFormsApp1
             {
                 if (control is Label label && label.Tag is Entity entity)
                 {
-                        label.Text = entity.Get_health.ToString();
-                        Background.Refresh();
+                    label.Text = entity.Get_health.ToString();
+                    Background.Refresh();
                 }
             }
             if(CheckBattleResult())
@@ -323,8 +325,127 @@ namespace WindowsFormsApp1
                 AttackWithDelay(OpponentAttack,1000);
             }
         }
-        
-        private void Perform_Action(PictureBox Target)
+
+        private async Task Attack_Leap_Animation(Entity Selected_Entity, Entity Target_Entity, int Damage)
+        {
+            const double angle = 0.001;
+            const int DelayMS = 10;
+            PictureBox Selected = Selected_Entity.Get_Creature;
+            PictureBox Target = Target_Entity.Get_Creature;
+
+            Label Selected_Label = null;
+            Label Target_Label = null;
+
+
+            foreach (Control control in Background.Controls)
+            {
+                if (control is Label label && label.Tag is Entity entity && entity == Selected_Entity)
+                {
+                    Selected_Label = label;
+                }
+            }
+
+            Point Offset = new Point(Selected_Label.Location.X - Selected.Location.X, Selected_Label.Location.Y - Selected.Location.Y);
+            Target_Label = Get_Target_Label(Target_Entity);
+
+            //Aktualna pozycja - Start == x, distance
+            int distance = Selected.Location.X - Target.Location.X;
+            int StartX = Selected.Location.X;
+            int StartY = Selected.Location.Y;
+            if (distance < 0)
+            {
+                //Gracz
+                while (Selected.Location.X < Target.Location.X)
+                {
+                    await Task.Delay(DelayMS);
+                    Selected.Location = new Point(Selected.Location.X - distance / 10, Selected.Location.Y);
+                    int x = Selected.Location.X - StartX;
+                    Selected.Location = new Point(Selected.Location.X, (int)Math.Round(StartY + angle * x * (x + distance)));
+                    Selected_Label.Location = new Point(Offset.X + Selected.Location.X, Offset.Y + Selected.Location.Y);
+                }
+            }
+            else
+            {
+                //Przeciwnicy
+                while (Selected.Location.X > Target.Location.X)
+                {
+                    await Task.Delay(DelayMS);
+                    Selected.Location = new Point(Selected.Location.X - distance / 10, Selected.Location.Y);
+                    int x = Selected.Location.X - StartX;
+                    Selected.Location = new Point(Selected.Location.X, (int)Math.Round(StartY + angle * x * (x + distance)));
+                    Selected_Label.Location = new Point(Offset.X + Selected.Location.X, Offset.Y + Selected.Location.Y);
+                }
+            }
+
+            await DamageFlash(Target_Entity, Target_Label, Damage);
+
+            if (distance < 0)
+            {
+                while (Selected.Location.X > distance + Target.Location.X)
+                {
+                    await Task.Delay(DelayMS);
+                    Selected.Location = new Point(Selected.Location.X + distance / 10, Selected.Location.Y);
+                    int x = Selected.Location.X - StartX;
+                    Selected.Location = new Point(Selected.Location.X, (int)Math.Round(StartY + angle * x * (x + distance)));
+                    Selected_Label.Location = new Point(Offset.X + Selected.Location.X, Offset.Y + Selected.Location.Y);
+                }
+            }
+            else
+            {
+                while (Selected.Location.X < distance + Target.Location.X)
+                {
+                    await Task.Delay(DelayMS);
+                    Selected.Location = new Point(Selected.Location.X + distance / 10, Selected.Location.Y);
+                    int x = Selected.Location.X - StartX;
+                    Selected.Location = new Point(Selected.Location.X, (int)Math.Round(StartY + angle * x * (x + distance)));
+                    Selected_Label.Location = new Point(Offset.X + Selected.Location.X, Offset.Y + Selected.Location.Y);
+                }
+            }
+            Background.Refresh();
+        }
+
+        private Label Get_Target_Label(Entity Target_Entity)
+        {
+            foreach (Control control in Background.Controls)
+            {
+                if (control is Label label && label.Tag is Entity entity && entity == Target_Entity)
+                {
+                    return label;
+                }
+            }
+            return null;
+        }
+
+        private async Task DamageFlash(Entity Target, Label Target_Health, int Damage)
+        {
+            Bitmap save = (Bitmap)Target.Get_Creature.Image.Clone();
+            Bitmap BM = (Bitmap)Target.Get_Creature.Image.Clone();
+            for (int y = 0; y < Target.Get_Creature.Image.Height; y++)
+            {
+                for (int x = 0; x < Target.Get_Creature.Image.Width; x++)
+                {
+                    if (BM.GetPixel(x, y) != Color.FromArgb(0, 0, 0, 0))
+                    {
+                        BM.SetPixel(x, y, Color.White);
+                    }
+                }
+            }
+            Target.Get_Creature.Image = BM;
+            Target.Get_health -= Damage;
+
+            if(Target.Get_health < 0)
+            {
+                EnemyDied(Convert.ToInt32(Target.Get_Creature.Name.Substring(0, 1)));
+            }
+
+            Target_Health.Text = Target.Get_health.ToString();
+
+            await Task.Delay(60);
+
+            Target.Get_Creature.Image = save;
+        }
+
+        private async void Perform_Action(PictureBox Target)
         {
             var Held = from Item in Edc.Items
                                where Item.Id == Main_Hand
@@ -387,8 +508,9 @@ namespace WindowsFormsApp1
                         if (Chance.Next() % 100 < (int)Querry.Main_Target_Proc_Chance)
                         {
                             int Damage = (int)Querry.Damage;
-                            Opponents[Target_Id].Get_health -= Damage;
                             Opponents[Target_Id].Effects = Effects_To_Apply_Solo;
+
+                            await Attack_Leap_Animation(Our_team[0] ,Opponents[Target_Id], Damage);
                         }
                     }
                     else if (Querry.Type_Of_Action == 'c')
@@ -413,15 +535,17 @@ namespace WindowsFormsApp1
                         if (Chance.Next() % 100 < (int)Querry.Main_Target_Proc_Chance)
                         {
                             int Damage = (int)Querry.Damage;
-                            Opponents[Target_Id].Get_health -= Damage;
                             Opponents[Target_Id].Effects = Effects_To_Apply_Solo;
+
+                            await Attack_Leap_Animation(Our_team[0], Opponents[Target_Id], Damage);
+
                             if (Chance.Next() % 100 < (int)Querry.Other_Targets_Proc_Chance)
                             {
                                 int Targets_Count = Opponents.Count;
                                 int Next_Target = Target_Id + 1;
                                 int Jumps = (int)Querry.Amount_Of_Jumps;
 
-                                while (Jumps > 1)
+                                while (Jumps > 0)
                                 {
                                     if (Next_Target >= Targets_Count)
                                     {
@@ -433,14 +557,15 @@ namespace WindowsFormsApp1
                                         break;
                                     }
                                     Damage = Damage * (int)Querry.Damage_After_Jump / 100;
+                                    //await DamageFlash(Opponents[Next_Target], Get_Target_Label(Opponents[Next_Target]), Damage);
                                     Opponents[Next_Target].Get_health -= Damage;
+
                                     Opponents[Target_Id].Effects = Effects_To_Apply_Multi;
                                     Jumps--;
                                 }
                             }
                         }
                     }
-
                 }
                 else if(Target_Team == 'p')
                 {
@@ -468,33 +593,25 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void OpponentAttack()
+        private async void OpponentAttack()
         {
             var random = new Random();
             var target = random.Next(Our_team.Count);
 
             //tymczasowo
-            foreach(Entity enemy in Opponents)
+            foreach (Entity enemy in Opponents)
             {
                 int Damage = enemy.Get_Damage;
-                if (enemy.AbleToAttack && enemy.Get_health > 0)
+                if (enemy.AbleToAttack && enemy.Get_health > 0 && enemy.Get_Creature.Visible)
                 {
                     //Tarcza
                     if (Our_team[0].Effects.Count > 0)
                     {
                         Damage = Damage * (100 - (int)Our_team[0].Effects[0].Strength) / 100;
                     }
-                    Our_team[target].Get_health -= Damage;
-                    
-                    foreach (Control control in Background.Controls)
-                    {
-                        if (control is Label label && label.Tag is Entity entity && entity == Our_team[target])
-                        {
 
-                            label.Text = Our_team[target].Get_health.ToString();
-                            Background.Refresh();
-                        }
-                    }
+                    await Attack_Leap_Animation(enemy, Our_team[target], Damage);
+
                     Thread.Sleep(1000);
                 }
             }
@@ -561,16 +678,7 @@ namespace WindowsFormsApp1
                 }
                 else
                 {
-                    Background.Controls.Remove(Opponents[i].Get_Creature);
-                    foreach(Control control in Background.Controls)
-                    {
-                        if(control is Label label && label.Tag is Entity entity && entity == Opponents[i])
-                        {
-                            Background.Controls.Remove(label);
-                            break;
-                        }
-                    }
-                    Opponents.Remove(Opponents[i]);
+                    EnemyDied(i);
                 }
             }
 
@@ -586,7 +694,7 @@ namespace WindowsFormsApp1
                 {
                     resultText.Location = new Point(Background.Width / 2, Background.Height / 2);
                     resultText.Size = new Size(Background.Width, Background.Height);
-                    resultText.Text = "YOU LOOSE!";
+                    resultText.Text = "Porażka!";
                     resultText.ForeColor = Color.Red;
                     Background.BackColor = Color.Gray;
                     temp.BackColor = Color.Gray;
@@ -597,7 +705,7 @@ namespace WindowsFormsApp1
                 else
                 {
                     resultText.Location = new Point((Background.Width / 2) - resultText.Size.Width, 100);
-                    resultText.Text = "YOU WIN!";
+                    resultText.Text = "Wygrana!";
                     resultText.ForeColor = Color.LightGoldenrodYellow;
                     Background.BackColor = Color.Green;
                     temp.BackColor = Color.Green;
@@ -626,6 +734,47 @@ namespace WindowsFormsApp1
                 return false;
             }
             return true;
+        }
+
+        private void EnemyDied(int i)
+        {
+            Background.Controls.Remove(Opponents[i].Get_Creature);
+            Opponents[i].Get_Creature.Visible = false;
+            foreach (Control control in Background.Controls)
+            {
+                if (control is Label label && label.Tag is Entity entity && entity == Opponents[i])
+                {
+                    Background.Controls.Remove(label);
+                    break;
+                }
+            }
+
+            int Enemy_Id = Convert.ToInt32(Opponents[i].Get_Creature.Name.Substring(0, 1));
+
+            Entity Show_Next_Enemy = null;
+            for (int j = 0; j < Opponents.Count; j++)
+            {
+                int Next_Enemy_Id = Convert.ToInt32(Opponents[j].Get_Creature.Name.Substring(0, 1));
+                if (Enemy_Id != Next_Enemy_Id && Enemy_Id % 2 == Next_Enemy_Id % 2)
+                {
+                    Show_Next_Enemy = Opponents[j];
+                    Show_Next_Enemy.Get_Creature.Visible = true;
+                    break;
+                }
+            }
+
+            if (Show_Next_Enemy != null)
+            {
+                foreach (Control control in Background.Controls)
+                {
+                    if (control is Label label && label.Tag is Entity entity && entity == Show_Next_Enemy)
+                    {
+                        label.Visible = true;
+                        break;
+                    }
+                }
+            }
+            Background.Refresh();
         }
 
         private void disappear()
