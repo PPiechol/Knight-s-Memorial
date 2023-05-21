@@ -154,3 +154,17 @@ C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\Microsoft.Win32
 C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\NAudio.xml
 C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\System.Security.AccessControl.xml
 C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\System.Security.Principal.Windows.xml
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\Microsoft.Win32.Registry.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\NAudio.Asio.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\NAudio.Core.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\NAudio.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\NAudio.Midi.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\NAudio.Wasapi.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\NAudio.WinForms.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\NAudio.WinMM.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\System.Security.AccessControl.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\System.Security.Principal.Windows.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\Microsoft.Win32.Registry.xml
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\NAudio.xml
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\System.Security.AccessControl.xml
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\System.Security.Principal.Windows.xml
