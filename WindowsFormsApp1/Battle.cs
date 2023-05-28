@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NAudio.Wave;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -308,22 +309,6 @@ namespace WindowsFormsApp1
             Performing_Attack = true;
             PictureBox pb = (sender as PictureBox);
             Perform_Action(pb);
-
-            // aktualizacja etykiety healthLabel
-            foreach (Control control in Background.Controls)
-            {
-                if (control is Label label && label.Tag is Entity entity)
-                {
-                    label.Text = entity.Get_health.ToString();
-                    Background.Refresh();
-                }
-            }
-            if(CheckBattleResult())
-            {
-                Turn.Text = "TURA PRZECIWNIKÓW";
-                Turn.Location = new Point((Background.Width - Turn.Width) / 2, Turn.Location.Y);
-                AttackWithDelay(OpponentAttack,1000);
-            }
         }
 
         private async Task Attack_Leap_Animation(Entity Selected_Entity, Entity Target_Entity, int Damage)
@@ -485,7 +470,12 @@ namespace WindowsFormsApp1
             Target.Get_Creature.Image = BM;
             Target.Get_health -= Damage;
 
-            if(Target.Get_health <= 0)
+            WaveOutEvent woe = new WaveOutEvent();
+            AudioFileReader Damage_Taken = new AudioFileReader(Environment.CurrentDirectory + "\\Sounds\\hit.mp3");
+            woe.Init(Damage_Taken);
+            woe.Play();
+
+            if (Target.Get_health <= 0)
             {
                 EnemyDied(Convert.ToInt32(Target.Get_Creature.Name.Substring(0, 1)));
             }
@@ -504,6 +494,7 @@ namespace WindowsFormsApp1
                                select Item;
 
             Random Chance = new Random();
+            bool correct_action = true;
             int Target_Id = Convert.ToInt32(Target.Name.Substring(0, 1));
             char Target_Team = Convert.ToChar(Target.Name.Substring(1, 1));
 
@@ -633,6 +624,10 @@ namespace WindowsFormsApp1
                             await Return_Leap_Animation(Our_team[0], Opponents[Target_Id], Start);
                         }
                     }
+                    else
+                    {
+                        correct_action = false;
+                    }
                 }
                 else if(Target_Team == 'p')
                 {
@@ -656,7 +651,33 @@ namespace WindowsFormsApp1
                         }
                         Our_team[Target_Id].Effects = Effects_To_Apply;
                     }
+                    else
+                    {
+                        correct_action = false;
+                    }
                 }
+            }
+
+            if(correct_action)
+            {
+                foreach (Control control in Background.Controls)
+                {
+                    if (control is Label label && label.Tag is Entity entity)
+                    {
+                        label.Text = entity.Get_health.ToString();
+                        Background.Refresh();
+                    }
+                }
+                if (CheckBattleResult())
+                {
+                    Turn.Text = "TURA PRZECIWNIKÓW";
+                    Turn.Location = new Point((Background.Width - Turn.Width) / 2, Turn.Location.Y);
+                    AttackWithDelay(OpponentAttack, 1000);
+                }
+            }
+            else
+            {
+                Performing_Attack = false;
             }
         }
 
