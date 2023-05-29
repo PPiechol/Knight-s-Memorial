@@ -24,6 +24,7 @@ using ProgressBar = System.Windows.Forms.ProgressBar;
 using System.Threading;
 using Timer = System.Windows.Forms.Timer;
 using NAudio.Wave.SampleProviders;
+using System.IO;
 
 namespace WindowsFormsApp1
 {
@@ -60,6 +61,7 @@ namespace WindowsFormsApp1
         EquipmentDataContext Edc = new EquipmentDataContext();
         List<string> battleMusicThemes = new List<string>();
 
+        string SaveFilePath = "";
         
 
         //muzyka
@@ -100,13 +102,13 @@ namespace WindowsFormsApp1
 
             panelMenu = new Panel();
             panelMenu.Visible = false;
-            panelMenu.Size = new Size(Screen.PrimaryScreen.Bounds.Width / 5, 250);
+            panelMenu.Size = new Size(Screen.PrimaryScreen.Bounds.Width / 5, 300);
             panelMenu.Location = new Point((Screen.PrimaryScreen.Bounds.Width - panelMenu.Width) / 2, (Screen.PrimaryScreen.Bounds.Height - panelMenu.Height) / 2);
             panelMenu.BackColor = Color.Gray;
             this.Controls.Add(panelMenu);
 
             menuText = new System.Windows.Forms.Label();
-            menuText.Text = "Game paused";
+            menuText.Text = "Menu";
             menuText.Visible = true;
             menuText.BackColor = Color.White;
             menuText.Padding = new Padding(5);
@@ -114,11 +116,11 @@ namespace WindowsFormsApp1
             menuText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             menuText.Font = new Font("Arial", 16, FontStyle.Bold);
             menuText.BackColor = Color.Transparent;
-            menuText.Location = new Point((panelMenu.Width - menuText.Width) / 2, (panelMenu.Height / 2 - 100));
+            menuText.Location = new Point((panelMenu.Width - menuText.Width) / 2, (panelMenu.Height / 20));
             panelMenu.Controls.Add(menuText);
 
             continueButton = new System.Windows.Forms.Label();
-            continueButton.Text = "Continue";
+            continueButton.Text = "Powrót do gry";
             continueButton.Visible = true;
             continueButton.BackColor = Color.White;
             continueButton.Padding = new Padding(5);
@@ -130,12 +132,12 @@ namespace WindowsFormsApp1
             };
             continueButton.Font = new Font("Arial", 16, FontStyle.Bold);
 
-            continueButton.Location = new Point((panelMenu.Width - menuText.Width) / 2, (panelMenu.Height / 2 - 50));
+            continueButton.Location = new Point((panelMenu.Width - menuText.Width) / 2, menuText.Location.Y + continueButton.Height * 6/5);
             panelMenu.Controls.Add(continueButton);
 
 
             exitButton = new System.Windows.Forms.Label();
-            exitButton.Text = "Exit";
+            exitButton.Text = "Wyjdź";
             exitButton.Visible = true;
             exitButton.BackColor = Color.White; // Set background color to white
             exitButton.Padding = new Padding(5);
@@ -147,7 +149,7 @@ namespace WindowsFormsApp1
             };
             exitButton.Font = new Font("Arial", 16, FontStyle.Bold);
 
-            exitButton.Location = new Point((panelMenu.Width - exitButton.Width) / 2, (panelMenu.Height / 2)+10);
+            exitButton.Location = new Point((panelMenu.Width - exitButton.Width) / 2, continueButton.Location.Y + exitButton.Height*6/5);
             panelMenu.Controls.Add(exitButton);
 
             TrackBar volumeSlider = new System.Windows.Forms.TrackBar();
@@ -155,7 +157,7 @@ namespace WindowsFormsApp1
             volumeSlider.BackColor = Color.White;
             volumeSlider.Padding = new Padding(5);
             volumeSlider.Size = new Size(200, 20);
-            volumeSlider.Location = new Point((panelMenu.Width - menuText.Width) / 2, (panelMenu.Height / 2) + 70);
+            volumeSlider.Location = new Point((panelMenu.Width - menuText.Width) / 2, exitButton.Location.Y + volumeSlider.Height*6/5);
             volumeSlider.Minimum = 0;
             volumeSlider.Maximum = 200;
             volumeSlider.SmallChange = 1;
@@ -168,12 +170,66 @@ namespace WindowsFormsApp1
             volumeSlider.Value = (int)(volumeSlider.Maximum * Source.Get_Volume_Level / 4);
             VolumeSlider_ValueChanged(volumeSlider, null);
 
+
+            Label SaveButton = new Label();
+            SaveButton.Text = "Zapisz grę";
+            SaveButton.Visible = true;
+            SaveButton.BackColor = Color.White; // Set background color to white
+            SaveButton.Padding = new Padding(5);
+            SaveButton.Size = new Size(200, 50);
+            SaveButton.Location = new Point((panelMenu.Width - menuText.Width) / 2, volumeSlider.Location.Y + SaveButton.Height*11/10);
+            SaveButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            SaveButton.Paint += (sender, e) =>
+            {
+                ControlPaint.DrawBorder(e.Graphics, SaveButton.ClientRectangle, Color.Black, ButtonBorderStyle.Solid);
+            };
+            SaveButton.Font = new Font("Arial", 16, FontStyle.Bold);
+            panelMenu.Controls.Add(SaveButton);
+
             continueButton.Click += ContinueButton_Click;
             exitButton.Click += ExitButton_Click;
+            SaveButton.Click += SaveButton_Click;
             panelMenu.TabStop = true;
 
 
 
+        }
+
+        private void SaveButton_Click(object sender, EventArgs e)
+        {
+            if(SaveFilePath != "")
+            {
+                /*
+                DataSaveFile Current_Data = new DataSaveFile {
+                    PlayerStats = player;
+                    Inventory;
+                    Object_list;
+                    Player_Positon;
+                    Map_Positon;
+                    Current_Level; ,Inventory,Objects,Character.Location,new Point(MapPositionX,MapPositionY),Current_Level
+                };*/
+                var jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(Current_Data);
+
+                File.WriteAllText(SaveFilePath, jsonString);
+            }
+            else
+            {
+                SaveFilePath = SelectPath();
+            }
+        }
+
+        private string SelectPath()
+        {
+            SaveFileDialog OFD = new SaveFileDialog();
+            OFD.InitialDirectory = Environment.CurrentDirectory + "\\Saves";
+            OFD.Title = "Select File";
+            OFD.Filter = "All files (*.*)|*.*|JSON file (*.json)|*.json";
+            OFD.FilterIndex = 2;
+            if (OFD.ShowDialog() == DialogResult.OK)
+            {
+                return OFD.FileName;
+            }
+            return "";
         }
 
         private void VolumeSlider_GotFocus(object sender, EventArgs e)
@@ -304,7 +360,7 @@ namespace WindowsFormsApp1
             menuRight.Size = new Size(50, 50);
             menuRight.BackColor = Color.Gray;
             menuRight.BackgroundImageLayout = ImageLayout.Center;
-            menuRight.Click += menuLeftButton_Click;
+            menuRight.Click += menuRightButton_Click;
             menuRight.Visible = true;
             this.Controls.Add(menuRight);
         }
@@ -325,7 +381,7 @@ namespace WindowsFormsApp1
                 }
             }
         }
-        private void menuLeftButton_Click(object sender, EventArgs e)
+        private void menuRightButton_Click(object sender, EventArgs e)
         {
             buttonClicking.Position = 0;
             wo6.Init(buttonClicking);
@@ -357,7 +413,6 @@ namespace WindowsFormsApp1
                 timer.Enabled = true;
                 menu.Visible = true;
             }
-
         }
         private void menuButton_Click(object sender, EventArgs e)
         {
@@ -415,7 +470,6 @@ namespace WindowsFormsApp1
             menuButton_Click(null, null);
         }
 
-
         public Display(int Width, int Height, MainForm Source_Form)
         {
             string battle1 = "\\Sounds\\battle1.mp3";
@@ -431,9 +485,11 @@ namespace WindowsFormsApp1
             battleMusicThemes.Add(battle4);
             battleMusicThemes.Add(battle5);
             battleMusicThemes.Add(battle6);
+
+            wo.Volume = Source_Form.Get_Volume_Level;
+            
             FadeInOutSampleProvider fade = new FadeInOutSampleProvider(MainMusic, true);
             fade.BeginFadeIn(2000);
-            wo.Volume = Source_Form.Get_Volume_Level;
             wo.Init(fade);
             wo.Play();
 
