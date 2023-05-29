@@ -168,3 +168,5 @@ D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\Mi
 D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\NAudio.xml
 D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\System.Security.AccessControl.xml
 D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\System.Security.Principal.Windows.xml
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\Newtonsoft.Json.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\Newtonsoft.Json.xml
