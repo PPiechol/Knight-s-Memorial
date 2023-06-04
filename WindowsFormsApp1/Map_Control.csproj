@@ -105,7 +105,6 @@
     <Compile Include="Battle.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataSaveFile.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Form2.cs">
       <SubType>Form</SubType>

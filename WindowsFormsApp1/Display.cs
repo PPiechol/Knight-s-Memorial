@@ -62,8 +62,6 @@ namespace WindowsFormsApp1
         EquipmentDataContext Edc = new EquipmentDataContext(); //baza przedmiotów
         HighscoreDataContext hsdb = new HighscoreDataContext(); //baza wyników
         List<string> battleMusicThemes = new List<string>();
-
-        string SaveFilePath = "";
         
 
         //muzyka
@@ -172,67 +170,11 @@ namespace WindowsFormsApp1
             volumeSlider.Value = (int)(volumeSlider.Maximum * Source.Get_Volume_Level / 4);
             VolumeSlider_ValueChanged(volumeSlider, null);
 
-
-            Label SaveButton = new Label();
-            SaveButton.Text = "Zapisz grę";
-            SaveButton.Visible = true;
-            SaveButton.BackColor = Color.White; // Set background color to white
-            SaveButton.Padding = new Padding(5);
-            SaveButton.Size = new Size(200, 50);
-            SaveButton.Location = new Point((panelMenu.Width - menuText.Width) / 2, volumeSlider.Location.Y + SaveButton.Height*11/10);
-            SaveButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            SaveButton.Paint += (sender, e) =>
-            {
-                ControlPaint.DrawBorder(e.Graphics, SaveButton.ClientRectangle, Color.Black, ButtonBorderStyle.Solid);
-            };
-            SaveButton.Font = new Font("Arial", 16, FontStyle.Bold);
-            panelMenu.Controls.Add(SaveButton);
-
             continueButton.Click += ContinueButton_Click;
             exitButton.Click += ExitButton_Click;
-            SaveButton.Click += SaveButton_Click;
             panelMenu.TabStop = true;
 
 
-
-        }
-
-        private void SaveButton_Click(object sender, EventArgs e)
-        {
-            if(SaveFilePath != "")
-            {
-                /*
-                DataSaveFile Current_Data = new DataSaveFile {
-                    PlayerStats = player;
-                    Inventory;
-                    Object_list;
-                    Player_Positon;
-                    Map_Positon;
-                    Current_Level; ,Inventory,Objects,Character.Location,new Point(MapPositionX,MapPositionY),Current_Level
-                };
-                var jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(Current_Data);
-
-                File.WriteAllText(SaveFilePath, jsonString);
-                */
-            }
-            else
-            {
-                SaveFilePath = SelectPath();
-            }
-        }
-
-        private string SelectPath()
-        {
-            SaveFileDialog OFD = new SaveFileDialog();
-            OFD.InitialDirectory = Environment.CurrentDirectory + "\\Saves";
-            OFD.Title = "Select File";
-            OFD.Filter = "All files (*.*)|*.*|JSON file (*.json)|*.json";
-            OFD.FilterIndex = 2;
-            if (OFD.ShowDialog() == DialogResult.OK)
-            {
-                return OFD.FileName;
-            }
-            return "";
         }
 
         private void VolumeSlider_GotFocus(object sender, EventArgs e)
