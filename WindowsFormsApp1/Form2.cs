@@ -17,10 +17,10 @@ namespace WindowsFormsApp1
     public partial class Form2 : Form
     {
         Form source;
-        bool Entity_editor;
         List<Map_Object> Objects;
         Map_Object Selected_Object;
         int Current_Level;
+        enum MapObjectType { Coin, Enemy, Weapon, EOL };
 
         public Form2(Form source)
         {
@@ -87,12 +87,12 @@ namespace WindowsFormsApp1
             delete_button.ForeColor = Color.White;
             delete_button.MouseHover += Delete_button_MouseHover;
             delete_button.MouseLeave += Delete_button_MouseLeave;
-            Entity_editor = true;
 
             //dla monet i broni
             Label CW_label = new Label();
             CW_label.Location = new Point(label_range.Location.X, label_range.Location.Y);
             CW_label.Text = "Wartość Monety";
+            CW_label.Tag = "CW";
             groupBox_Inside.Controls.Add(CW_label);
             CW_label.Visible = false;
 
@@ -102,6 +102,7 @@ namespace WindowsFormsApp1
             CW_value_nup.Value = 10;
             CW_value_nup.Minimum = 0;
             CW_value_nup.Maximum = 999;
+            CW_value_nup.Tag = "CW";
             CW_value_nup.Location = new Point(numericUpDown_range.Location.X, numericUpDown_range.Location.Y);
             groupBox_Inside.Controls.Add(CW_value_nup);
             CW_value_nup.Visible = false;
@@ -110,16 +111,19 @@ namespace WindowsFormsApp1
             Label name_label = new Label();
             name_label.Location = new Point(label_range.Location.X, label_range.Location.Y);
             name_label.Text = "Nazwa";
+            name_label.Tag = "Enemy";
             groupBox_Inside.Controls.Add(name_label);
 
             TextBox name_tb = new TextBox();
             name_tb.Location = new Point(numericUpDown_range.Location.X, numericUpDown_range.Location.Y);
             name_tb.Size = new Size(numericUpDown_size.Width, name_tb.Size.Height);
+            name_tb.Tag = "Enemy";
             groupBox_Inside.Controls.Add(name_tb);
 
             Label health_label = new Label();
             health_label.Location = new Point(name_label.Location.X, name_label.Location.Y + 27);
             health_label.Text = "Max życie";
+            health_label.Tag = "Enemy";
             groupBox_Inside.Controls.Add(health_label);
 
             NumericUpDown health_nup = new NumericUpDown();
@@ -127,12 +131,14 @@ namespace WindowsFormsApp1
             health_nup.Minimum = 0;
             health_nup.Maximum = 999;
             health_nup.Name = "Health";
+            health_nup.Tag = "Enemy";
             health_nup.Location = new Point(name_tb.Location.X, name_tb.Location.Y + 27);
             groupBox_Inside.Controls.Add(health_nup);
 
             Label damage_label = new Label();
             damage_label.Location = new Point(health_label.Location.X, health_label.Location.Y + 27);
             damage_label.Text = "Obrażenia";
+            damage_label.Tag = "Enemy";
             groupBox_Inside.Controls.Add(damage_label);
 
             NumericUpDown damage_nup = new NumericUpDown();
@@ -140,14 +146,17 @@ namespace WindowsFormsApp1
             damage_nup.Minimum = 0;
             damage_nup.Maximum = 999;
             damage_nup.Name = "Damage";
+            damage_nup.Tag = "Enemy";
             damage_nup.Location = new Point(health_nup.Location.X, health_nup.Location.Y + 27);
             groupBox_Inside.Controls.Add(damage_nup);
 
+            /*
             key_label = new Label();
             key_label.AutoSize = true;
             key_label.Location = new Point(damage_nup.Location.X, damage_nup.Location.Y + 27);
             key_label.Visible = false;
-            groupBox_Inside.Controls.Add(key_label); // Dodanie Labela do panelu
+            groupBox_Inside.Controls.Add(key_label);
+            */
 
             key_label_Txt.Text = "ID";
 
@@ -199,29 +208,23 @@ namespace WindowsFormsApp1
                     }
                 }
 
-                if (Object_Data[6] == "Coin")
-                {
-                    Interactive_Object New_Object = new Interactive_Object(Current_Level, Int_data[0], Int_data[1], Int_data[2],
+                Interactive_Object New_Object = new Interactive_Object(Current_Level, Int_data[0], Int_data[1], Int_data[2],
                                                         Int_data[3], Int_data[4], Int_data[5],
                                                         Object_Data[6], Convert.ToInt32(Object_Data[7]));
-                    Object_list.Add(new Map_Object(New_Object, key));
-                }
-                else if (Object_Data[6] == "Weapon")
+
+                if (Object_Data[6] == "EOL") //EOL - End Of Level
                 {
-                    Interactive_Object New_Object = new Interactive_Object(Current_Level, Int_data[0], Int_data[1], Int_data[2],
-                                                        Int_data[3], Int_data[4], Int_data[5],
-                                                        Object_Data[6], Convert.ToInt32(Object_Data[7]));
-                    Object_list.Add(new Map_Object(New_Object, key));
+                    New_Object.Get_Icon.Image = new Bitmap(New_Object.Get_Icon.Width, New_Object.Get_Icon.Height);
+                    Graphics g = Graphics.FromImage(New_Object.Get_Icon.Image);
+                    g.FillEllipse(new SolidBrush(Color.MediumPurple),0,0, New_Object.Get_Icon.Width, New_Object.Get_Icon.Height);
+                    New_Object.Get_Icon.Refresh();
                 }
                 else if (Object_Data[6].Length >= 5 && Object_Data[6].Substring(0, 5) == "Enemy")
                 {
-                    Interactive_Object New_Object = new Interactive_Object(Current_Level, Int_data[0], Int_data[1], Int_data[2],
-                                                        Int_data[3], Int_data[4], Int_data[5],
-                                                        Object_Data[6], null);
                     Entity Monster = new Entity(New_Object.Get_Icon, Convert.ToInt32(Object_Data[7]), Convert.ToInt32(Object_Data[8]));
                     New_Object.Get_Type = Monster;
-                    Object_list.Add(new Map_Object(New_Object, key));
                 }
+                Object_list.Add(new Map_Object(New_Object, key));
             }
         }
 
@@ -290,10 +293,7 @@ namespace WindowsFormsApp1
                 numericUpDown_range.Value = Selected_Object.Get_Object.Get_Range;
                 if (Selected_Object.Get_Object.Get_Type is Entity)
                 {
-                    if (!Entity_editor)
-                    {
-                        radioButtonEnemy.Checked = true;
-                    }
+                    radioButtonEnemy.Checked = true;
 
                     foreach (object obiekt in groupBox_Inside.Controls)
                     {
@@ -325,12 +325,16 @@ namespace WindowsFormsApp1
                 {
                     radioButtonWeapon.Checked = true;
                 }
+                else if (Selected_Object.Get_Object.Get_Name == "EOL")
+                {
+                    radioButtonEOL.Checked = true;
+                }
                 else
                 {
                     return;
                 }
 
-                foreach (object obiekt in groupBox_Inside.Controls)
+                foreach (Control obiekt in groupBox_Inside.Controls)
                 {
                     if (obiekt is NumericUpDown)
                     {
@@ -378,6 +382,7 @@ namespace WindowsFormsApp1
             int enemyIDCounter = 0;
             int coinIDCounter = 0;
             int weaponIDCounter = 0;
+            int EOLIDCounter = 0;
             var Object_list = xmlDoc.SelectNodes("//Map_1_Data/Map_Objects");
 
             XmlNode Existing_Node = null;
@@ -394,107 +399,128 @@ namespace WindowsFormsApp1
                         }
 
                         string[] Node_values = Single_Node.Attributes["value"].Value.Split(',');
-                        if (Node_values[6] == "Coin")
+
+                        switch (Node_values[6])
                         {
-                            coinIDCounter++;
-                        }
-                        else if (Node_values[6] == "Weapon")
-                        {
-                            weaponIDCounter++;
-                        }
-                        else
-                        {
-                            enemyIDCounter++;
+                            case "Coin":
+                                {
+                                    coinIDCounter++;
+                                    break;
+                                }
+                            case "Weapon":
+                                {
+                                    weaponIDCounter++;
+                                    break;
+                                }
+                            case "EOL":
+                                {
+                                    EOLIDCounter++;
+                                    break;
+                                }
+                            default:
+                                {
+                                    enemyIDCounter++;
+                                    break;
+                                }
                         }
                     }
                 }
             }
 
-            int enemyKeyCount = 0;
-            int coinKeyCount = 0;
-            //sprawdza ilość kluczy zaczynających się od Enemy,
-            //aby nie nadpisywać lub dodawać tego samego klucza 
-            //do app.configu
-            XmlNodeList objectNodes = xmlDoc.SelectNodes("//Map_1_Data/Map_Objects/add");
-            if (objectNodes != null)
-            {
-                foreach (XmlElement node in objectNodes)
-                {
-                    string existingKey = node.GetAttribute("key");
-                    if (existingKey.StartsWith("Enemy"))
-                    {
-                        enemyKeyCount++;
-                    }
-                }
-            }
-            //ustawia enemyIdCounter na taką wartość której w konfigu nie ma
-            for (int i = 0; i < enemyKeyCount; i++)
-            {
-                string keyToCheck = "Enemy" + i.ToString();
-                XmlNode existingNode = xmlDoc.SelectSingleNode("//Map_1_Data/Map_Objects/add[@key='" + keyToCheck + "']");
+            coinIDCounter = GetCorrectId(xmlDoc, coinIDCounter);
+            weaponIDCounter = GetCorrectId(xmlDoc, weaponIDCounter);
+            EOLIDCounter = GetCorrectId(xmlDoc, EOLIDCounter);
+            enemyIDCounter = GetCorrectId(xmlDoc, enemyIDCounter);
 
-                if (existingNode == null)
-                {
-                    enemyIDCounter = i;
-                }
-            }
+            var nodeRegion = xmlDoc.CreateElement("add");
+            string value = "";
+            string key = "";
 
 
-            //sprawdza ilość kluczy zaczynających się od Coin,
-            //aby nie nadpisywać lub dodawać tego samego klucza 
-            //do app.configu
-            if (objectNodes != null)
+            MapObjectType MOT;
+            if (radioButtonCoin.Checked)
             {
-                foreach (XmlElement node in objectNodes)
-                {
-                    string existingKey = node.GetAttribute("key");
-                    if (existingKey.StartsWith("Coin"))
-                    {
-                        coinKeyCount++;
-                    }
-                }
+                MOT = MapObjectType.Coin;
+                key = "Coin" + coinIDCounter.ToString();
             }
-            //ustawia coinIdCounter na taką wartość której w konfigu nie ma
-            for (int i = 0; i <= coinKeyCount; i++)
+            else if (radioButtonEnemy.Checked)
+            {
+                MOT = MapObjectType.Enemy;
+                key = "Enemy" + enemyIDCounter.ToString();
+            }
+            else if (radioButtonEOL.Checked)
+            {
+                MOT = MapObjectType.EOL;
+                key = "EOL" + EOLIDCounter.ToString();
+            }
+            else
+            {
+                MOT = MapObjectType.Weapon;
+                key = "Weapon" + weaponIDCounter.ToString();
+            }
+
+            value = GenerateNewObject(MOT);
+
+            if (value == "Error")
+            {
+                return;
+            }
+
+            //dodaj klucz i wartość
+            nodeRegion.SetAttribute("key", key);
+            nodeRegion.SetAttribute("value", value);
+            if (Existing_Node != null)
+            {
+                Existing_Node.Attributes["value"].Value = value;
+                Selected_Object = null;
+                add_button.Text = "Dodaj Obiekt";
+                Switch_Type_Modification(true);
+            }
+            else
+            {
+                xmlDoc.SelectSingleNode("//Map_1_Data/Map_Objects").AppendChild(nodeRegion);
+            }
+            xmlDoc.Save(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
+
+            string SectionName = "Map_" + Current_Level.ToString() + "_Data/Map_Objects";
+            ConfigurationManager.RefreshSection(SectionName);
+
+            File.Copy(Environment.CurrentDirectory + "\\WindowsFormsApp1.exe.config", Environment.CurrentDirectory.Replace("\\bin\\Debug", "") + "\\App.config", true);
+
+            Objects.Clear();
+            pictureBox_display.Controls.Clear();
+
+            Retrive_Map_Objects(SectionName, Current_Level, Objects);
+            foreach (Map_Object MO in Objects)
+            {
+                MO.Click += Map_Object_Click;
+            }
+            Show_Objects();
+        }
+
+        private static int GetCorrectId(XmlDocument xmlDoc, int IDCounter)
+        {
+            for (int i = 0; i <= IDCounter; i++)
             {
                 string keyToCheck = "Coin" + i.ToString();
                 XmlNode existingNode = xmlDoc.SelectSingleNode("//Map_1_Data/Map_Objects/add[@key='" + keyToCheck + "']");
 
                 if (existingNode == null)
                 {
-                    coinIDCounter = i;
+                    IDCounter = i;
+                    break;
                 }
             }
 
-            var nodeRegion = xmlDoc.CreateElement("add");
-            string enemy_name = "Enemy" + enemyIDCounter.ToString();
-            string coin_name = "Coin" + coinIDCounter.ToString();
-            string weapon_name = "Weapon" + weaponIDCounter.ToString();
+            return IDCounter;
+        }
+
+        private string GenerateNewObject(MapObjectType MOT)
+        {
             string value = "";
-            string key = "";
-            //sprawdzanie poszczególnych opcji
-            if (radioButtonCoin.Checked)
+
+            if(MOT == MapObjectType.Enemy)
             {
-                key = coin_name;
-                int coin_value = 0;
-                foreach (object obiekt in groupBox_Inside.Controls)
-                {
-                    if (obiekt is NumericUpDown)
-                    {
-                        NumericUpDown temp = obiekt as NumericUpDown;
-                        if (temp.Visible)
-                        {
-                            coin_value = (int)temp.Value;
-                        }
-                    }
-                }
-                value = numericUpDown_Map_X.Value + "," + numericUpDown_Map_Y.Value + "," + numericUpDown_X.Value + "," + numericUpDown_Y.Value + ","
-                    + numericUpDown_size.Value + "," + numericUpDown_range.Value + ",Coin," + coin_value;
-                coinIDCounter++;
-            }
-            else if (radioButtonEnemy.Checked)
-            {
-                key = enemy_name;
                 string source = "";
                 int health = 0;
                 int damage = 0;
@@ -531,20 +557,19 @@ namespace WindowsFormsApp1
                         break;
                     }
                 }
+
                 if (!Enemy_exist)
                 {
                     MessageBox.Show("Brak pliku graficznego odpowiadającego nazwie");
-                    return;
+                    return "Error";
                 }
+
                 value = numericUpDown_Map_X.Value + "," + numericUpDown_Map_Y.Value + "," + numericUpDown_X.Value + "," + numericUpDown_Y.Value + ","
                      + numericUpDown_size.Value + "," + numericUpDown_range.Value + "," + source + "," + damage + "," + health;
-                enemyIDCounter++;
             }
             else
             {
-                EquipmentDataContext Edc = new EquipmentDataContext();
-                key = weapon_name;
-                int weapon_id = 0;
+                int first_argument = 0;
                 foreach (object obiekt in groupBox_Inside.Controls)
                 {
                     if (obiekt is NumericUpDown)
@@ -552,74 +577,47 @@ namespace WindowsFormsApp1
                         NumericUpDown temp = obiekt as NumericUpDown;
                         if (temp.Visible)
                         {
-                            weapon_id = (int)temp.Value;
+                            first_argument = (int)temp.Value;
                         }
                     }
                 }
+                string name = "Coin";
 
-                //Test czy w bazie danych istnieje przedmiot o podanym id
-                var Held = from Item in Edc.Items
-                           where Item.Id == weapon_id
-                           select Item;
-                if (Held == null)
+                if(MOT == MapObjectType.Weapon)
                 {
-                    MessageBox.Show("Brak przedmiotu o podanym id");
-                    return;
+                    EquipmentDataContext Edc = new EquipmentDataContext();
+                    var Held = from Item in Edc.Items
+                               where Item.Id == first_argument
+                               select Item;
+                    if (Held == null)
+                    {
+                        MessageBox.Show("Brak przedmiotu o podanym id");
+                        return "Error";
+                    }
+                    name = "Weapon";
                 }
+                else if(MOT == MapObjectType.EOL)
+                {
+                    name = "EOL";
+                    first_argument = Current_Level;
+                }
+
                 value = numericUpDown_Map_X.Value + "," + numericUpDown_Map_Y.Value + "," + numericUpDown_X.Value + "," + numericUpDown_Y.Value + ","
-                    + numericUpDown_size.Value + "," + numericUpDown_range.Value + ",Weapon," + weapon_id;
-                weaponIDCounter++;
+                    + numericUpDown_size.Value + "," + numericUpDown_range.Value + "," + name + "," + first_argument;
             }
 
-            //dodaj klucz i wartość
-            nodeRegion.SetAttribute("key", key);
-            nodeRegion.SetAttribute("value", value);
-            if (Existing_Node != null)
-            {
-                Existing_Node.Attributes["value"].Value = value;
-                Selected_Object = null;
-                add_button.Text = "Dodaj Obiekt";
-
-            }
-            else
-            {
-                xmlDoc.SelectSingleNode("//Map_1_Data/Map_Objects").AppendChild(nodeRegion);
-            }
-            xmlDoc.Save(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
-
-            string SectionName = "Map_" + Current_Level.ToString() + "_Data/Map_Objects";
-            ConfigurationManager.RefreshSection(SectionName);
-
-            File.Copy(Environment.CurrentDirectory + "\\WindowsFormsApp1.exe.config", Environment.CurrentDirectory.Replace("\\bin\\Debug", "") + "\\App.config", true);
-
-            Objects.Clear();
-            pictureBox_display.Controls.Clear();
-
-            Retrive_Map_Objects(SectionName, Current_Level, Objects);
-            foreach (Map_Object MO in Objects)
-            {
-                MO.Click += Map_Object_Click;
-            }
-            Show_Objects();
+            return value;
         }
 
         private void radioButton_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButtonEnemy.Checked)
             {
-                if (!Entity_editor)
-                {
-                    Swap_Visible();
-                    Entity_editor = true;
-                }
+                Swap_Visible("Enemy");
             }
             else if (radioButtonCoin.Checked)
             {
-                if (Entity_editor)
-                {
-                    Swap_Visible();
-                    Entity_editor = false;
-                }
+                Swap_Visible("CW");
                 foreach (object obiekt in groupBox_Inside.Controls)
                 {
                     if (obiekt is Label)
@@ -632,13 +630,13 @@ namespace WindowsFormsApp1
                     }
                 }
             }
+            else if (radioButtonEOL.Checked)
+            {
+                Swap_Visible("EOL");
+            }
             else
             {
-                if (Entity_editor)
-                {
-                    Swap_Visible();
-                    Entity_editor = false;
-                }
+                Swap_Visible("CW");
                 foreach (object obiekt in groupBox_Inside.Controls)
                 {
                     if (obiekt is Label)
@@ -653,24 +651,25 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void Swap_Visible()
+        private void Swap_Visible(string tag)
         {
-            foreach (object obiekt in groupBox_Inside.Controls)
+            foreach (Control obiekt in groupBox_Inside.Controls)
             {
-                if (obiekt is Label)
+                obiekt.Visible = false;
+                if (obiekt is Label label && (string)label.Tag == tag)
                 {
                     Label temp = obiekt as Label;
-                    temp.Visible = !temp.Visible;
+                    temp.Visible = true;
                 }
-                else if (obiekt is NumericUpDown)
+                else if (obiekt is NumericUpDown nup && (string)nup.Tag == tag)
                 {
                     NumericUpDown temp = obiekt as NumericUpDown;
-                    temp.Visible = !temp.Visible;
+                    temp.Visible = true;
                 }
-                else if (obiekt is TextBox)
+                else if (obiekt is TextBox tb && (string)tb.Tag == tag)
                 {
                     TextBox temp = obiekt as TextBox;
-                    temp.Visible = !temp.Visible;
+                    temp.Visible = true;
                 }
             }
         }
@@ -682,8 +681,6 @@ namespace WindowsFormsApp1
 
         private void delete_button_Click(object sender, EventArgs e)
         {
-
-
             if (Selected_Object != null)
             {
                 

@@ -38,10 +38,11 @@ namespace WindowsFormsApp1
                 }
                 icon.Tag = Convert.ToInt32(type);
             }
-            else
+            else if(name != "EOL")
             {
                 icon.Image = Image.FromFile(Environment.CurrentDirectory + "\\Map parts\\Level " + level.ToString() + "\\" + name + ".png");
             }
+
             icon.BackColor = Color.Transparent;
             icon.Size = new Size(size, size);
             icon.Location = new Point(x, y);
