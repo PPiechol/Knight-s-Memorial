@@ -76,7 +76,7 @@
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System">
-      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.dll</HintPath>
     </Reference>
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -113,6 +113,17 @@
     <Compile Include="Form2.Designer.cs">
       <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormNickname.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormNickname.Designer.cs">
+      <DependentUpon>FormNickname.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Highscore.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Highscore.dbml</DependentUpon>
+    </Compile>
     <Compile Include="Interactive_Object.cs" />
     <Compile Include="Display.cs">
       <SubType>Component</SubType>
@@ -137,11 +148,20 @@
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserControlHighScores.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControlHighScores.Designer.cs">
+      <DependentUpon>UserControlHighScores.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form2.resx">
       <DependentUpon>Form2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormNickname.resx">
+      <DependentUpon>FormNickname.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -152,6 +172,17 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UserControlHighScores.resx">
+      <DependentUpon>UserControlHighScores.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Highscore.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Highscore.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Highscore.dbml.layout">
+      <DependentUpon>Highscore.dbml</DependentUpon>
+    </None>
     <None Include="Items.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>Items.designer.cs</LastGenOutput>
@@ -180,7 +211,7 @@
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
       <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 i x64%29</ProductName>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
@@ -196,6 +227,13 @@
     <Content Include="Items_log.ldf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>Items.mdf</DependentUpon>
+    </Content>
+    <Content Include="TopScores.mdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TopScores_log.ldf">
+      <DependentUpon>TopScores.mdf</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
