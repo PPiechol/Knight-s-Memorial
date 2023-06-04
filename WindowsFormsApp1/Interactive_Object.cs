@@ -14,25 +14,44 @@ namespace WindowsFormsApp1
         int map_pos_x;
         int map_pos_y;
         int interaction_range;
+        object type;
         PictureBox icon;
         bool interacted;
+        EquipmentDataContext Edc = new EquipmentDataContext();
 
-        public Interactive_Object(int level, int map_x, int map_y, int x, int y, int size, int range, string name)
+        public Interactive_Object(int level, int map_x, int map_y, int x, int y, int size, int range, string name, object type)
         {
             icon = new PictureBox();
             icon.SizeMode = PictureBoxSizeMode.Zoom;
             this.level = level;
             map_pos_x = map_x;
             map_pos_y = map_y;
-            icon.Image = Image.FromFile(Environment.CurrentDirectory + "\\Map parts\\Level " + level.ToString() + "\\" + name + ".png");
+            icon.Name = name;
+            if(name == "Weapon")
+            {
+                var First_Weapon = from Item in Edc.Items
+                                   where Item.Id == Convert.ToInt32(type)
+                                   select Item;
+                foreach (Items Querry in First_Weapon)
+                {
+                    icon.Image = Image.FromFile(Environment.CurrentDirectory + "\\Items\\" + Querry.Name.ToString() + ".png");
+                }
+                icon.Tag = Convert.ToInt32(type);
+            }
+            else if(name != "EOL")
+            {
+                icon.Image = Image.FromFile(Environment.CurrentDirectory + "\\Map parts\\Level " + level.ToString() + "\\" + name + ".png");
+            }
+
             icon.BackColor = Color.Transparent;
             icon.Size = new Size(size, size);
             icon.Location = new Point(x, y);
             interaction_range = range;
             interacted = false;
+            this.type = type;
         }
 
-        public PictureBox GetIcon
+        public PictureBox Get_Icon
         {
             get 
             {
@@ -92,5 +111,27 @@ namespace WindowsFormsApp1
                 interacted = value;
             }
         }
+
+        public string Get_Name
+        {
+            get
+            {
+                return icon.Name;
+            }
+        }
+
+        public object Get_Type
+        {
+            get
+            {
+                return type;
+            }
+            set
+            {
+                type = value;
+            }
+        }
+
+        public object Location { get; internal set; }
     }
 }

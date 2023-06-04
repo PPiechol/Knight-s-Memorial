@@ -1,52 +1,340 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Configuration;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Numerics;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 namespace WindowsFormsApp1
 {
+
     class Display : Panel
     {
         PictureBox Game_Board;
-        PictureBox Character;
+        Player player;
+
+
+        Label continueButton;
+        Label exitButton;
+        Label menu;
+        Label menuText;
+        public PictureBox Character;
         Bitmap Level_Hitbox;
         List<Interactive_Object> Objects;
         private const int Character_size = 50;
-        private const int speed = 5;
+        private int speed = 5;
+        private int enemySpeed = 7;
         int Display_Size;
         int MapPositionX;
         int MapPositionY;
         int Current_Level;
-        bool battle;
+        public bool battle;
+        Panel panelRight;
+        TableLayoutPanel panelBottom;
+        Panel panelMenu;
+        Panel menuLeft;
+        Battle activeBattle;
+        Form Source;
+        List<int> Inventory;
+        Timer timer = new Timer();
+        int labelSize = 50;
+        int spacing = 10;
+        EquipmentDataContext Edc = new EquipmentDataContext();
 
-        public Display(int Width, int Height)
+        public void PanelMenu()
         {
+
+            menu = new System.Windows.Forms.Label();
+            menu.Location = new Point(Screen.PrimaryScreen.Bounds.Width - 50, 0);
+            menu.Image = Image.FromFile(Environment.CurrentDirectory + "\\Icons\\menu.png");
+            menu.Size = new Size(50 , 50);
+            menu.BackColor = Color.Gray;
+            menu.Click += menuButton_Click;
+            this.Controls.Add(menu);
+
+            panelMenu = new Panel();
+            panelMenu.Visible = false;
+            panelMenu.Size = new Size(Screen.PrimaryScreen.Bounds.Width / 5, 250);
+            panelMenu.Location = new Point((Screen.PrimaryScreen.Bounds.Width - panelMenu.Width) / 2, (Screen.PrimaryScreen.Bounds.Height - panelMenu.Height) / 2);
+            panelMenu.BackColor = Color.Gray;
+            this.Controls.Add(panelMenu);
+
+            menuText = new System.Windows.Forms.Label();
+            menuText.Text = "Game paused";
+            menuText.Visible = true;
+            menuText.BackColor = Color.White;
+            menuText.Padding = new Padding(5);
+            menuText.Size = new Size(200, 50);
+            menuText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            menuText.Font = new Font("Arial", 16, FontStyle.Bold);
+            menuText.BackColor = Color.Transparent;
+            menuText.Location = new Point((panelMenu.Width - menuText.Width) / 2, (panelMenu.Height/2-60));
+            panelMenu.Controls.Add(menuText);
+
+            continueButton = new System.Windows.Forms.Label();
+            continueButton.Text = "Continue";
+            continueButton.Visible = true;
+            continueButton.BackColor = Color.White;
+            continueButton.Padding = new Padding(5);
+            continueButton.Size = new Size(200, 50);
+            continueButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            continueButton.Paint += (sender, e) =>
+            {
+                ControlPaint.DrawBorder(e.Graphics, continueButton.ClientRectangle, Color.Black, ButtonBorderStyle.Solid);
+            };
+            continueButton.Font = new Font("Arial", 16, FontStyle.Bold);
+
+            continueButton.Location = new Point((panelMenu.Width - menuText.Width) / 2, (panelMenu.Height / 2));
+            panelMenu.Controls.Add(continueButton);
+
+
+            exitButton = new System.Windows.Forms.Label();
+            exitButton.Text = "Exit";
+            exitButton.Visible = true;
+            exitButton.BackColor = Color.White; // Set background color to white
+            exitButton.Padding = new Padding(5);
+            exitButton.Size = new Size(200, 50);
+            exitButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            exitButton.Paint += (sender, e) =>
+            {
+                ControlPaint.DrawBorder(e.Graphics, exitButton.ClientRectangle, Color.Black, ButtonBorderStyle.Solid);
+            };
+            exitButton.Font = new Font("Arial", 16, FontStyle.Bold);
+
+            exitButton.Location = new Point((panelMenu.Width - exitButton.Width) / 2, (panelMenu.Height / 2) + 60);
+            panelMenu.Controls.Add(exitButton);
+
+            ;
+            continueButton.Click += ContinueButton_Click;
+            exitButton.Click += ExitButton_Click;
+            panelMenu.TabStop = true;
+
+        }
+        public void PanelHero()
+        {
+
+
+            if (Screen.PrimaryScreen.WorkingArea.Height < 1050 || Screen.PrimaryScreen.WorkingArea.Width < 1600)
+            {
+                labelSize = 35;
+                spacing = 5;
+                panelRight = new Panel();
+                panelRight.Size = new Size(Screen.PrimaryScreen.Bounds.Width / 2 - labelSize * 6, Screen.PrimaryScreen.Bounds.Height / 2 - labelSize * 6);
+                panelRight.Location = new Point(Screen.PrimaryScreen.Bounds.Height / 2, 0);
+                panelRight.AutoSize = true;
+                panelRight.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+                panelRight.Visible = false;
+                this.Controls.Add(panelRight);
+            }
+            else
+            {
+                panelRight = new Panel();
+                panelRight.Size = new Size(Screen.PrimaryScreen.Bounds.Width / 2 - labelSize * 3, Screen.PrimaryScreen.Bounds.Height / 2 - labelSize * 3);
+                panelRight.Location = new Point(Screen.PrimaryScreen.Bounds.Height / 2, 0);
+
+                panelRight.Visible = false;
+                this.Controls.Add(panelRight);
+            }
+            panelRight.Paint += (sender, e) =>
+            {
+                LinearGradientBrush gradientBrush = new LinearGradientBrush(
+                    panelRight.ClientRectangle,
+                    Color.Black,
+                    Color.LightGray,
+                    LinearGradientMode.Vertical
+                );
+
+                e.Graphics.FillRectangle(gradientBrush, panelRight.ClientRectangle);
+                gradientBrush.Dispose();
+            };
+
+            
+            for (int i = 0; i < 6; i++)
+            {
+                for (int j = 0; j < 7; j++)
+                {
+                    Label label = new Label();
+                    if(6 * i + j < Inventory.Count)
+                    {
+                        var First_Weapon = from Item in Edc.Items
+                                           where Item.Id == Inventory[6 * i + j]
+                                           select Item;
+                        foreach (Items Querry in First_Weapon)
+                        {
+                            label.Image = Image.FromFile(Environment.CurrentDirectory + "\\Items\\" + Querry.Name.ToString() + ".png");
+                        }
+                    }
+                    label.Size = new Size(labelSize, labelSize);
+                    label.BackColor = Color.LightGray; // Zmieniamy kolor na czarny
+                    label.BorderStyle = BorderStyle.FixedSingle;
+                    label.Location = new Point(j * (labelSize + spacing)+spacing, i * (labelSize + spacing) + labelSize / 2);
+                    label.Margin = new Padding(spacing,0,0,0);
+                    label.AllowDrop = true;
+                    panelRight.Controls.Add(label);
+                }
+            }
+            PictureBox heroImage = new PictureBox();
+            heroImage.SizeMode = PictureBoxSizeMode.Zoom;
+            heroImage.MinimumSize = new Size(panelRight.Width, panelRight.Height);
+            heroImage.Location = new Point((panelRight.Bounds.Width+heroImage.Size.Width) / 2 + labelSize, panelRight.Height / 2 - heroImage.Height / 2);
+            heroImage.Image = Image.FromFile(Environment.CurrentDirectory + "\\Characters\\hero.png");
+            heroImage.BackColor = Color.Transparent;
+            /*if (Screen.PrimaryScreen.Bounds.Height < 1050 || Screen.PrimaryScreen.Bounds.Width < 1400)
+            {
+                heroImage.SizeMode = PictureBoxSizeMode.Zoom;
+            }*/
+            panelRight.Controls.Add(heroImage);
+            
+            
+            
+            
+            
+            panelBottom = new TableLayoutPanel();
+            panelBottom.Size = new Size(panelRight.Width, panelRight.Height / 2);
+            panelBottom.AutoSize = true;
+            panelBottom.MinimumSize = new Size(panelRight.Width, panelRight.Height);
+            panelBottom.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            panelBottom.Location = new Point(Screen.PrimaryScreen.Bounds.Height / 2, panelRight.Height);
+            panelBottom.Padding = new Padding(0, panelBottom.Height / 4, 0, panelBottom.Height / 4);
+            panelBottom.ColumnCount = 5;
+            panelBottom.Visible = false;
+            panelBottom.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            panelBottom.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            panelBottom.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            panelBottom.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            panelBottom.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            this.Controls.Add(panelBottom);
+
+            panelBottom.Paint += (sender, e) =>
+            {
+                LinearGradientBrush gradientBrush = new LinearGradientBrush(
+                    panelBottom.ClientRectangle,
+                    Color.LightGray,
+                    Color.Black,
+                    
+                    LinearGradientMode.Vertical
+                ) ;
+
+                e.Graphics.FillRectangle(gradientBrush, panelBottom.ClientRectangle);
+                gradientBrush.Dispose();
+            };
+
+
+
+            menuLeft = new Panel();
+            menuLeft.Location = new Point(0, 0);
+            menuLeft.BackgroundImage = Image.FromFile(Environment.CurrentDirectory + "\\Icons\\menu.png");
+            menuLeft.Size = new Size(50, 50);
+            menuLeft.BackColor = Color.Gray;
+            menuLeft.BackgroundImageLayout = ImageLayout.Center;
+            menuLeft.Click += menuLeftButton_Click;
+            menuLeft.Visible = true;
+            this.Controls.Add(menuLeft);
+            
+
+        }
+        private void menuLeftButton_Click(object sender, EventArgs e)
+        {
+            panelRight.Visible = !panelBottom.Visible;
+            panelBottom.Visible = !panelBottom.Visible;
+            if (panelRight.Visible && panelBottom.Visible)
+            {
+                speed = 0;
+                timer.Enabled = false;
+                menu.Visible = false;
+            }
+            else
+            {
+                speed = 5;
+                timer.Enabled = true;
+                menu.Visible = true;
+            }
+
+        }
+        private void menuButton_Click(object sender, EventArgs e)
+        {
+            panelMenu.Visible = !panelMenu.Visible;
+            if (panelMenu.Visible)
+            {
+                speed = 0;
+                timer.Enabled = false;
+                menuLeft.Visible= false;
+            }
+            else
+            {
+                speed = 5;
+                timer.Enabled = true;
+                menuLeft.Visible = true;
+            }
+            
+
+        }
+
+        private void ExitButton_Click(object sender, EventArgs e)
+        {
+            Environment.Exit(0);
+        }
+
+        private void ContinueButton_Click(object sender, EventArgs e)
+        {
+            menuButton_Click(null,null);
+        }
+          
+        
+        public Display(int Width, int Height, Form Source_Form)
+        {
+            Inventory = new List<int>();
+            string SectionName = "Player_Items";
+            var ApplicationConfig = ConfigurationManager.GetSection(SectionName) as NameValueCollection;
+            foreach(var key in ApplicationConfig.AllKeys)
+            {
+                string[] Player_Items = ApplicationConfig[key].Split(',');
+                foreach(string Item_id in Player_Items)
+                {
+                    Inventory.Add(Convert.ToInt32(Item_id));
+                }
+            }
+
+            PanelMenu();
+            PanelHero();
+
+            Source = Source_Form;
+            
             this.AutoSize = true;
-            this.BackColor = Color.Orange;
+            this.BackgroundImage = Image.FromFile(Environment.CurrentDirectory + "\\BackGround\\Background.png");
+            this.BackgroundImageLayout = ImageLayout.Stretch;
             this.Dock = DockStyle.Fill;
 
             Game_Board = new PictureBox();
-            
-            
             Display_Size = Width;
-            if(Width > Height)
+            if (Width > Height)
             {
                 Display_Size = Height;
             }
             Game_Board.Size = new Size(Display_Size, Display_Size);
             Game_Board.BackColor = Color.Red;
             Game_Board.SizeMode = PictureBoxSizeMode.Zoom;
-            Game_Board.Location = new Point((Width - Display_Size)/2, (Height - Display_Size) / 2);
+            Game_Board.Location = new Point((Width - Display_Size) / 2, (Height - Display_Size) / 2);
             this.Controls.Add(Game_Board);
+
+            timer = new Timer();
+            timer.Interval = 100; // Set the interval to 100 milliseconds
+            timer.Tick += new EventHandler(OnTimerTick);
+            timer.Start();
+
         }
 
         public void Load_Level(int level, int Sx, int Sy)
         {
+
             MapPositionX = Sx;
             MapPositionY = Sy;
             Current_Level = level;
@@ -63,25 +351,168 @@ namespace WindowsFormsApp1
             Character.BackColor = Color.Transparent;
 
             Game_Board.Controls.Add(Character);
-            Character.Location = new Point(Display_Size/2, Display_Size / 2);
+            Character.Location = new Point(Display_Size / 2, Display_Size / 2);
 
-            
-            //s = "Punkty: " + Score.ToString();
-            //s = "Punkty: " + Score;
-            //s = String.Format("{0}: {1}", "Punkty", Score);
-            
             //Beta HitBox'a
             Level_Hitbox = SetHitbox(level, MapPositionX, MapPositionY);
 
             //Punkty interakcji
             Objects = new List<Interactive_Object>();
-            Interactive_Object Coin = new Interactive_Object(1, 1, 0, 350, 200, 15, 50, "Coin");
-            Objects.Add(Coin);
 
-            Interactive_Object Enemy = new Interactive_Object(1, 1, 1, 700, 700, 50, 100, "Enemy");
-            Objects.Add(Enemy);
+            string SectionName = "Map_" + Current_Level.ToString() + "_Data/Map_Objects";
+            var ApplicationConfig = ConfigurationManager.GetSection(SectionName) as NameValueCollection;
+            foreach (var key in ApplicationConfig.AllKeys)
+            {
+                string[] Object_Data = ApplicationConfig[key].Split(',');
+                int[] Int_data = new int[7];
+                int i = 0;
+                foreach(string Int_num in Object_Data)
+                {
+                    Int_data[i] = Convert.ToInt32(Int_num);
+                    i++;
+                    if(i == Int_data.Length)
+                    {
+                        break;
+                    }
+                }
 
+                if (Object_Data[7] == "Coin")
+                {
+                    Interactive_Object New_Object = new Interactive_Object(Int_data[0], Int_data[1], Int_data[2],
+                                                        Int_data[3], Int_data[4], Int_data[5],
+                                                        Int_data[6], Object_Data[7], Object_Data[8]);
+                    Objects.Add(New_Object);
+                }
+                else if(Object_Data[7] == "Weapon")
+                {
+                    Interactive_Object New_Object = new Interactive_Object(Int_data[0], Int_data[1], Int_data[2],
+                                                        Int_data[3], Int_data[4], Int_data[5],
+                                                        Int_data[6], Object_Data[7], Convert.ToInt32(Object_Data[8]));
+                    Objects.Add(New_Object);
+                }
+                else if (Object_Data[7].Length >= 5 && Object_Data[7].Substring(0, 5) == "Enemy")
+                {
+                    Interactive_Object New_Object = new Interactive_Object(Int_data[0], Int_data[1], Int_data[2],
+                                                        Int_data[3], Int_data[4], Int_data[5],
+                                                        Int_data[6], Object_Data[7], null);
+                    Entity Monster = new Entity(New_Object.Get_Icon, Convert.ToInt32(Object_Data[8]), Convert.ToInt32(Object_Data[9]));
+                    New_Object.Get_Type = Monster;
+                    Objects.Add(New_Object);
+                }
+            }
+           
+            foreach (Interactive_Object IO in Objects)
+            {
+                if (MapPositionX == IO.Get_Map_X && MapPositionY == IO.Get_Map_Y && !IO.Get_Interaction)
+                {
+                    Game_Board.Controls.Add(IO.Get_Icon);
+                }
+                else
+                {
+                    Game_Board.Controls.Remove(IO.Get_Icon);
+                }
+            }
             battle = false;
+
+            player = new Player(Character, 1, 60, 8, 10, 1, panelBottom);
+        }
+
+
+
+        private void OnTimerTick(object sender, EventArgs e)
+        {
+            // Check if there's an enemy in the current scene
+            foreach (Interactive_Object enemy in Objects)
+            {
+                if (enemy.Get_Type is Entity && enemy.Get_Map_X == MapPositionX && enemy.Get_Map_Y == MapPositionY)
+                {
+                    int EnemyX = enemy.Get_Pos_X;
+                    int EnemyY = enemy.Get_Pos_Y;
+                    int dx = Character.Location.X - EnemyX;
+                    int dy = Character.Location.Y - EnemyY;
+
+                    int directionX = 0;
+                    int directionY = 0;
+                    int length = (int)Math.Sqrt(dx * dx + dy * dy);
+
+                    if (length != 0 && length > 200)
+                    {
+                        enemySpeed = 7;
+                        directionX = dx * enemySpeed / length;
+                        directionY = dy * enemySpeed / length;
+
+                    }
+                    else if (length != 0 && length <= 200 && length >= 50)
+                    {
+
+                        enemySpeed = 15;
+                        directionX = dx * enemySpeed / length;
+                        directionY = dy * enemySpeed / length;
+
+                    }
+                    else if (length == 0 || (length != 0 && length < 50))
+                    {
+                        KeyEventArgs Move_up = new KeyEventArgs(Keys.Up);
+                        Movement(Move_up);
+                        PictureBox temp = new PictureBox();
+                        temp.SizeMode = Game_Board.SizeMode;
+                        temp.Size = Game_Board.Size;
+                        temp.BackColor = this.BackColor;
+
+                        temp.Image = Image.FromFile(Environment.CurrentDirectory + "\\Map parts\\Level " + Current_Level.ToString() + "\\Battle.png");
+                        battle = true;
+                        menu.Visible = false;
+                        Battle Prepare_Battle = new Battle(temp, Inventory, this);
+                        Character.Visible = false;
+
+                        foreach (Interactive_Object IO in Objects)
+                        {
+                            IO.Get_Icon.Visible = false;
+                        }
+
+                        Game_Board.Controls.Add(Prepare_Battle.Get_Background);
+
+                        //Dodawanie stworzeń
+                        PictureBox fighter = new PictureBox();
+                        fighter.SizeMode = PictureBoxSizeMode.Zoom;
+                        fighter.BackColor = Color.Transparent;
+                        fighter.Size = new Size(200, 200);
+
+                        fighter.Image = Character.Image;
+                        fighter.Location = new Point(150, Display_Size / 2 - fighter.Height + 150);
+
+                        Prepare_Battle.Add_entity('p', 8, player.Health, fighter);
+
+                        Entity New_Enemy = (enemy.Get_Type as Entity);
+
+                        fighter.Size = new Size(New_Enemy.Get_Creature.Width * 4, New_Enemy.Get_Creature.Height * 4);
+                        fighter.Image = New_Enemy.Get_Creature.Image;
+                        fighter.Location = new Point(Display_Size - 350, Display_Size / 2 - fighter.Height + 150);
+
+                        Prepare_Battle.Add_entity('e', New_Enemy.Get_Damage, New_Enemy.Get_health, fighter);
+
+                        foreach (Entity el in Prepare_Battle.Get_Our_team)
+                        {
+                            Prepare_Battle.Get_Background.Controls.Add(el.Get_Creature);
+                        }
+
+                        foreach (Entity el in Prepare_Battle.Get_Opponents)
+                        {
+                            Prepare_Battle.Get_Background.Controls.Add(el.Get_Creature);
+                        }
+
+                        Objects.Remove(enemy);
+                        activeBattle = Prepare_Battle;
+                        timer.Enabled = false;
+                    }
+
+                    EnemyX += directionX;
+                    EnemyY += directionY;
+                    enemy.Get_Icon.Location = new Point(EnemyX, EnemyY);
+                    break;
+                }
+            }
+            
         }
 
         private Image SetBackGround(int level, int x, int y)
@@ -118,9 +549,10 @@ namespace WindowsFormsApp1
             return toReturn;
         }
 
+
         public void Movement(KeyEventArgs e)
         {
-            if(battle)
+            if (battle)
             {
                 return;
             }
@@ -142,6 +574,7 @@ namespace WindowsFormsApp1
                 case Keys.Up:
                     {
                         Character.Location = new Point(x, y - TestHitbox(x, x, y, y - speed));
+                        
                         break;
                     }
                 case Keys.Down:
@@ -181,56 +614,24 @@ namespace WindowsFormsApp1
             }
             foreach (Interactive_Object IO in Objects)
             {
-                if (Game_Board.Controls.Contains(IO.GetIcon))
+                if (Game_Board.Controls.Contains(IO.Get_Icon))
                 {
                     if (Math.Pow(x - IO.Get_Pos_X, 2) + Math.Pow(y - IO.Get_Pos_Y, 2) <= Math.Pow(IO.Get_Range, 2))
                     {
                         IO.Get_Interaction = true;
-                        Game_Board.Controls.Remove(IO.GetIcon);
+                        Game_Board.Controls.Remove(IO.Get_Icon);
+                        if(IO.Get_Type is "o")
+                        {
+                            player.AddCoins(10);
+                        }
+                        else if(IO.Get_Name == "Weapon")
+                        {
+                            Inventory.Add((int)IO.Get_Icon.Tag);
+                        }
                     }
                 }
             }
-
-            //Ładowanie walki
-            if (Objects[1].Get_Interaction)
-            {
-                PictureBox temp = new PictureBox();
-                temp.SizeMode = Game_Board.SizeMode;
-                temp.Size = Game_Board.Size;
-                temp.BackColor = this.BackColor;
-                temp.Image = Image.FromFile(Environment.CurrentDirectory + "\\Map parts\\Level " + Current_Level.ToString() + "\\Battle.png");
-                battle = true;
-                Battle First_Battle = new Battle(temp);
-                Game_Board.Controls.Remove(Character);
-                Game_Board.Controls.Add(First_Battle.Get_Background);
-
-                //Dodawanie stworzeń
-                PictureBox entity = new PictureBox();
-                entity.SizeMode = PictureBoxSizeMode.Zoom;
-                entity.BackColor = Color.Transparent;
-                entity.Size = new Size(200, 200);
-
-                entity.Image = Character.Image;
-                entity.Location = new Point(150, (Display_Size - 100) / 2);
-
-                First_Battle.Add_entity('p', 8, 35, 30, entity);
-
-                entity.Image = Objects[1].GetIcon.Image;
-                entity.Location = new Point(Display_Size - 350, (Display_Size - 100)/ 2);
-
-                First_Battle.Add_entity('e', 4, 20, 25, entity);
-
-                foreach (Entity el in First_Battle.Get_Our_team)
-                {
-                    First_Battle.Get_Background.Controls.Add(el.Get_Creature);
-                }
-
-                foreach (Entity el in First_Battle.Get_Opponents)
-                {
-                    First_Battle.Get_Background.Controls.Add(el.Get_Creature);
-                }
-
-            }
+            
 
             if (Scene_Switch)
             {
@@ -241,18 +642,18 @@ namespace WindowsFormsApp1
                 {
                     if (MapPositionX == IO.Get_Map_X && MapPositionY == IO.Get_Map_Y && !IO.Get_Interaction)
                     {
-                        Game_Board.Controls.Add(IO.GetIcon);
+                        Game_Board.Controls.Add(IO.Get_Icon);
                     }
                     else
                     {
-                        Game_Board.Controls.Remove(IO.GetIcon);
+                        Game_Board.Controls.Remove(IO.Get_Icon);
                     }
                 }
             }
         }
-
         private int TestHitbox(int old_x, int new_x, int old_y, int new_y)
         {
+
             int distance = 0;
             int start_x, start_y, end_x, end_y, direction_x = 1, direction_y = 1;
             int temp = 0;
@@ -274,14 +675,14 @@ namespace WindowsFormsApp1
                     direction_x = 1;
                 }
                 temp = start_y;
-                while(start_x != end_x)
+                while (start_x != end_x)
                 {
                     start_y = temp;
-                    while(start_y != end_y)
+                    while (start_y != end_y)
                     {
                         if (start_x < Display_Size && start_x >= 0)
                         {
-                            if(Level_Hitbox.GetPixel(start_x, start_y).ToArgb() != Color.White.ToArgb())
+                            if (Level_Hitbox.GetPixel(start_x, start_y).ToArgb() != Color.White.ToArgb())
                             {
                                 return distance;
                             }
@@ -337,7 +738,29 @@ namespace WindowsFormsApp1
                     distance++;
                 }
             }
+
             return distance;
         }
+
+        public void stopBattle()
+        {
+            Game_Board.Controls.Remove(activeBattle.Get_Background);
+            activeBattle.Dispose();
+            activeBattle = null;
+            Character.Visible = true;
+            battle = false;
+            Source.Activate();
+            Source.Focus();
+            timer.Enabled = true;
+            menu.Visible = true;
+            player.AddCoins(10);
+            player.AddExp(11);
+            foreach (Interactive_Object IO in Objects)
+            {
+                IO.Get_Icon.Visible = true;
+            }
+        }
     }
+
 }
+
