@@ -40,7 +40,7 @@ namespace WindowsFormsApp1
         public PictureBox Character;
         Bitmap Level_Hitbox;
         List<Interactive_Object> Objects;
-        private const int Character_size = 20;
+        private const int Character_size = 50;
         private int speed = 5;
         private int enemySpeed = 7;
         int Display_Size;
@@ -893,17 +893,21 @@ namespace WindowsFormsApp1
                         else if (IO.Get_Name == "EOL")
                         {
                             //pokazanie tablicy wyników (top 10)
+                            UserControlHighScores uchst = new UserControlHighScores();
+                            
                             FlowLayoutPanel flphs = new FlowLayoutPanel();
                             flphs.FlowDirection = FlowDirection.TopDown;
-                            flphs.Size = new Size(749, 520);
+                            flphs.Size = new Size(749, 750);
                             flphs.Location = new Point(Screen.PrimaryScreen.WorkingArea.Width / 2 - flphs.Size.Width / 2, Screen.PrimaryScreen.WorkingArea.Height / 2 - flphs.Size.Height / 2);
                             flphs.BackColor = Color.Transparent;
-                            HighScore hs = new HighScore();
-                            hs.name = System.Environment.UserName;
-                            hs.score = player.Score;
-                            hsdb.HighScore.InsertOnSubmit(hs);
-                            hsdb.SubmitChanges();
-                            UserControlHighScores uchst = new UserControlHighScores();
+                            FormNickname fn = new FormNickname();
+                            if (fn.ShowDialog() == DialogResult.OK)
+                            {
+                                fn.HighScore.score = player.Score;
+                                hsdb.HighScore.InsertOnSubmit(fn.HighScore);
+                                hsdb.SubmitChanges();
+                            }
+
                             flphs.Controls.Add(uchst);
                             int counter = 1;
                             foreach(HighScore hst in hsdb.HighScore.OrderByDescending(xx => xx.score))
