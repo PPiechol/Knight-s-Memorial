@@ -166,7 +166,7 @@ namespace WindowsFormsApp1
             Entity temp = new Entity(creature, damage, health);
             if(team == 'e')
             {
-                creature.Name = Opponents.Count.ToString() + team;
+                creature.Name = team + Opponents.Count.ToString();
                 Opponents.Add(temp);
             }
             else if(team == 'p')
@@ -175,7 +175,7 @@ namespace WindowsFormsApp1
                 Held_Item.Size = Selected_Item.Size;
                 Held_Item.Image = Selected_Item.Image;
 
-                creature.Name = Our_team.Count.ToString() + team;
+                creature.Name = team + Our_team.Count.ToString();
                 Our_team.Add(temp);
                 PictureBox Warrior = Our_team[0].Get_Creature;
 
@@ -477,7 +477,7 @@ namespace WindowsFormsApp1
 
             if (Target.Get_health <= 0)
             {
-                EnemyDied(Convert.ToInt32(Target.Get_Creature.Name.Substring(0, 1)));
+                EnemyDied(Convert.ToInt32(Target.Get_Creature.Name.Substring(1)));
             }
 
             Target_Health.Text = Target.Get_health.ToString();
@@ -495,8 +495,8 @@ namespace WindowsFormsApp1
 
             Random Chance = new Random();
             bool correct_action = true;
-            int Target_Id = Convert.ToInt32(Target.Name.Substring(0, 1));
-            char Target_Team = Convert.ToChar(Target.Name.Substring(1, 1));
+            int Target_Id = Convert.ToInt32(Target.Name.Substring(1));
+            char Target_Team = Convert.ToChar(Target.Name.Substring(0, 1));
 
             foreach (Items Querry in Held)
             {

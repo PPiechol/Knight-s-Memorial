@@ -31,6 +31,7 @@ namespace WindowsFormsApp1
         int coins;
         int level;
         int exp;
+        int score = 0;
         
 
         public Player(PictureBox Character, int level, int health, int attackSpeed, int critHitChance, int coins, Panel panelBottom, int exp=0)
@@ -167,6 +168,12 @@ namespace WindowsFormsApp1
             exp += amount;
             CheckHeroLvl(exp);
         }
+
+        public void AddScore(int amount)
+        {
+            score += amount;
+            
+        }
         private void CheckHeroLvl(int expGained)
         {
             var wo = new WaveOutEvent();
@@ -232,6 +239,14 @@ namespace WindowsFormsApp1
             get
             {
                 return level;
+            }
+        }
+
+        public int Score
+        {
+            get
+            {
+                return score;
             }
         }
 
