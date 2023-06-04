@@ -207,10 +207,11 @@ namespace WindowsFormsApp1
                     Player_Positon;
                     Map_Positon;
                     Current_Level; ,Inventory,Objects,Character.Location,new Point(MapPositionX,MapPositionY),Current_Level
-                };*/
+                };
                 var jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(Current_Data);
 
                 File.WriteAllText(SaveFilePath, jsonString);
+                */
             }
             else
             {
@@ -608,29 +609,16 @@ namespace WindowsFormsApp1
                     }
                 }
 
-                if (Object_Data[6] == "Coin")
-                {
-                    Interactive_Object New_Object = new Interactive_Object(Current_Level, Int_data[0], Int_data[1], Int_data[2],
+                Interactive_Object New_Object = new Interactive_Object(Current_Level, Int_data[0], Int_data[1], Int_data[2],
                                                         Int_data[3], Int_data[4], Int_data[5],
                                                         Object_Data[6], Convert.ToInt32(Object_Data[7]));
-                    Object_list.Add(New_Object);
-                }
-                else if (Object_Data[6] == "Weapon")
+
+                if (Object_Data[6].Length >= 5 && Object_Data[6].Substring(0, 5) == "Enemy")
                 {
-                    Interactive_Object New_Object = new Interactive_Object(Current_Level, Int_data[0], Int_data[1], Int_data[2],
-                                                        Int_data[3], Int_data[4], Int_data[5],
-                                                        Object_Data[6], Convert.ToInt32(Object_Data[7]));
-                    Object_list.Add(New_Object);
-                }
-                else if (Object_Data[6].Length >= 5 && Object_Data[6].Substring(0, 5) == "Enemy")
-                {
-                    Interactive_Object New_Object = new Interactive_Object(Current_Level, Int_data[0], Int_data[1], Int_data[2],
-                                                        Int_data[3], Int_data[4], Int_data[5],
-                                                        Object_Data[6], null);
                     Entity Monster = new Entity(New_Object.Get_Icon, Convert.ToInt32(Object_Data[7]), Convert.ToInt32(Object_Data[8]));
                     New_Object.Get_Type = Monster;
-                    Object_list.Add(New_Object);
                 }
+                Object_list.Add(New_Object);
             }
         }
 
@@ -899,6 +887,10 @@ namespace WindowsFormsApp1
 
                                 wo5.Dispose();
                             }
+                        }
+                        else if (IO.Get_Name == "EOL")
+                        {
+                            //Tutaj funkcja zakończenia poziomu/przejścia do podsumowania poziomu
                         }
                     }
                 }
