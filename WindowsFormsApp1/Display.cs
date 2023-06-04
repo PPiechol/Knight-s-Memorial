@@ -40,7 +40,7 @@ namespace WindowsFormsApp1
         public PictureBox Character;
         Bitmap Level_Hitbox;
         List<Interactive_Object> Objects;
-        private const int Character_size = 50;
+        private const int Character_size = 20;
         private int speed = 5;
         private int enemySpeed = 7;
         int Display_Size;
@@ -58,7 +58,9 @@ namespace WindowsFormsApp1
         Timer timer = new Timer();
         int labelSize = 50;
         int spacing = 10;
-        EquipmentDataContext Edc = new EquipmentDataContext();
+        int enemyCount = 0;
+        EquipmentDataContext Edc = new EquipmentDataContext(); //baza przedmiotów
+        HighscoreDataContext hsdb = new HighscoreDataContext(); //baza wyników
         List<string> battleMusicThemes = new List<string>();
 
         string SaveFilePath = "";
@@ -721,7 +723,7 @@ namespace WindowsFormsApp1
                                 }
                                 
                                 Prepare_Battle.Add_entity('e', Next_Enemy.Get_Damage, Next_Enemy.Get_health, Opponent);
-
+                                enemyCount++;
                                 Objects.Remove(enemy_nearby);
                                 if(Prepare_Battle.Get_Opponents.Count % 2 == 0)
                                 {
@@ -890,7 +892,35 @@ namespace WindowsFormsApp1
                         }
                         else if (IO.Get_Name == "EOL")
                         {
-                            //Tutaj funkcja zakończenia poziomu/przejścia do podsumowania poziomu
+                            //pokazanie tablicy wyników (top 10)
+                            //Console.WriteLine(System.Environment.UserName);
+                            //TODO Tutaj funkcja zakończenia poziomu/przejścia do podsumowania poziomu
+                            FlowLayoutPanel flphs = new FlowLayoutPanel();
+                            flphs.FlowDirection = FlowDirection.TopDown;
+                            flphs.Size = new Size(749, Screen.PrimaryScreen.WorkingArea.Height);
+                            flphs.Location = new Point(Screen.PrimaryScreen.WorkingArea.Width / 2 - flphs.Size.Width / 2, Screen.PrimaryScreen.WorkingArea.Height / 2 - flphs.Size.Height / 2);
+                            flphs.BackColor = Color.Transparent;
+                            HighScore hs = new HighScore();
+                            hs.name = System.Environment.UserName;
+                            hs.score = player.Score;
+                            hsdb.HighScore.InsertOnSubmit(hs);
+                            hsdb.SubmitChanges();
+                            UserControlHighScores uchst = new UserControlHighScores();
+                            flphs.Controls.Add(uchst);
+                            int counter = 1;
+                            foreach(HighScore hst in hsdb.HighScore.OrderByDescending(xx => xx.score))
+                            {
+                                if (counter <= 10)
+                                {
+                                    UserControlHighScores uchs = new UserControlHighScores(counter, hst.name, hst.score);
+                                    flphs.Controls.Add(uchs);
+                                    counter++;
+                                }
+                            }
+                            Game_Board.SendToBack();
+                            this.Controls.Add(flphs);
+                            flphs.BringToFront();
+                            timer.Stop();
                         }
                     }
                 }
@@ -1101,6 +1131,8 @@ namespace WindowsFormsApp1
             menuRight.Visible = true;
             player.AddCoins(10);
             player.AddExp(10);
+            player.AddScore(100*enemyCount);
+            enemyCount = 0;
             foreach (Interactive_Object IO in Objects)
             {
                 IO.Get_Icon.Visible = true;
