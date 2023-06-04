@@ -190,3 +190,9 @@ E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\obj\D
 E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\TopScores.mdf
 E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\TopScores_log.ldf
 E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.UserControlHighScores.resources
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\TopScores.mdf
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\TopScores_log.ldf
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.FormNickname.resources
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.UserControlHighScores.resources
