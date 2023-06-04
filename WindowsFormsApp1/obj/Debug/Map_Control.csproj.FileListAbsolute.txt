@@ -91,3 +91,108 @@ E:\projekty\ciul\WindowsFormsApp1\obj\Debug\Map_Control.csproj.SuggestedBindingR
 D:\Tomek\Virtual Studio\Projects\Knigth's Memorial\WindowsFormsApp1\bin\Debug\System.Numerics.Vectors.dll
 D:\Tomek\Virtual Studio\Projects\Knigth's Memorial\WindowsFormsApp1\bin\Debug\System.Numerics.Vectors.xml
 D:\Tomek\Virtual Studio\Projects\Knigth's Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.CopyComplete
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\Items.mdf
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\Items_log.ldf
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe.config
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.pdb
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\System.Numerics.Vectors.dll
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\System.Numerics.Vectors.xml
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.AssemblyReference.cache
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.MainForm.resources
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Properties.Resources.resources
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.GenerateResource.cache
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.CoreCompileInputs.cache
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.CopyComplete
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\Items.mdf
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\Items_log.ldf
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe.config
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.pdb
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.AssemblyReference.cache
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.SuggestedBindingRedirects.cache
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.MainForm.resources
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Properties.Resources.resources
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.GenerateResource.cache
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.CoreCompileInputs.cache
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\Map_Control.csproj.CopyComplete
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb
+D:\Student\Desktop\game\WindowsFormsApp1\bin\Debug\Items.mdf
+D:\Student\Desktop\game\WindowsFormsApp1\bin\Debug\Items_log.ldf
+D:\Student\Desktop\game\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe.config
+D:\Student\Desktop\game\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe
+D:\Student\Desktop\game\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.pdb
+D:\Student\Desktop\game\WindowsFormsApp1\bin\Debug\System.Numerics.Vectors.dll
+D:\Student\Desktop\game\WindowsFormsApp1\bin\Debug\System.Numerics.Vectors.xml
+D:\Student\Desktop\game\WindowsFormsApp1\obj\Debug\Map_Control.csprojAssemblyReference.cache
+D:\Student\Desktop\game\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.MainForm.resources
+D:\Student\Desktop\game\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Properties.Resources.resources
+D:\Student\Desktop\game\WindowsFormsApp1\obj\Debug\Map_Control.csproj.GenerateResource.cache
+D:\Student\Desktop\game\WindowsFormsApp1\obj\Debug\Map_Control.csproj.CoreCompileInputs.cache
+D:\Student\Desktop\game\WindowsFormsApp1\obj\Debug\Map_Control.csproj.CopyComplete
+D:\Student\Desktop\game\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
+D:\Student\Desktop\game\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Form2.resources
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Form2.resources
+D:\Student\Desktop\game\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Form2.resources
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\Microsoft.Win32.Registry.dll
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\NAudio.Asio.dll
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\NAudio.Core.dll
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\NAudio.dll
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\NAudio.Midi.dll
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\NAudio.Wasapi.dll
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\NAudio.WinForms.dll
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\NAudio.WinMM.dll
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\System.Security.AccessControl.dll
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\System.Security.Principal.Windows.dll
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\Microsoft.Win32.Registry.xml
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\NAudio.xml
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\System.Security.AccessControl.xml
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\System.Security.Principal.Windows.xml
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\Microsoft.Win32.Registry.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\NAudio.Asio.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\NAudio.Core.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\NAudio.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\NAudio.Midi.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\NAudio.Wasapi.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\NAudio.WinForms.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\NAudio.WinMM.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\System.Security.AccessControl.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\System.Security.Principal.Windows.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\Microsoft.Win32.Registry.xml
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\NAudio.xml
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\System.Security.AccessControl.xml
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\System.Security.Principal.Windows.xml
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\Newtonsoft.Json.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Debug\Newtonsoft.Json.xml
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\Microsoft.Win32.Registry.dll
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\NAudio.Asio.dll
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\NAudio.Core.dll
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\NAudio.dll
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\NAudio.Midi.dll
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\NAudio.Wasapi.dll
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\NAudio.WinForms.dll
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\NAudio.WinMM.dll
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\Newtonsoft.Json.dll
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\System.Security.AccessControl.dll
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\System.Security.Principal.Windows.dll
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\Microsoft.Win32.Registry.xml
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\NAudio.xml
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\Newtonsoft.Json.xml
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\System.Security.AccessControl.xml
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\System.Security.Principal.Windows.xml
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Form2.resources
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\TopScores.mdf
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\TopScores_log.ldf
+E:\Users\Piotr Piechol\Documents\GitHub\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.UserControlHighScores.resources
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\TopScores.mdf
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\TopScores_log.ldf
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.FormNickname.resources
+C:\Users\Yoshi\GAME\Knight-s-Memorial\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.UserControlHighScores.resources
