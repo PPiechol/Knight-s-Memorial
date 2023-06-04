@@ -893,11 +893,9 @@ namespace WindowsFormsApp1
                         else if (IO.Get_Name == "EOL")
                         {
                             //pokazanie tablicy wyników (top 10)
-                            //Console.WriteLine(System.Environment.UserName);
-                            //TODO Tutaj funkcja zakończenia poziomu/przejścia do podsumowania poziomu
                             FlowLayoutPanel flphs = new FlowLayoutPanel();
                             flphs.FlowDirection = FlowDirection.TopDown;
-                            flphs.Size = new Size(749, Screen.PrimaryScreen.WorkingArea.Height);
+                            flphs.Size = new Size(749, 520);
                             flphs.Location = new Point(Screen.PrimaryScreen.WorkingArea.Width / 2 - flphs.Size.Width / 2, Screen.PrimaryScreen.WorkingArea.Height / 2 - flphs.Size.Height / 2);
                             flphs.BackColor = Color.Transparent;
                             HighScore hs = new HighScore();
