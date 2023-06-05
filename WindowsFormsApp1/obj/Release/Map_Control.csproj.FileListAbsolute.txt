@@ -1,0 +1,36 @@
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Release\TopScores.mdf
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Release\TopScores_log.ldf
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Release\Items.mdf
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Release\Items_log.ldf
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Release\Microsoft.Win32.Registry.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Release\NAudio.Asio.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Release\NAudio.Core.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Release\NAudio.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Release\NAudio.Midi.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Release\NAudio.Wasapi.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Release\NAudio.WinForms.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Release\NAudio.WinMM.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Release\Newtonsoft.Json.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Release\System.Numerics.Vectors.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Release\System.Security.AccessControl.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Release\System.Security.Principal.Windows.dll
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Release\Microsoft.Win32.Registry.xml
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Release\NAudio.xml
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Release\Newtonsoft.Json.xml
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Release\System.Numerics.Vectors.xml
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Release\System.Security.AccessControl.xml
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Release\System.Security.Principal.Windows.xml
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\obj\Release\Map_Control.csproj.AssemblyReference.cache
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\obj\Release\WindowsFormsApp1.MainForm.resources
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\obj\Release\WindowsFormsApp1.Form2.resources
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\obj\Release\WindowsFormsApp1.FormNickname.resources
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\obj\Release\WindowsFormsApp1.Properties.Resources.resources
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\obj\Release\WindowsFormsApp1.UserControlHighScores.resources
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\obj\Release\Map_Control.csproj.GenerateResource.cache
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\obj\Release\Map_Control.csproj.CoreCompileInputs.cache
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\obj\Release\Map_Control.csproj.CopyComplete
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Release\Knight's Memorial.exe.config
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Release\Knight's Memorial.exe
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\bin\Release\Knight's Memorial.pdb
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\obj\Release\Knight's Memorial.exe
+D:\Tomek\Virtual Studio\Projects\Knight's Memorial\WindowsFormsApp1\obj\Release\Knight's Memorial.pdb

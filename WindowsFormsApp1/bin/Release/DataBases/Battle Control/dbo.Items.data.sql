@@ -1,0 +1,4 @@
+﻿INSERT INTO [dbo].[Items] ([Id], [Name], [Damage], [Type_Of_Action], [Main_Target_Proc_Chance], [Other_Targets_Proc_Chance], [Amount_Of_Jumps], [Damage_After_Jump]) VALUES (1, N'Żelazny Miecz', 6, N'c', 100, 35, 1, 50)
+INSERT INTO [dbo].[Items] ([Id], [Name], [Damage], [Type_Of_Action], [Main_Target_Proc_Chance], [Other_Targets_Proc_Chance], [Amount_Of_Jumps], [Damage_After_Jump]) VALUES (2, N'Tarcza Z Brązu', 0, N'p', 100, NULL, NULL, NULL)
+INSERT INTO [dbo].[Items] ([Id], [Name], [Damage], [Type_Of_Action], [Main_Target_Proc_Chance], [Other_Targets_Proc_Chance], [Amount_Of_Jumps], [Damage_After_Jump]) VALUES (3, N'Topór', 11, N's', 100, NULL, NULL, NULL)
+INSERT INTO [dbo].[Items] ([Id], [Name], [Damage], [Type_Of_Action], [Main_Target_Proc_Chance], [Other_Targets_Proc_Chance], [Amount_Of_Jumps], [Damage_After_Jump]) VALUES (4, N'Złoty Młot', 7, N's', 100, NULL, NULL, NULL)

@@ -260,7 +260,10 @@ namespace WindowsFormsApp1
         
         private void KeyIsDown(object sender, KeyEventArgs e)
         {
-            Ekran_glowny.Movement(e);
+            if(Ekran_glowny != null)
+            {
+                Ekran_glowny.Movement(e);
+            }
         }
 
         private void PlayButton_Click(object sender, EventArgs e)

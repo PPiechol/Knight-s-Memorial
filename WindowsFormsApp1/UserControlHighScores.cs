@@ -22,6 +22,9 @@ namespace WindowsFormsApp1
             this.labelName.Text = name;
             this.labelScore.Text = score.ToString();
             this.labelNumber.Text = counter.ToString();
+            labelName.BackColor = Color.Transparent;
+            labelScore.BackColor = Color.Transparent;
+            labelNumber.BackColor = Color.Transparent;
         }
     }
 }

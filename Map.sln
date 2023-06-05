@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.33328.57
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Map_Control", "WindowsFormsApp1\Map_Control.csproj", "{9DBA3EAA-3498-4188-B450-F809D93E47B0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Knight's Memorial", "WindowsFormsApp1\Knight's Memorial.csproj", "{9DBA3EAA-3498-4188-B450-F809D93E47B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

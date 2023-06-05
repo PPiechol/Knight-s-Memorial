@@ -23,8 +23,11 @@ namespace WindowsFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.OK;
-            highScore.name = textBox1.Text;
+            if(textBox1.Text != "")
+            {
+                DialogResult = DialogResult.OK;
+                highScore.name = textBox1.Text;
+            }
         }
     }
 }

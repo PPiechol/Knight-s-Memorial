@@ -839,13 +839,25 @@ namespace WindowsFormsApp1
                             
                             FlowLayoutPanel flphs = new FlowLayoutPanel();
                             flphs.FlowDirection = FlowDirection.TopDown;
-                            flphs.Size = new Size(749, 750);
-                            flphs.Location = new Point(Screen.PrimaryScreen.WorkingArea.Width / 2 - flphs.Size.Width / 2, Screen.PrimaryScreen.WorkingArea.Height / 2 - flphs.Size.Height / 2);
+                            flphs.Size = new Size(749, Screen.PrimaryScreen.Bounds.Height*9/10);
+                            flphs.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 2 - flphs.Size.Width / 2, Screen.PrimaryScreen.Bounds.Height - (int)Math.Round(flphs.Size.Height*1.02));
                             flphs.BackColor = Color.Transparent;
+                            flphs.BackgroundImage = Image.FromFile(Environment.CurrentDirectory + "\\BackGround\\Victory Screen.png");
+                            flphs.BackgroundImageLayout = ImageLayout.Stretch;
+
+                            this.Controls.Add(flphs);
+                            flphs.BringToFront();
+
+                            Game_Board.Hide();
+
                             FormNickname fn = new FormNickname();
+                            fn.BackColor = Color.LightBlue;
+
+                            timer.Stop();
+
                             if (fn.ShowDialog() == DialogResult.OK)
                             {
-                                fn.HighScore.score = player.Score;
+                                fn.HighScore.score = player.Score + player.Coins;
                                 hsdb.HighScore.InsertOnSubmit(fn.HighScore);
                                 hsdb.SubmitChanges();
                             }
@@ -857,14 +869,12 @@ namespace WindowsFormsApp1
                                 if (counter <= 10)
                                 {
                                     UserControlHighScores uchs = new UserControlHighScores(counter, hst.name, hst.score);
+                                    uchs.BackColor = Color.FromArgb(20, Color.White);
+                                    flphs.ForeColor = Color.LightGray;
                                     flphs.Controls.Add(uchs);
                                     counter++;
                                 }
                             }
-                            Game_Board.SendToBack();
-                            this.Controls.Add(flphs);
-                            flphs.BringToFront();
-                            timer.Stop();
                         }
                     }
                 }

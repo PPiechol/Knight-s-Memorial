@@ -150,14 +150,6 @@ namespace WindowsFormsApp1
             damage_nup.Location = new Point(health_nup.Location.X, health_nup.Location.Y + 27);
             groupBox_Inside.Controls.Add(damage_nup);
 
-            /*
-            key_label = new Label();
-            key_label.AutoSize = true;
-            key_label.Location = new Point(damage_nup.Location.X, damage_nup.Location.Y + 27);
-            key_label.Visible = false;
-            groupBox_Inside.Controls.Add(key_label);
-            */
-
             key_label_Txt.Text = "ID";
 
             string SectionName = "Map_" + Current_Level.ToString() + "_Data/Map_Objects";
@@ -427,10 +419,6 @@ namespace WindowsFormsApp1
                 }
             }
 
-            coinIDCounter = GetCorrectId(xmlDoc, coinIDCounter);
-            weaponIDCounter = GetCorrectId(xmlDoc, weaponIDCounter);
-            EOLIDCounter = GetCorrectId(xmlDoc, EOLIDCounter);
-            enemyIDCounter = GetCorrectId(xmlDoc, enemyIDCounter);
 
             var nodeRegion = xmlDoc.CreateElement("add");
             string value = "";
@@ -441,21 +429,25 @@ namespace WindowsFormsApp1
             if (radioButtonCoin.Checked)
             {
                 MOT = MapObjectType.Coin;
+                coinIDCounter = GetCorrectId(xmlDoc, "Coin", coinIDCounter);
                 key = "Coin" + coinIDCounter.ToString();
             }
             else if (radioButtonEnemy.Checked)
             {
                 MOT = MapObjectType.Enemy;
+                enemyIDCounter = GetCorrectId(xmlDoc, "Enemy", enemyIDCounter);
                 key = "Enemy" + enemyIDCounter.ToString();
             }
             else if (radioButtonEOL.Checked)
             {
                 MOT = MapObjectType.EOL;
+                EOLIDCounter = GetCorrectId(xmlDoc, "EOL", EOLIDCounter);
                 key = "EOL" + EOLIDCounter.ToString();
             }
             else
             {
                 MOT = MapObjectType.Weapon;
+                weaponIDCounter = GetCorrectId(xmlDoc, "Weapon", weaponIDCounter);
                 key = "Weapon" + weaponIDCounter.ToString();
             }
 
@@ -498,11 +490,11 @@ namespace WindowsFormsApp1
             Show_Objects();
         }
 
-        private static int GetCorrectId(XmlDocument xmlDoc, int IDCounter)
+        private static int GetCorrectId(XmlDocument xmlDoc,string name, int IDCounter)
         {
             for (int i = 0; i <= IDCounter; i++)
             {
-                string keyToCheck = "Coin" + i.ToString();
+                string keyToCheck = name + i.ToString();
                 XmlNode existingNode = xmlDoc.SelectSingleNode("//Map_1_Data/Map_Objects/add[@key='" + keyToCheck + "']");
 
                 if (existingNode == null)
